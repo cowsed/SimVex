@@ -1,0 +1,89 @@
+
+build/src/v5_apiuser.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <vexDelay>:
+   0:	50                   	push   %rax
+   1:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 8 <vexDelay+0x8>
+   8:	e8 00 00 00 00       	call   d <vexDelay+0xd>
+   d:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 14 <vexDelay+0x14>
+  14:	e8 00 00 00 00       	call   19 <vexDelay+0x19>
+  19:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 20 <vexDelay+0x20>
+  20:	e8 00 00 00 00       	call   25 <vexDelay+0x25>
+  25:	bf 0d 00 00 00       	mov    $0xd,%edi
+  2a:	e8 00 00 00 00       	call   2f <vexDelay+0x2f>
+  2f:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 36 <vexDelay+0x36>
+  36:	58                   	pop    %rax
+  37:	e9 00 00 00 00       	jmp    3c <.L.str.3+0x17>
+
+Disassembly of section .rodata.str1.1:
+
+0000000000000000 <.L.str>:
+   0:	4e                   	rex.WRX
+   1:	4f 54                	rex.WRXB push %r12
+   3:	20 49 4d             	and    %cl,0x4d(%rcx)
+   6:	50                   	push   %rax
+   7:	4c                   	rex.WR
+   8:	45                   	rex.RB
+   9:	4d                   	rex.WRB
+   a:	45                   	rex.RB
+   b:	4e 54                	rex.WRX push %rsp
+   d:	45                   	rex.RB
+   e:	44 00            	add    %r14b,0x72(%rbx)
+
+0000000000000010 <.L.str.1>:
+  10:	73 72                	jae    84 <.L.str.3+0x5f>
+  12:	63 2f                	movsxd (%rdi),%ebp
+  14:	76 35                	jbe    4b <.L.str.3+0x26>
+  16:	5f                   	pop    %rdi
+  17:	61                   	(bad)
+  18:	70 69                	jo     83 <.L.str.3+0x5e>
+  1a:	75 73                	jne    8f <.L.str.3+0x6a>
+  1c:	65 72 2e             	gs jb  4d <.L.str.3+0x28>
+  1f:	63 70 70             	movsxd 0x70(%rax),%esi
+	...
+
+0000000000000023 <.L.str.2>:
+  23:	3a 00                	cmp    (%rax),%al
+
+0000000000000025 <.L.str.3>:
+  25:	0a 00                	or     (%rax),%al
+
+Disassembly of section .comment:
+
+0000000000000000 <.comment>:
+   0:	00 63 6c             	add    %ah,0x6c(%rbx)
+   3:	61                   	(bad)
+   4:	6e                   	outsb  %ds:(%rsi),(%dx)
+   5:	67 20 76 65          	and    %dh,0x65(%esi)
+   9:	72 73                	jb     7e <.L.str.3+0x59>
+   b:	69 6f 6e 20 31 35 2e 	imul   $0x2e353120,0x6e(%rdi),%ebp
+  12:	30 2e                	xor    %ch,(%rsi)
+  14:	37                   	(bad)
+	...
+
+Disassembly of section .eh_frame:
+
+0000000000000000 <.eh_frame>:
+   0:	14 00                	adc    $0x0,%al
+   2:	00 00                	add    %al,(%rax)
+   4:	00 00                	add    %al,(%rax)
+   6:	00 00                	add    %al,(%rax)
+   8:	01 7a 52             	add    %edi,0x52(%rdx)
+   b:	00 01                	add    %al,(%rcx)
+   d:	78 10                	js     1f <.eh_frame+0x1f>
+   f:	01 1b                	add    %ebx,(%rbx)
+  11:	0c 07                	or     $0x7,%al
+  13:	08 90 01 00 00 14    	or     %dl,0x14000001(%rax)
+  19:	00 00                	add    %al,(%rax)
+  1b:	00 1c 00             	add    %bl,(%rax,%rax,1)
+  1e:	00 00                	add    %al,(%rax)
+  20:	00 00                	add    %al,(%rax)
+  22:	00 00                	add    %al,(%rax)
+  24:	3c 00                	cmp    $0x0,%al
+  26:	00 00                	add    %al,(%rax)
+  28:	00 41 0e             	add    %al,0xe(%rcx)
+  2b:	10 76 0e             	adc    %dh,0xe(%rsi)
+  2e:	08 00                	or     %al,(%rax)
