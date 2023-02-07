@@ -14,6 +14,10 @@
 #ifndef   VEX_DRIVETRAIN_EXT_CLASS_H
 #define   VEX_DRIVETRAIN_EXT_CLASS_H
 
+#include "vex_motor.h"
+#include "vex_motorgroup.h"
+#include "vex_drivetrain.h"
+
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_smartdrive.h
   * @brief   Drivetrain class header
@@ -23,8 +27,8 @@ namespace vex {
 
   class smartdrive : public drivetrain  {
     public:  
-      smartdrive( motor_group &l, motor_group &r, vex::guido &g, double wheelTravel=320, double trackWidth=320, double wheelBase=130, distanceUnits unit=distanceUnits::mm, double externalGearRatio = 1.0 );
-      smartdrive( vex::motor &l, vex::motor &r, vex::guido &g, double wheelTravel=320, double trackWidth=320, double wheelBase=130, distanceUnits unit=distanceUnits::mm, double externalGearRatio = 1.0 );
+      smartdrive( motor_group &l, motor_group &r, guido &g, double wheelTravel=320, double trackWidth=320, double wheelBase=130, distanceUnits unit=distanceUnits::mm, double externalGearRatio = 1.0 );
+      smartdrive( motor &l, motor &r, guido &g, double wheelTravel=320, double trackWidth=320, double wheelBase=130, distanceUnits unit=distanceUnits::mm, double externalGearRatio = 1.0 );
 
       ~smartdrive();
 
@@ -137,7 +141,7 @@ namespace vex {
       virtual bool isMoving();
       
     private:
-      vex::guido  *g;
+      guido  *g;
       double      _targetAngle;
       turnType    _targetDir;
       int32_t     _timeout;

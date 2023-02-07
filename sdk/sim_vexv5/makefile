@@ -29,7 +29,7 @@ ARCH = ar
 ARCH_FLAGS = rcs
 
 CXX = clang
-CXX_FLAGS = -O2 -Wall -Werror=return-type -fno-exceptions  -std=gnu++11 
+CXX_FLAGS = -O2 -Wall -Werror=return-type -fno-exceptions  -std=gnu++11  
 INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5
 
 all: $(BUILD)/$(PROJECTLIB).a

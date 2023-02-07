@@ -5,9 +5,7 @@
   * @brief   Header for V5 API device wrapper functions
 *//*--------------------------------------------------------------------------*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+
 
 void                vexDelay( uint32_t timems ){
     print_unimplimented();
@@ -186,7 +184,3 @@ int32_t             vexGenericSerialReceiveAvail( uint32_t index );
 int32_t             vexGenericSerialReceive( uint32_t index, uint8_t *buffer, int32_t length );
 void                vexGenericSerialFlush( uint32_t index );
 
-
-#ifdef __cplusplus
-}
-#endif /* V5_APIUSER_H_ */

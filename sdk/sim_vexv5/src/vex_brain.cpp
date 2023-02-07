@@ -8,9 +8,10 @@
 
 namespace vex
 {
-    /**
-     * @brief Use the brain class to see battery information, SD card information, or write to the Screen.
-     */
+    int brain::_getIndex(){
+        print_unimplimented();
+        return -1;
+    }
 
     /**
      * @brief Creates a new brain object.

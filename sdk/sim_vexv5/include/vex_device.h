@@ -15,6 +15,8 @@
 #ifndef   VEX_DEVICE_CLASS_H
 #define   VEX_DEVICE_CLASS_H
 
+#include "v5_api.h"
+#include "vex_units.h"
 
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_device.h
@@ -24,7 +26,6 @@
 /*-----------------------------------------------------------------------------*/
 /** @brief device class                                                        */
 /*-----------------------------------------------------------------------------*/
-namespace vex {
   /** @brief Use the device class to get information about a vex device plugged into the V5.
   */
   class device  {
@@ -48,7 +49,6 @@ namespace vex {
       virtual int32_t value();
       uint32_t        timestamp();
   };
-};
 
 /*-----------------------------------------------------------------------------*/
 /** @brief a safe array template                                               */
@@ -91,33 +91,30 @@ namespace vex {
 //
 // This class is never directly used except as a ptr to gyro or imu
 //
-namespace vex {
     class guido {
       public:
         guido(){};  
         virtual ~guido(){};
       
         // pure virtual methods that must be implemented
-        virtual double angle( rotationUnits units = rotationUnits::deg ) = 0;
-        virtual double heading( rotationUnits units = rotationUnits::deg ) = 0;
+        virtual double angle( vex::rotationUnits units = vex::rotationUnits::deg ) = 0;
+        virtual double heading( vex::rotationUnits units = vex::rotationUnits::deg ) = 0;
         virtual void   calibrate( int32_t value ) = 0;
         virtual bool   isCalibrating(void) = 0;
-        virtual void   setHeading( double value, rotationUnits units ) = 0;
-        virtual double rotation( rotationUnits units = rotationUnits::deg ) = 0;
-        virtual void   setRotation( double value, rotationUnits units ) = 0;
-        virtual turnType getTurnType( void ) = 0;
+        virtual void   setHeading( double value, vex::rotationUnits units ) = 0;
+        virtual double rotation( vex::rotationUnits units = vex::rotationUnits::deg ) = 0;
+        virtual void   setRotation( double value, vex::rotationUnits units ) = 0;
+        virtual vex::turnType getTurnType( void ) = 0;
     };
-};
 
 /*-----------------------------------------------------------------------------*/
 /** @brief All devices class                                                   */
 /*-----------------------------------------------------------------------------*/
-namespace vex {
   /** @brief Use the device class to get information about all of the vex devices plugged into the V5.
   */
   class devices {
     private:
-      safearray<device, V5_MAX_DEVICE_PORTS> data;
+      vex::safearray<device, V5_MAX_DEVICE_PORTS> data;
 
     public:
       devices();  
@@ -146,6 +143,6 @@ namespace vex {
       */
       int32_t         numberOf( V5_DeviceType type );
   };
-};
+
 
 #endif // VEX_DEVICE_CLASS_H

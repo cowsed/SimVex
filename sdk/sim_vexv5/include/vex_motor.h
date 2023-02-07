@@ -1,3 +1,4 @@
+#pragma once
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Copyright (c) Innovation First 2017-2019, All rights reserved.          */
@@ -13,8 +14,8 @@
 
 #ifndef   VEX_MOTOR_CLASS_H
 #define   VEX_MOTOR_CLASS_H
-#include "vex_device.h"
 
+#include "vex_device.h"
 
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_motor.h
