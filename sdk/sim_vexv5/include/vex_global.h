@@ -14,6 +14,7 @@
 
 #ifndef   VEX_GLOBAL_H
 #define   VEX_GLOBAL_H
+#include "v5_api.h"
 #include "vex_units.h"
 #include "vex_color.h"
 

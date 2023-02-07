@@ -14,6 +14,10 @@
 #ifndef   VEX_CONTROLLER_CLASS_H
 #define   VEX_CONTROLLER_CLASS_H
 
+#include "vex_mevent.h"
+#include "vex_units.h"
+#include <type_traits>
+
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_controller.h
   * @brief   V5 controller class header
@@ -126,9 +130,9 @@ namespace vex {
           tEventType _buttonToReleasedEvent() const;
           
         public:
-          button() : _id( tButtonType::kButtonUndefined), _parent(NULL) {};
-          button( const tButtonType id, controller *parent ) : _id( id ), _parent(parent) {};
-          ~button() {};
+          button() : _id( tButtonType::kButtonUndefined), _parent(NULL) {print_unimplimented();};
+          button( const tButtonType id, controller *parent ) : _id( id ), _parent(parent) {print_unimplimented();};
+          ~button() {print_unimplimented();};
           /**
            * @brief Sets the function to be called when the button is pressed.
            * @param callback A reference to a function.

@@ -28,6 +28,8 @@
 /*-----------------------------------------------------------------------------*/
   /** @brief Use the device class to get information about a vex device plugged into the V5.
   */
+ namespace vex {
+
   class device  {
     private:
       V5_DeviceT      _ptr;
@@ -49,7 +51,7 @@
       virtual int32_t value();
       uint32_t        timestamp();
   };
-
+ };
 /*-----------------------------------------------------------------------------*/
 /** @brief a safe array template                                               */
 /*-----------------------------------------------------------------------------*/
@@ -114,13 +116,13 @@ namespace vex {
   */
   class devices {
     private:
-      vex::safearray<device, V5_MAX_DEVICE_PORTS> data;
+      vex::safearray<vex::device, V5_MAX_DEVICE_PORTS> data;
 
     public:
       devices();  
       ~devices();
 
-      device &operator[]( int i ) {
+      vex::device &operator[]( int i ) {
         return( data[i] );
       }
       /**
