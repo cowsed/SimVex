@@ -15,10 +15,11 @@
 #ifndef   VEX_COMPETITION_CLASS_H
 #define   VEX_COMPETITION_CLASS_H
 
+#include <stdio.h>
 // VEX Stuff
 #include "vex_mevent.h"
 #include "vex_brain.h"
-
+#include "sim/graphics/window.h"
 
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_competition.h

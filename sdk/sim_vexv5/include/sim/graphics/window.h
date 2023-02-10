@@ -1,6 +1,14 @@
-#define GLFW_INCLUDE_NONE
+#pragma once
+
+#include <stdio.h>
+#include <thread>
+
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glad/gl.h>
+#include <GL/glcorearb.h>
+
+#include "../util.h" //TODO figure out why this include is funky
+
 namespace sim{
-    void initWindow();
+    bool initWindow();
 }

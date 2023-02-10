@@ -27,7 +27,10 @@ namespace vex
      * @brief Creates a competition object that has access to competition methods.
      */
     competition::competition() {
-        
+        bool succeeded = sim::initWindow();
+        if (!succeeded){
+            exit(1);
+        }
     }
     competition::~competition() {
         print_unimplimented();

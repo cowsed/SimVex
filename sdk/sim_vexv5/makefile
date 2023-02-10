@@ -1,4 +1,4 @@
-VERBOSE = 1
+VERBOSE = 0
 
 PROJECT = simv5rt
 
@@ -10,11 +10,17 @@ SRC_C += $(wildcard src/*/*.cpp)
 SRC_C += $(wildcard src/*/*/*.cpp) 
 
 SRC_H = $(wildcard include/*.h)
-SRC_H = $(wildcard include/*/*.h)
-SRC_H = $(wildcard include/*/*/*.h)
+
 
 
 OBJ = $(addprefix $(BUILD)/, $(addsuffix .o, $(basename $(SRC_C))) )
+
+# allow verbose to be set by makefile if not set by app
+ifndef VERBOSE
+BUILD_VERBOSE ?= 0
+else
+BUILD_VERBOSE ?= $(VERBOSE)
+endif
 
 # use verbose flag
 ifeq ($(BUILD_VERBOSE),0)
@@ -32,9 +38,12 @@ ARCH = ar
 ARCH_FLAGS = rcs
 
 CXX = clang
-CXX_FLAGS = -O2 -Wall -Werror=return-type -fno-exceptions  -std=gnu++11  
-INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5
 
+#-lopengl32 -lglfw3 -lglew32
+
+
+CXX_FLAGS = -O2 -Wall -Werror=return-type --std=gnu++17
+INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5 
 all: $(BUILD)/$(PROJECTLIB).a
 
 
