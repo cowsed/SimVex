@@ -1,12 +1,11 @@
 #pragma once
 
-#include <stdio.h>
-#define print_unimplimented()   sim_puts("NOT IMPLEMENTED");\
-                                sim_puts(__FILE__);\
-                                sim_puts(":");\
-                                sim_putI(__LINE__);\
-                                sim_puts("\n");
+#include <iostream>
+#include <stdarg.h>
 
+#define print_unimplimented()   sim::printf("UNIMPLEMENTED: %s:%d : %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__);
 
-void sim_puts(char const *str);
-void sim_putI(int n);
+namespace sim{
+void puts(char const *str);
+bool printf(const char *format, ...);
+};

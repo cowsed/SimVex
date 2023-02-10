@@ -7,8 +7,11 @@ PROJECTLIB = lib$(PROJECT)#libsimvexc5
 
 SRC_C = $(wildcard src/*.cpp) 
 SRC_C += $(wildcard src/*/*.cpp) 
+SRC_C += $(wildcard src/*/*/*.cpp) 
 
 SRC_H = $(wildcard include/*.h)
+SRC_H = $(wildcard include/*/*.h)
+SRC_H = $(wildcard include/*/*/*.h)
 
 
 OBJ = $(addprefix $(BUILD)/, $(addsuffix .o, $(basename $(SRC_C))) )

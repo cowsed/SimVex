@@ -1,0 +1,21 @@
+kpackage main
+
+import "fmt" import "os" import "io" import "time" var file io.Writer
+s
+func sim_print(s string){
+	file.Write([]byte(s))
+}
+
+func main(){
+	var err error
+	file, err=os.Create("real.txt");
+	if err!=nil{
+		panic(err)
+	}
+
+	for i:=0; i<10; i++{
+		fmt.Println("To file 1")
+		sim_print("to stdout (through other file 1\n")
+		time.Sleep(1 * time.Second)
+	}
+}

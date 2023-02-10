@@ -19,6 +19,9 @@
 
 #ifndef   VEX_TRIPORT_CLASS_H
 #define   VEX_TRIPORT_CLASS_H
+
+#include "vex_device.h"
+
 #include "vex_mevent.h"
 /*-----------------------------------------------------------------------------*/
 /** @brief Triport device class                                                */

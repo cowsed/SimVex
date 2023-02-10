@@ -15,9 +15,10 @@
 #ifndef   VEX_COMPETITION_CLASS_H
 #define   VEX_COMPETITION_CLASS_H
 
-
+// VEX Stuff
 #include "vex_mevent.h"
 #include "vex_brain.h"
+
 
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_competition.h
