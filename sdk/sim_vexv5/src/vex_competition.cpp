@@ -26,8 +26,12 @@ namespace vex
     /**
      * @brief Creates a competition object that has access to competition methods.
      */
-    competition::competition() {}
-    competition::~competition() {}
+    competition::competition() {
+        
+    }
+    competition::~competition() {
+        print_unimplimented();
+    }
 
     // callbacks for C++ code
     // pre-auton makes no sense here
