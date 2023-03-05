@@ -107,7 +107,7 @@ namespace sim
             break;
         }
         std::cerr << "\033[1;32mOPENGL:\033[0m\t";
-        std::cerr << id << ": " << _type << " of " << _severity << " severity, raised from " << _source << ": " << msg << std::endl;         
+        std::cerr << id << ": " << _type << " of " << _severity << " severity, raised from " << _source << ": " << msg << std::endl;
     }
 
     static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
@@ -119,10 +119,10 @@ namespace sim
         }
     }
 
-    static void resize_callback(GLFWwindow * window, int width, int height){
+    static void resize_callback(GLFWwindow *window, int width, int height)
+    {
         sim_printf("Window resized to %dx%d\n", width, height);
     }
-
 
     bool test_render()
     {
@@ -134,16 +134,49 @@ namespace sim
         return true;
     }
 
+    void imguiNewFrame()
+    {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+    }
+
+    bool imguiSetup()
+    {
+        // ImGui::Text
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO &io = ImGui::GetIO();
+        ImGui::StyleColorsDark();
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+        ImGui_ImplOpenGL3_Init((char *)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
+
+        return true;
+    }
+
+    void imguiRender()
+    {
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
+    void imguiCleanup()
+    {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+    }
+
     void cleanUpWindow()
     {
         sim_printf("Destroying Window\n");
+        imguiCleanup();
         glfwDestroyWindow(window);
 
         glfwTerminate();
 
         // stop any background threads
-        sim_time_end();
         // We're really done
+        sim_time_end();
         exit(0);
     }
 
@@ -181,6 +214,10 @@ namespace sim
 
         glfwSetWindowSizeCallback(window, resize_callback);
 
+        if (!imguiSetup())
+        {
+            return false;
+        }
 
         return true;
     }
@@ -197,9 +234,13 @@ namespace sim
         sim_time_start();
         while (!glfwWindowShouldClose(window))
         {
-            //sim::printf("in main loop\n");
+            // sim::printf("in main loop\n");
+            imguiNewFrame();
+            ImGui::ShowDemoWindow();
 
             test_render();
+
+            imguiRender();
 
             glfwSwapBuffers(window);
             glfwPollEvents();

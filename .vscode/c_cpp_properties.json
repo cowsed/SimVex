@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/sdk/sim_vexv5/vendor/imgui"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

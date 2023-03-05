@@ -2,14 +2,19 @@ VERBOSE = 0
 
 PROJECT = simv5rt
 
-PROJECTLIB = lib$(PROJECT)#libsimvexc5
+PROJECTLIB = lib$(PROJECT)#libsimvexv5
 
 
 SRC_C = $(wildcard src/*.cpp) 
 SRC_C += $(wildcard src/*/*.cpp) 
 SRC_C += $(wildcard src/*/*/*.cpp) 
 
+SRC_C += $(wildcard vendor/imgui/*.cpp) 
+SRC_C += vendor/imgui/backends/imgui_impl_glfw.cpp
+SRC_C += vendor/imgui/backends/imgui_impl_opengl3.cpp
+
 SRC_H = $(wildcard include/*.h)
+SRC_H = $(wildcard vendor/imgui/*.h)
 
 
 
@@ -43,7 +48,7 @@ CXX = clang
 
 
 CXX_FLAGS = -O2 -Wall -Werror=return-type --std=gnu++17
-INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5 
+INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5 -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends
 all: $(BUILD)/$(PROJECTLIB).a
 
 

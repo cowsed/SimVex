@@ -9,6 +9,11 @@
 
 #include "../util.h" //TODO figure out why this include is funky
 #include "../time.h"
+
+#include "../../../vendor/imgui/imgui.h"
+#include "../../../vendor/imgui/backends/imgui_impl_glfw.h"
+#include "../../../vendor/imgui/backends/imgui_impl_opengl3.h" 
+
 namespace sim{
     bool initWindow();
 }
