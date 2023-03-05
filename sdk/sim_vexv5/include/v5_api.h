@@ -50,7 +50,10 @@ extern "C" {
 void                  vexBackgroundProcessing( void );
 
 // Console output
-int32_t               vexDebug( char const *fmt, ... );
+
+//int32_t               vexDebug( char const *fmt, ... );
+#define vexDebug(...) vex_printf(__VA_ARGS__)
+
 int32_t               vex_printf( char const *fmt, ... );
 int32_t               vex_sprintf ( char *out, const char *format, ... );
 int32_t               vex_snprintf( char *out, uint32_t max_len, const char *format, ... );

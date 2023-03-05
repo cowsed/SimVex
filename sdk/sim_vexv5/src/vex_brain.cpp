@@ -477,6 +477,7 @@ namespace vex
     double brain::battery::current(currentUnits units) { print_unimplimented(); return 0.0;}
 
     brain::sdcard::sdcard() { print_unimplimented(); }
+    brain::sdcard::~sdcard() { print_unimplimented(); }
 
     /**
      * @brief Gets the state of the SD card

@@ -1,24 +1,17 @@
 #include "include/sim/util.h"
 
-namespace sim
+// things in namespace sim are accessible by sim code
+bool sim_printf(const char *format, ...)
 {
+    va_list arg;
+    int done;
+    va_start(arg, format);
+    done = vfprintf(stdout, format, arg);
+    va_end(arg);
+    return done;
+}
 
-
-
-    bool printf(const char *format, ...)
-    {
-
-        va_list arg;
-        int done;
-        va_start(arg, format);
-        done = vfprintf(stderr, format, arg);
-        va_end(arg);
-        return done;
-    }
-
-    void puts(char const *str)
-    {
-        fputs(str, stderr);
-    }
-
-};
+void sim_puts(char const *str)
+{
+    fputs(str, stderr);
+}

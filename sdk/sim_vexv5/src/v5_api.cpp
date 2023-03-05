@@ -22,7 +22,6 @@
 // see v5_apiuser.h for these functions
 //
 
-
 // simple background processing
 void vexBackgroundProcessing(void)
 {
@@ -30,16 +29,20 @@ void vexBackgroundProcessing(void)
 }
 
 // Console output
-int32_t vexDebug(char const *fmt, ...)
-{
-    print_unimplimented();
-    return -1;
-}
+
+// same thing as vex_printf
+//int32_t vexDebug(char const *fmt, ...){}
 
 int32_t vex_printf(char const *fmt, ...)
 {
-    print_unimplimented();
-    return -1;
+    sim_printf("INTERCEPTED: ");
+    va_list arg;
+    int done;
+    va_start(arg, fmt);
+    done = vfprintf(stdout, fmt, arg);
+    va_end(arg);
+    return done;
+
 }
 int32_t vex_sprintf(char *out, const char *format, ...)
 {
@@ -235,7 +238,6 @@ double vexDeviceGyroHeadingGet(V5_DeviceT device)
 {
     print_unimplimented();
     return 0.0;
-
 }
 double vexDeviceGyroDegreesGet(V5_DeviceT device)
 {
@@ -773,7 +775,8 @@ uint32_t vexDeviceMagnetStatusGet(V5_DeviceT device)
 }
 
 // Distance
-uint32_t vexDeviceDistanceDistanceGet(V5_DeviceT device){
+uint32_t vexDeviceDistanceDistanceGet(V5_DeviceT device)
+{
     print_unimplimented();
     return -1;
 }
@@ -1140,7 +1143,6 @@ FRESULT vexFileDirectoryGet(const char *path, char *buffer, uint32_t len)
 {
     print_unimplimented();
     return (FRESULT)(0);
-
 }
 FIL *vexFileOpen(const char *filename, const char *mode)
 {
@@ -1151,9 +1153,8 @@ FIL *vexFileOpenWrite(const char *filename)
 {
     print_unimplimented();
     return (void *)0;
-
 }
-FIL * vexFileOpenCreate(const char *filename)
+FIL *vexFileOpenCreate(const char *filename)
 {
     print_unimplimented();
     return (void *)0;
@@ -1260,7 +1261,8 @@ uint32_t vexSystemWatchdogGet(void)
 
 // Hooks into the interrupt system, some of these will be used by FreeRTOS
 // the others are just placeholders for now
-void vexSystemBoot(void){
+void vexSystemBoot(void)
+{
     print_unimplimented();
 }
 void vexSystemUndefinedException(void)
@@ -1355,7 +1357,6 @@ double vexBatteryTemperatureGet(void)
 {
     print_unimplimented();
     return 0.0;
-
 }
 double vexBatteryCapacityGet(void)
 {
