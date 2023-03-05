@@ -8,9 +8,9 @@
 
 namespace vex
 {
+    // UNKNOWN: think brain is index 0, ports are 1-20, triport are 22
     int brain::_getIndex(){
-        print_unimplimented();
-        return -1;
+        return 0;
     }
 
     /**
