@@ -8,7 +8,7 @@
 #include <GL/glcorearb.h>
 
 #include "../util.h" //TODO figure out why this include is funky
-
+#include "../time.h"
 namespace sim{
     bool initWindow();
 }

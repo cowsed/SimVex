@@ -28,8 +28,8 @@ namespace vex {
     */
     class timer {
         private:
-          uint32_t  _offset;
-          uint32_t  _initial;
+          uint32_t  _offset; // time after start that the timer will be triggered
+          uint32_t  _initial; // time from start of time that this timer was started
           
         public:
           timer();          

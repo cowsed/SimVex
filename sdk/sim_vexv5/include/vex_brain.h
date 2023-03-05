@@ -632,8 +632,8 @@ namespace vex {
       */      
       class battery {
         public:
-          battery() {};
-          ~battery() {};
+          battery() {print_unimplimented();};
+          ~battery() {print_unimplimented();};
 
           /** 
            * @brief Gets the battery capacity.

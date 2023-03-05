@@ -39,6 +39,10 @@ namespace vex
     const char *rumbleShort = nullptr;
     const char *rumblePulse = nullptr;
 
+    /// @brief wait for the specified amount of time in units
+    /// @param time number of units to delay for
+    /// @param units the unit: second or millisecond
+    /// @return 
     void wait(double time, timeUnits units){
         uint32_t ms;
         switch (units){
@@ -46,7 +50,7 @@ namespace vex
                 ms = static_cast<uint32_t>((time)*1000);
                 break;
             case timeUnits::msec:
-                ms = (uint32_t)time;
+                ms = static_cast<uint32_t>(time);
                 break;
         }
         vexDelay(ms);

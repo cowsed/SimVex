@@ -140,6 +140,9 @@ namespace sim
         glfwDestroyWindow(window);
 
         glfwTerminate();
+
+        // stop any background threads
+        sim_time_end();
         // We're really done
         exit(0);
     }
@@ -191,6 +194,7 @@ namespace sim
         glfwMakeContextCurrent(window);
         glfwSetKeyCallback(window, key_callback);
 
+        sim_time_start();
         while (!glfwWindowShouldClose(window))
         {
             //sim::printf("in main loop\n");
