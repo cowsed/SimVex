@@ -146,11 +146,14 @@ namespace sim
         // ImGui::Text
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
+        
         ImGuiIO &io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        (void)io;
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init((char *)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
-
+        
         return true;
     }
 
