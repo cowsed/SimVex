@@ -17,6 +17,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "sim/util.h"
+#include "sim/time.h"
 #include "v5_apitypes.h"
 
 /*----------------------------------------------------------------------------*/

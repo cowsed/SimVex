@@ -40,7 +40,16 @@ namespace vex
     const char *rumblePulse = nullptr;
 
     void wait(double time, timeUnits units){
-        print_unimplimented();
+        uint32_t ms;
+        switch (units){
+            case timeUnits::sec:
+                ms = static_cast<uint32_t>((time)*1000);
+                break;
+            case timeUnits::msec:
+                ms = (uint32_t)time;
+                break;
+        }
+        vexDelay(ms);
     }
 };
 

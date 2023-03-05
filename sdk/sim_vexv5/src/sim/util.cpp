@@ -1,6 +1,6 @@
 #include "include/sim/util.h"
 
-// things in namespace sim are accessible by sim code
+// things in sim_ are accessible by sim code
 bool sim_printf(const char *format, ...)
 {
     va_list arg;
