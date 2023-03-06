@@ -28,7 +28,7 @@ void setupDockspace()
 
 void drawUI(GLFWwindow *window)
 {
-    sim_printf("drawUI2ing\n");
+    printf("drawUI2ing\n");
     // Background window
     int width;
     int height;

@@ -6,7 +6,8 @@ namespace sim
     bool show_gl_notis = false; // opengl notifications arent really needed and often clog up output
     std::thread render_thread;
     GLFWwindow *window;
-    
+    ImFont* main_font;
+    const float font_size = 15;
 
     static void glfwError(int id, const char *description)
     {
@@ -147,6 +148,8 @@ namespace sim
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+
+        ImGui::PushFont(main_font);
     }
 
     bool imguiSetup()
@@ -163,12 +166,15 @@ namespace sim
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init((char *)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
 
+        main_font = io.Fonts->AddFontFromMemoryCompressedTTF(embedded_font_compressed_data, embedded_font_compressed_size, font_size);
+
         setRedStyle();
         return true;
     }
     // Render imgui to screen. Call this last
     void imguiRender()
     {
+        ImGui::PopFont();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
