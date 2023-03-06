@@ -33,15 +33,20 @@ void vexBackgroundProcessing(void)
 // same thing as vex_printf
 //int32_t vexDebug(char const *fmt, ...){}
 
+//UNKNOWN: if 2048 is big enough. kinda dont wanna allocate memory but software team does weird things
 int32_t vex_printf(char const *fmt, ...)
 {
-    sim_printf("INTERCEPTED: ");
+    static char adding_buffer[2048];   
     va_list arg;
     int done;
     va_start(arg, fmt);
-    done = vfprintf(stdout, fmt, arg);
+    done = sprintf(adding_buffer, fmt, arg);
     va_end(arg);
+
+    print_to_terminal(adding_buffer);
+
     return done;
+
 
 }
 int32_t vex_sprintf(char *out, const char *format, ...)

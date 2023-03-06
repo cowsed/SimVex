@@ -3,6 +3,8 @@
         "chrono": "cpp",
         "compare": "cpp",
         "cstdint": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "iosfwd": "cpp",
+        "sstream": "cpp"
     }
 }

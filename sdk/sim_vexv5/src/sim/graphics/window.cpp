@@ -168,16 +168,19 @@ namespace sim
 
         main_font = io.Fonts->AddFontFromMemoryCompressedTTF(embedded_font_compressed_data, embedded_font_compressed_size, font_size);
 
-        setRedStyle();
+        ImGui::StyleColorsDark();
+        //setRedStyle();
         return true;
     }
-    // Render imgui to screen. Call this last
+
+    // Render imgui to screen. Call this last after all simulation renderring happens
     void imguiRender()
     {
         ImGui::PopFont();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
+    
     // Destruct Imgui
     void imguiCleanup()
     {

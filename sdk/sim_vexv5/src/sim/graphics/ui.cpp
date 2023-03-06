@@ -70,18 +70,28 @@ void drawUI(GLFWwindow *window)
     ImGui::Begin("Viewport");
     ImGui::Text("COMING SOON");
     ImGui::End();
-    ImGui::Begin("Control");
 
+    ImGui::Begin("Control");
     ImGui::Button("Play");
     ImGui::SameLine();
     ImGui::Button("Pause");
     ImGui::SameLine();
     ImGui::TextDisabled("Paused");
-    
-    if (ImGui::CollapsingHeader("Devices")){
-        ImGui::Text("Motor Here");
-    }
+    ImGui::Text("Controller Connected");
+    ImGui::End();
 
+    ImGui::Begin("Devices");
+    if (ImGui::CollapsingHeader("Motor : Port1"))
+    {
+        ImGui::Text("59 *C");
+        ImGui::SameLine();
+        ImGui::TextDisabled("(throttled)");
+        ImGui::Text("36:1 ratio");
+    }
+    ImGui::End();
+
+    ImGui::Begin("Terminal", NULL, ImGuiWindowFlags_HorizontalScrollbar);
+    ImGui::TextUnformatted(get_terminal_text());
     ImGui::End();
 }
 
