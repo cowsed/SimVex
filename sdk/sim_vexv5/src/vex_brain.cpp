@@ -1,4 +1,4 @@
-#include "include/vex_brain.h"
+#include "vex_brain.h"
 
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_brain.h

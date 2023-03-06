@@ -1,4 +1,4 @@
-#include "include/vex_device.h"
+#include "vex_device.h"
 
 namespace vex
 {

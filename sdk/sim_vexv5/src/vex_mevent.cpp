@@ -1,4 +1,4 @@
-#include "include/vex_mevent.h"
+#include "vex_mevent.h"
 
 namespace vex
 {

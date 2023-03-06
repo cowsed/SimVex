@@ -14,6 +14,8 @@ SRC_C += vendor/imgui/backends/imgui_impl_glfw.cpp
 SRC_C += vendor/imgui/backends/imgui_impl_opengl3.cpp
 
 SRC_H = $(wildcard include/*.h)
+SRC_H = $(wildcard include/*/*.h)
+SRC_H = $(wildcard include/*/*/*.h)
 SRC_H = $(wildcard vendor/imgui/*.h)
 
 
@@ -48,7 +50,7 @@ CXX = clang
 
 
 CXX_FLAGS = -O2 -Wall -Werror=return-type --std=gnu++17
-INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5 -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends
+INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends
 all: $(BUILD)/$(PROJECTLIB).a
 
 
@@ -69,5 +71,11 @@ $(BUILD)/$(PROJECTLIB).a: $(OBJ)
 # clean project
 clean:
 	$(info clean project)
+	rm -rf $(BUILD)/src
+	rm -rf $(BUILD)/libsimv5rt.a
+	rm $(PROJECTLIB).a
+
+deepclean:
+	$(info deepclean project)
 	rm -rf $(BUILD)
 	rm $(PROJECTLIB).a

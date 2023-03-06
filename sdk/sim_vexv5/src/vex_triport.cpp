@@ -1,4 +1,4 @@
-#include "include/vex_triport.h"
+#include "vex_triport.h"
 
 namespace vex
 {

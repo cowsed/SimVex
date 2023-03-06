@@ -1,4 +1,4 @@
-#include "include/vex_competition.h"
+#include "vex_competition.h"
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Copyright (c) Innovation First 2017-2019, All rights reserved.          */

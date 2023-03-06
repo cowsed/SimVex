@@ -1,4 +1,4 @@
-#include "include/sim/util.h"
+#include "sim/util.h"
 
 // things in sim_ are accessible by sim code
 bool sim_printf(const char *format, ...)

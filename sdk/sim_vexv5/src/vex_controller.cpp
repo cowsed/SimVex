@@ -1,4 +1,4 @@
-#include "include/vex_controller.h"
+#include "vex_controller.h"
 
 namespace vex
 {

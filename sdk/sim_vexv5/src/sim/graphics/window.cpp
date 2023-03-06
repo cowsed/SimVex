@@ -1,9 +1,12 @@
-#include "include/sim/graphics/window.h"
+#include "sim/graphics/window.h"
+
 
 namespace sim
 {
+    bool show_gl_notis = false; // opengl notifications arent really needed and often clog up output
     std::thread render_thread;
     GLFWwindow *window;
+    
 
     static void glfwError(int id, const char *description)
     {
@@ -52,7 +55,7 @@ namespace sim
         switch (type)
         {
         case GL_DEBUG_TYPE_ERROR:
-            _type = "ERROR";
+            _type = "\033[1;31mERROR\033[0m";
             break;
 
         case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
@@ -100,6 +103,9 @@ namespace sim
 
         case GL_DEBUG_SEVERITY_NOTIFICATION:
             _severity = "NOTIFICATION";
+            if (!show_gl_notis){
+                return;
+            }
             break;
 
         default:
@@ -112,9 +118,9 @@ namespace sim
 
     static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
     {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        if ((mods & GLFW_MOD_CONTROL) &&  key == GLFW_KEY_Q && action == GLFW_PRESS)
         {
-            sim_printf("ESC Pressed\n");
+            sim_printf("CTRL + Q Pressed. Exitting...\n");
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
     }
@@ -122,6 +128,8 @@ namespace sim
     static void resize_callback(GLFWwindow *window, int width, int height)
     {
         sim_printf("Window resized to %dx%d\n", width, height);
+
+        // Resize imgui window to os window
     }
 
     bool test_render()
@@ -129,7 +137,7 @@ namespace sim
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         glViewport(0, 0, width, height);
-        glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
         return true;
     }
@@ -146,29 +154,32 @@ namespace sim
         // ImGui::Text
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        
+
         ImGuiIO &io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        
         (void)io;
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init((char *)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
-        
+
+        setRedStyle();
         return true;
     }
-
+    // Render imgui to screen. Call this last
     void imguiRender()
     {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
+    // Destruct Imgui
     void imguiCleanup()
     {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
-
+    // Destruct Main Window
     void cleanUpWindow()
     {
         sim_printf("Destroying Window\n");
@@ -237,12 +248,14 @@ namespace sim
         sim_time_start();
         while (!glfwWindowShouldClose(window))
         {
-            // sim::printf("in main loop\n");
+            sim_printf("in main loop\n");
             imguiNewFrame();
-            ImGui::ShowDemoWindow();
+
+            drawUI(window);
 
             test_render();
 
+            // Where ImGui data is drawn to the screen - actual creation of UI should happen before this
             imguiRender();
 
             glfwSwapBuffers(window);

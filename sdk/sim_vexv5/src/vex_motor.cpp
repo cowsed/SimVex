@@ -1,4 +1,4 @@
-#include "include/vex_motor.h"
+#include "vex_motor.h"
 
 namespace vex
 {

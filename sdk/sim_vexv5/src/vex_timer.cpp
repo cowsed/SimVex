@@ -1,4 +1,4 @@
-#include "include/vex_timer.h"
+#include "vex_timer.h"
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_timer.h
  * @brief   V5 timer class header
