@@ -246,6 +246,7 @@ namespace sim
             cleanUpWindow();
         }
         glfwMakeContextCurrent(window);
+        setupBrainScreen();
         // glfwSetKeyCallback(window, key_callback);
 
         sim_time_start();

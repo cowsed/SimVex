@@ -20,8 +20,8 @@ namespace sim
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        ImGui::Begin("DockSpace Demo", NULL, window_flags);
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::Begin("dockspace_win", NULL, window_flags);
+        ImGuiID dockspace_id = ImGui::GetID("my_dockspace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         ImGui::End();
 
@@ -80,6 +80,9 @@ namespace sim
                 printf("released A");
             }
         }
+        ImGui::Text("pointer = %u", get_brain_screen_tex_handle());
+        ImGui::Text("size = %d x %d", 480, 240);
+        ImGui::Image((void *)(intptr_t)(get_brain_screen_tex_handle()), ImVec2(480, 240));
 
         ImGui::End();
 
@@ -97,8 +100,7 @@ namespace sim
             int remainder = (int)(seconds - (minutes * 60));
             ImGui::Text("Sim Time: %dm %ds", minutes, remainder);
             ImGui::Combo("Type", sim_time_type(), sim_time_labels_separated_by_zeroes());
-            //ImGui::SetTooltip("Time Type\n Steady: description of steady time\n Accurate: description of accurate");
-            
+            // ImGui::SetTooltip("Time Type\n Steady: description of steady time\n Accurate: description of accurate");
         }
 
         ImGui::TextColored(ImVec4(0.1, 1.0, 0.1, 1.0), "Controller Connected");

@@ -2,6 +2,7 @@
 
 namespace vex
 {
+    // easily typable units and aliases
     const rotationUnits degrees = rotationUnits::deg;
     const rotationUnits turns = rotationUnits::rev;
     const percentUnits percent = percentUnits::pct;
