@@ -3,11 +3,12 @@
 
 namespace sim
 {
+
     bool show_gl_notis = false; // opengl notifications arent really needed and often clog up output
     std::thread render_thread;
     GLFWwindow *window;
     ImFont* main_font;
-    const float font_size = 15;
+    const float font_size = 18;
 
     static void glfwError(int id, const char *description)
     {
@@ -117,18 +118,10 @@ namespace sim
         std::cerr << id << ": " << _type << " of " << _severity << " severity, raised from " << _source << ": " << msg << std::endl;
     }
 
-    static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
-    {
-        if ((mods & GLFW_MOD_CONTROL) &&  key == GLFW_KEY_Q && action == GLFW_PRESS)
-        {
-            sim_printf("CTRL + Q Pressed. Exitting...\n");
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
-        }
-    }
 
     static void resize_callback(GLFWwindow *window, int width, int height)
     {
-        sim_printf("Window resized to %dx%d\n", width, height);
+        printf("Window resized to %dx%d\n", width, height);
 
         // Resize imgui window to os window
     }
@@ -160,6 +153,7 @@ namespace sim
 
         ImGuiIO &io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         
         (void)io;
         ImGui::StyleColorsDark();
@@ -191,7 +185,7 @@ namespace sim
     // Destruct Main Window
     void cleanUpWindow()
     {
-        sim_printf("Destroying Window\n");
+        printf("Destroying Window\n");
         imguiCleanup();
         glfwDestroyWindow(window);
 
@@ -252,12 +246,11 @@ namespace sim
             cleanUpWindow();
         }
         glfwMakeContextCurrent(window);
-        glfwSetKeyCallback(window, key_callback);
+        // glfwSetKeyCallback(window, key_callback);
 
         sim_time_start();
         while (!glfwWindowShouldClose(window))
         {
-            sim_printf("in main loop\n");
             imguiNewFrame();
 
             drawUI(window);
@@ -270,7 +263,7 @@ namespace sim
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
-        sim_printf("out of main loop\n");
+        printf("out of main loop\n");
         cleanUpWindow();
         return true;
     }

@@ -49,7 +49,7 @@ CXX = clang
 #-lopengl32 -lglfw3 -lglew32
 
 
-CXX_FLAGS = -O2 -Wall -Werror=return-type --std=gnu++17
+CXX_FLAGS = -O2 -Wall -Werror=return-type --std=gnu++17 
 INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends
 all: $(BUILD)/$(PROJECTLIB).a
 

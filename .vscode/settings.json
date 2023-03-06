@@ -5,6 +5,7 @@
         "cstdint": "cpp",
         "type_traits": "cpp",
         "iosfwd": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "ratio": "cpp"
     }
 }

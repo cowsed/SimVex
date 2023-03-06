@@ -1,6 +1,6 @@
 #include "sim/terminal.h"
 
-static std::string terminal_text = "Terminal Start\n";
+static std::string terminal_text = "";
 
 void print_to_terminal(char * str){
     terminal_text.append(str);
