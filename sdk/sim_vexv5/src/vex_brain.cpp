@@ -9,7 +9,8 @@
 namespace vex
 {
     // UNKNOWN: think brain is index 0, ports are 1-20, triport are 22
-    int brain::_getIndex(){
+    int brain::_getIndex()
+    {
         return 0;
     }
 
@@ -17,6 +18,11 @@ namespace vex
      * @brief Creates a new brain object.
      */
     brain::brain() { print_unimplimented(); }
+
+    /**
+     * @brief Creates a new brain object.
+     */
+    brain::~brain() { print_unimplimented(); }
 
     /**
      * @brief Use this class to write or draw to the brain's LCD screen.
@@ -53,13 +59,21 @@ namespace vex
      * @brief An integer that tracks the current cursor position's column, starting at 1.
      * @return Returns an integer that tracks the current cursor position's column, starting at 1.
      */
-    int32_t brain::lcd::column() { print_unimplimented(); return 0;return 0;}
+    int32_t brain::lcd::column()
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief An integer that tracks the current cursor position's row, starting at 1.
      * @return Returns an integer that tracks the current cursor position's row, starting at 1.
      */
-    int32_t brain::lcd::row() { print_unimplimented(); return 0;return 0;}
+    int32_t brain::lcd::row()
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief Sets the color of the pen to a specified color.
@@ -78,7 +92,6 @@ namespace vex
      * @param hue The integer represents the hue of the color.
      */
     void brain::lcd::setPenColor(int hue) { print_unimplimented(); }
-
 
     /**
      * @brief Sets the default fill color for any subsequent draw command.
@@ -102,13 +115,21 @@ namespace vex
      * @brief Gets the width in pixels of the given string.
      * @return Returns an integer that represents the width of the string in pixels.
      */
-    int32_t brain::lcd::getStringWidth(const char *cstr) { print_unimplimented(); return 0;}
+    int32_t brain::lcd::getStringWidth(const char *cstr)
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief Gets the height in pixels of the given string.
      * @return Returns an integer that represents the height of the string in pixels.
      */
-    int32_t brain::lcd::getStringHeight(const char *cstr) { print_unimplimented(); return 0;}
+    int32_t brain::lcd::getStringHeight(const char *cstr)
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief Prints a number, string, or Boolean.
@@ -140,7 +161,11 @@ namespace vex
     /**
      * @brief Clears the whole Screen to a default color or otherwise specified color.
      */
-    void brain::lcd::clearScreen(void) { print_unimplimented(); }
+    void brain::lcd::clearScreen(void) { 
+        // clear to black
+        // UNKNOWN: does clearScreen work with clipRect or does it really clear the whole screen
+        vexDisplayClipRegionClear();
+    }
 
     /**
      * @brief Clears the whole Screen to a default color or otherwise specified color.
@@ -317,25 +342,41 @@ namespace vex
      * @brief Gets the last x location pressed on the screen.
      * @return Returns an integer that represents the last x location pressed on the screen.
      */
-    int32_t brain::lcd::xPosition() { print_unimplimented(); return 0;}
+    int32_t brain::lcd::xPosition()
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief Gets the last y location pressed on the screen.
      * @return Returns an integer that represents the last y location pressed on the screen.
      */
-    int32_t brain::lcd::yPosition() { print_unimplimented(); return 0;}
+    int32_t brain::lcd::yPosition()
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief Gets the pressed status of the Screen.
      * @return Returns a Boolean based on the state of a press on the screen. If the screen is pressed, the Boolean will be true, if the button is released, the Boolean will be false.
      */
-    bool brain::lcd::pressing() { print_unimplimented(); return false;}
+    bool brain::lcd::pressing()
+    {
+        print_unimplimented();
+        return false;
+    }
 
     /**
      * @brief Switches to double buffering or renders back buffer to screen.
      * @return Returns true if the back buffer was successfully copied to the screen.
      */
-    bool brain::lcd::render() { print_unimplimented(); return false;}
+    bool brain::lcd::render()
+    {
+        print_unimplimented();
+        return false;
+    }
 
     /**
      * @brief Switches to double buffering or renders back buffer to screen.
@@ -343,7 +384,11 @@ namespace vex
      * @param bRunScheduler (Optional) If true, run background tasks while waiting to render. By default, this parameter is true.
      * @return Returns true if the back buffer was successfully copied to the screen.
      */
-    bool brain::lcd::render(bool bVsyncWait, bool bRunScheduler) { print_unimplimented(); return false;}
+    bool brain::lcd::render(bool bVsyncWait, bool bRunScheduler)
+    {
+        print_unimplimented();
+        return false;
+    }
 
     /**
      * @brief Sets the clip region for screen output.  Only effects the current thread.
@@ -369,7 +414,11 @@ namespace vex
      *  The top/left corner of the image is placed at the coordinates given by x and y, these can
      *  be negative if desired.
      */
-    bool brain::lcd::drawImageFromBuffer(uint8_t *buffer, int x, int y, int bufferLen) { print_unimplimented(); return false;}
+    bool brain::lcd::drawImageFromBuffer(uint8_t *buffer, int x, int y, int bufferLen)
+    {
+        print_unimplimented();
+        return false;
+    }
 
     /**
      * @brief Draws an image on the screen using the contents of the memory buffer.
@@ -388,7 +437,11 @@ namespace vex
      *  The top/left corner of the image is placed at the coordinates given by x and y, these can
      *  be negative if desired.
      */
-    bool brain::lcd::drawImageFromBuffer(uint32_t *buffer, int x, int y, int width, int height) { print_unimplimented(); return false;}
+    bool brain::lcd::drawImageFromBuffer(uint32_t *buffer, int x, int y, int width, int height)
+    {
+        print_unimplimented();
+        return false;
+    }
 
     /**
      * @brief Draws an image on the screen using a file on the SD Card as the source.
@@ -403,7 +456,11 @@ namespace vex
      *  The top/left corner of the image is placed at the coordinates given by x and y, these can
      *  be negative if desired.
      */
-    bool brain::lcd::drawImageFromFile(const char *name, int x, int y) { print_unimplimented(); return false;}
+    bool brain::lcd::drawImageFromFile(const char *name, int x, int y)
+    {
+        print_unimplimented();
+        return false;
+    }
 
     // not for public use yet
     void brain::lcd::waitForRefresh() { print_unimplimented(); }
@@ -416,17 +473,35 @@ namespace vex
     void brain::lcd::_drawRectangle(int x, int y, int width, int height, uint32_t rgb) { print_unimplimented(); }
     void brain::lcd::_drawCircle(int x, int y, int radius, uint32_t rgb) { print_unimplimented(); }
 
-    brain::lcd::tImageBufferType brain::lcd::_validateImageBuffer(uint8_t *buffer) { print_unimplimented(); return brain::lcd::tImageBufferType::kImageBufferTypeUnknown;}
+    brain::lcd::tImageBufferType brain::lcd::_validateImageBuffer(uint8_t *buffer)
+    {
+        print_unimplimented();
+        return brain::lcd::tImageBufferType::kImageBufferTypeUnknown;
+    }
 
-    uint32_t brain::lcd::webColorToRgb(const char *color) { print_unimplimented(); return 0;return 0;}
-    uint32_t brain::lcd::hueToRgb(uint32_t color) { print_unimplimented(); return 0;return 0;}
+    uint32_t brain::lcd::webColorToRgb(const char *color)
+    {
+        print_unimplimented();
+        return 0;
+        return 0;
+    }
+    uint32_t brain::lcd::hueToRgb(uint32_t color)
+    {
+        print_unimplimented();
+        return 0;
+        return 0;
+    }
 
     /**
      * @brief Gets the value of the timer in the units specified.
      * @param units The unit of time that will be returned.
      * @return Returns a double that represents the value of the timer.
      */
-    double brain::timer(timeUnits units) { print_unimplimented(); return 0.0;}
+    double brain::timer(timeUnits units)
+    {
+        print_unimplimented();
+        return 0.0;
+    }
 
     /**
      * @brief Resets the timer to zero.
@@ -446,35 +521,56 @@ namespace vex
      * @return Returns an integer that represents the batteries capacity in the units specified by the parameter.
      * @param units (Optional) The type of unit that will be returned. By default, this parameter is a percentage.
      */
-    uint32_t brain::battery::capacity(percentUnits units) { print_unimplimented(); return 0;return 0;}
+    uint32_t brain::battery::capacity(percentUnits units)
+    {
+        print_unimplimented();
+        return 0;
+        return 0;
+    }
 
     /**
      * @brief Gets the battery temperature.
      * @return Returns a double that represents the batteries temperature in the units specified by the parameter.
      * @param units (Optional) The type of unit that will be returned. By default, this parameter is a percentage.
      */
-    double brain::battery::temperature(percentUnits units) { print_unimplimented(); return 0.0;}
+    double brain::battery::temperature(percentUnits units)
+    {
+        print_unimplimented();
+        return 0.0;
+    }
 
     /**
      * @brief Gets the battery temperature.
      * @return Returns a double that represents the batteries temperature in the units specified by the parameter.
      * @param units The unit of temperature that will be returned.
      */
-    double brain::battery::temperature(temperatureUnits units) { print_unimplimented(); return 0.0;}
+    double brain::battery::temperature(temperatureUnits units)
+    {
+        print_unimplimented();
+        return 0.0;
+    }
 
     /**
      * @brief Gets the battery voltage.
      * @return Returns a double that represents the batteries voltage in the units specified by the parameter.
      * @param units The unit of voltage to be returned.
      */
-    double brain::battery::voltage(voltageUnits units) { print_unimplimented(); return 0.0;}
+    double brain::battery::voltage(voltageUnits units)
+    {
+        print_unimplimented();
+        return 0.0;
+    }
 
     /**
      * @brief Gets the battery current.
      * @return Returns a double that represents the batteries current in the units specified by the parameter.
      * @param units The type of current to be returned.
      */
-    double brain::battery::current(currentUnits units) { print_unimplimented(); return 0.0;}
+    double brain::battery::current(currentUnits units)
+    {
+        print_unimplimented();
+        return 0.0;
+    }
 
     brain::sdcard::sdcard() { print_unimplimented(); }
     brain::sdcard::~sdcard() { print_unimplimented(); }
@@ -483,7 +579,11 @@ namespace vex
      * @brief Gets the state of the SD card
      * @return Returns true if the SD card is inserted. Returns false if there is not an SD card inserted.
      */
-    bool brain::sdcard::isInserted() { print_unimplimented(); return false;}
+    bool brain::sdcard::isInserted()
+    {
+        print_unimplimented();
+        return false;
+    }
 
     /**
      * @return Returns the number of bytes read from the file.
@@ -492,7 +592,11 @@ namespace vex
      * @param buffer Pointer to a buffer for file data.
      * @param len The length of the buffer in bytes. Usually set to the max length of the buffer.
      */
-    int32_t brain::sdcard::loadfile(const char *name, uint8_t *buffer, int32_t len) { print_unimplimented(); return 0;}
+    int32_t brain::sdcard::loadfile(const char *name, uint8_t *buffer, int32_t len)
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief Saves a file to the SD card.
@@ -501,7 +605,11 @@ namespace vex
      * @param buffer Pointer to a buffer with file data.
      * @param len The length of the buffer in bytes. Usually set to the max length of the buffer.
      */
-    int32_t brain::sdcard::savefile(const char *name, uint8_t *buffer, int32_t len) { print_unimplimented(); return 0;}
+    int32_t brain::sdcard::savefile(const char *name, uint8_t *buffer, int32_t len)
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief Appends data to an existing file.
@@ -510,19 +618,31 @@ namespace vex
      * @param buffer Pointer to a buffer with file data.
      * @param len The length of the buffer in bytes. Usually set to the max length of the buffer.
      */
-    int32_t brain::sdcard::appendfile(const char *name, uint8_t *buffer, int32_t len) { print_unimplimented(); return 0;}
+    int32_t brain::sdcard::appendfile(const char *name, uint8_t *buffer, int32_t len)
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief get the size in bytes of the named file
      * @return size of file in bytes
      * @param name The name of the file.
      */
-    int32_t brain::sdcard::size(const char *name) { print_unimplimented(); return 0;}
+    int32_t brain::sdcard::size(const char *name)
+    {
+        print_unimplimented();
+        return 0;
+    }
 
     /**
      * @brief check if the named file exists
      * @return true if the file exists
      * @param name The name of the file.
      */
-    bool brain::sdcard::exists(const char *name) { print_unimplimented(); return false;}
+    bool brain::sdcard::exists(const char *name)
+    {
+        print_unimplimented();
+        return false;
+    }
 }

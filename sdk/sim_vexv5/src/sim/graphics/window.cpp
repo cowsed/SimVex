@@ -246,7 +246,7 @@ namespace sim
             cleanUpWindow();
         }
         glfwMakeContextCurrent(window);
-        setupBrainScreen();
+        brain_screen::setup();
         // glfwSetKeyCallback(window, key_callback);
 
         sim_time_start();
@@ -255,6 +255,8 @@ namespace sim
             imguiNewFrame();
 
             drawUI(window);
+
+            brain_screen::render_to_tex();
 
             test_render();
 

@@ -23,6 +23,8 @@
 #include "vex_mevent.h"
 #include <type_traits> // for weird rectangle stuff
 
+#include "sim/graphics/brain_screen.h"
+
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_brain.h
   * @brief   V5 brain class header
@@ -91,7 +93,7 @@ namespace vex {
                     
         public:
           lcd();
-          ~lcd() {};
+          ~lcd() {print_unimplimented();};
                   
           /** 
            * @brief Sets the cursor to the row and column number set in the parameters.
