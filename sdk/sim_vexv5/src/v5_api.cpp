@@ -1107,9 +1107,10 @@ void vexDisplayClipRegionSet(int32_t x1, int32_t y1, int32_t x2, int32_t y2)
 {
     print_unimplimented();
 }
+// Replace 
 void vexDisplayClipRegionClear()
 {
-    print_unimplimented();
+    sim::brain_screen::clear_clip_space_internal();
 }
 
 uint32_t vexImageBmpRead(const uint8_t *ibuf, v5_image *oBuf, uint32_t maxw, uint32_t maxh)
