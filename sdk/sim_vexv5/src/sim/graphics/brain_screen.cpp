@@ -41,13 +41,11 @@ namespace sim
                 }
                 else
                 {
-                    buf[y][x] = 0xFF00FF00; // 1, 0, 1, 1
+                    buf[y][x] = 0xFF000000; // 1, 0, 1, 1
                 }
             }
         }                                //                   AARRGGBB
-        set_bg_col_internal(0x00FF0000); // 1, 0, 0, 1
-        set_fg_col_internal(0xFF000000); // 1, 0, 0, 1
-        draw_rect_internal(40, 40, 400, 160);
+
     }
 
     void renderBrainScreenToFrameBuffer()
