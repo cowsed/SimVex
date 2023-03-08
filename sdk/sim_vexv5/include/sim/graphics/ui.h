@@ -9,9 +9,10 @@
 #include "../time.h"
 #include "../terminal.h"
 #include "brain_screen.h"
+#include "../sim.h"
+namespace sim
+{
+    void drawUI(GLFWwindow *window);
 
-namespace sim{
-void drawUI(GLFWwindow *window);
-
-void setRedStyle();
+    void setRedStyle();
 }

@@ -1,8 +1,22 @@
 
 
-namespace sim{
+namespace sim
+{
+    enum SimState
+    {
+        NotReady,
+        Paused,
+        Playing
+    };
 
-    /// @brief starts or unpauses the simulation 
+    enum VexState
+    {
+        Waiting,
+        Driver,
+        Autonamous,
+    };
+
+    /// @brief starts or unpauses the simulation
     void start_sim();
 
     /// @brief pauses the simulation (physics stops, vex code will continue running with no effect until any time delay is hit, then it will hold until simulation is unpaused)
@@ -10,6 +24,8 @@ namespace sim{
 
     bool is_paused();
     bool is_running();
+
+    const char *sim_state_text();
 
     /// @brief Start autonomous control (the function registered in `competition.autonomous())
     /// If autonomous or driver control is already running, this function does nothing
@@ -20,5 +36,6 @@ namespace sim{
 
     bool is_driver_control();
     bool is_auto_control();
+    const char *vex_state_text();
 
 }

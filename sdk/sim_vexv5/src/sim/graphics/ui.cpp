@@ -88,7 +88,6 @@ namespace sim
         ImGui::Text("size = %d x %d", 480, 240);
         ImGui::Image((void *)(intptr_t)(brain_screen::get_gltex_handle()), ImVec2(480, 240));
 
-
         ImGui::End();
 
         ImGui::Begin("Control");
@@ -98,7 +97,7 @@ namespace sim
             ImGui::SameLine();
             ImGui::Button("Pause");
             ImGui::SameLine();
-            ImGui::TextDisabled("Playing");
+            ImGui::TextDisabled("%s", sim_state_text());
 
             double seconds = sim_time_sec();
             int minutes = (int)(seconds / 60);
@@ -107,15 +106,17 @@ namespace sim
             ImGui::Combo("Type", sim_time_type(), sim_time_labels_separated_by_zeroes());
             // ImGui::SetTooltip("Time Type\n Steady: description of steady time\n Accurate: description of accurate");
         }
-        if (ImGui::CollapsingHeader("Vex Control")){
-            ImGui::BeginDisabled(false);
+        if (ImGui::CollapsingHeader("Vex Control", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            
+            ImGui::BeginDisabled(((is_driver_control() || is_auto_control()))); // disable if we've already selected
             ImGui::Button("driver");
-            ImGui::EndDisabled();
             ImGui::SameLine();
-            ImGui::BeginDisabled();
             ImGui::Button("auto");
             ImGui::EndDisabled();
-            ImGui::TextDisabled("running");
+
+            ImGui::SameLine();
+            ImGui::TextDisabled("%s", vex_state_text());
         }
 
         ImGui::TextColored(ImVec4(0.1, 1.0, 0.1, 1.0), "Controller Connected");
