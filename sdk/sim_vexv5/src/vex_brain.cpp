@@ -318,7 +318,10 @@ namespace vex
      * @brief Sets the function to be called when the Screen is pressed.
      * @param callback A reference to a function.
      */
-    void brain::lcd::pressed(void (*callback)(void)) { print_unimplimented(); }
+    void brain::lcd::pressed(void (*callback)(void))
+    {
+        sim::event_handler::set_event_callback(_getIndex(), (int)tEventType::EVENT_LCD_PRESSED, callback);
+    }
 
     /**
      * @brief Sets the function to be called when the Screen is pressed.  A void pointer may be passed to the callback.
@@ -331,7 +334,10 @@ namespace vex
      * @brief Sets the function to be called when the screen is released after being pressed.
      * @param callback A reference to a function.
      */
-    void brain::lcd::released(void (*callback)(void)) { print_unimplimented(); }
+    void brain::lcd::released(void (*callback)(void))
+    {
+        sim::event_handler::set_event_callback(_getIndex(), (int)tEventType::EVENT_LCD_RELEASED, callback);
+    }
     /**
      * @brief Sets the function to be called when the screen is released after being pressed.  A void pointer may be passed to the callback.
      * @param callback A reference to a function.
