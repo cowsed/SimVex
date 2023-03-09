@@ -145,7 +145,16 @@ namespace sim
 
         // serial terminal from robot
         ImGui::Begin("Terminal", NULL, ImGuiWindowFlags_HorizontalScrollbar);
+        static bool auto_scroll_terminal = true;
+
         ImGui::TextUnformatted(get_terminal_text());
+
+        ImGui::Separator();
+        ImGui::Checkbox("Auto Scroll", &auto_scroll_terminal);
+        if (auto_scroll_terminal)
+        {
+            ImGui::SetScrollHereY(.99);
+        }
         ImGui::End();
 
         // Event Sender
