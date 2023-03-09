@@ -4,7 +4,11 @@
 #include <GL/glew.h>
 #include <GL/glcorearb.h>
 
+#include "imgui.h"
+
+
 #include "v5_apitypes.h"
+#include "sim/events.h"
 
 namespace sim
 {
@@ -21,6 +25,8 @@ namespace sim
 
         void set_bg_col_internal(uint32_t col);
         void set_fg_col_internal(uint32_t col);
+
+        void makeUI();
 
         V5_TouchStatus* get_touch_status_internal();
 

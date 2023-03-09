@@ -70,7 +70,7 @@ namespace vex {
         * @brief Calls back a function when the autonomous period starts.
         * @param callback A reference to a function.
       */
-      void     autonomous( void (* callback)(void) );
+    void     autonomous( void (* callback)(void) );
 
       /** 
         * @brief Calls back a function when the driver control period starts.

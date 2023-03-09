@@ -4,7 +4,7 @@ namespace sim
 {
     bool show_imgui_demo = false;
     bool show_imgui_stats = false;
-
+    bool show_event_sender = true;
     void setupDockspace()
     {
         ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -41,6 +41,18 @@ namespace sim
 
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("View"))
+        {
+            if (ImGui::BeginMenu("Utilities"))
+            {
+                ImGui::Checkbox("Event Sender", &show_event_sender);
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMenu();
+        }
+
         if (ImGui::BeginMenu("About"))
         {
             ImGui::MenuItem("About SimVex");
@@ -82,20 +94,10 @@ namespace sim
         }
         ImGui::End();
 
-        ImGui::Begin("Brain Screen");
+        //  Brain screen to tap on
+        sim::brain_screen::makeUI();
 
-        ImGui::Text("pointer = %u", brain_screen::get_gltex_handle());
-        ImGui::Text("size = %d x %d", 480, 240);
-        ImGui::Image((void *)(intptr_t)(brain_screen::get_gltex_handle()), ImVec2(480, 240));
-
-        ImGui::End();
-
-
-        if (ImGui::Button("Send Event")){
-            send_mevent(0, 1);
-        }
-
-
+        // Simulation Control
         ImGui::Begin("Control");
         if (ImGui::CollapsingHeader("Simulation Control", ImGuiTreeNodeFlags_DefaultOpen))
         {
@@ -112,9 +114,12 @@ namespace sim
             ImGui::Combo("Type", sim_time_type(), sim_time_labels_separated_by_zeroes());
             // ImGui::SetTooltip("Time Type\n Steady: description of steady time\n Accurate: description of accurate");
         }
+
+        // Vex Control
+        // Auto/opcontrol
         if (ImGui::CollapsingHeader("Vex Control", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            
+
             ImGui::BeginDisabled(((is_driver_control() || is_auto_control()))); // disable if we've already selected
             ImGui::Button("driver");
             ImGui::SameLine();
@@ -138,9 +143,28 @@ namespace sim
         }
         ImGui::End();
 
+        // serial terminal from robot
         ImGui::Begin("Terminal", NULL, ImGuiWindowFlags_HorizontalScrollbar);
         ImGui::TextUnformatted(get_terminal_text());
         ImGui::End();
+
+        // Event Sender
+        // Sends arbitrary mevent
+        if (show_event_sender)
+        {
+            ImGui::Begin("Event Sender", &show_event_sender);
+            ImGui::TextWrapped("Send arbitrary mevent 'interrupts' to the system. Consult docs for names and numbers of these");
+            static int event_index = 0;
+            static int event_id = 0;
+            if (ImGui::Button("Send Event"))
+            {
+                event_handler::send_mevent(event_index, event_id);
+            }
+            ImGui::InputInt("ind", &event_index);
+            ImGui::InputInt("id", &event_id);
+
+            ImGui::End();
+        }
     }
 
     void setRedStyle()

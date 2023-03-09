@@ -73,7 +73,7 @@ namespace sim::event_handler
     /// @param index index of mevent (sorta like port)
     /// @param event_id id of event on that port
     /// @param callback the function that should run when this guy happens
-    void register_mevent(int index, int event_id, mevent_func callback)
+    void register_mevent(int index, int event_id)
     {
         if (!(index >= 0 && index < NUM_INDICES && event_id >= 0 && event_id < MAX_EVENTS_PER_INDEX))
         {
@@ -89,9 +89,8 @@ namespace sim::event_handler
             return;
         }
 
-        event_handler *my_mevent = new event_handler(index, event_id, callback);
 
-        // We're working with un initizialized stuff here
+        event_handler *my_mevent = new event_handler(index, event_id, NULL);
 
         mevent_array[index][event_id] = my_mevent;
     }

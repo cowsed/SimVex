@@ -53,11 +53,15 @@ namespace sim
                     int fill = (tiley + tilex) % 2;
                     if (fill)
                     {
-                        buf[y][x] = 0xFFFF00FF; // 1, 1, 0, 1
+                        buf[y][x] = 0xFFFF00FF;
                     }
                     else
                     {
-                        buf[y][x] = 0xFF000000; // 1, 0, 1, 1
+                        buf[y][x] = 0xFF000000;
+                    }
+                    if (y > 120)
+                    {
+                        buf[y][x] = 0xFFFF0000;
                     }
                 }
             }
@@ -196,6 +200,73 @@ namespace sim
         V5_TouchStatus *get_touch_status_internal()
         {
             return &last_touch_status;
+        }
+
+        void makeUI()
+        {
+            ImGui::Begin("Brain Screen");
+
+            ImGui::Text("pointer = %u", brain_screen::get_gltex_handle());
+            ImGui::Text("size = %d x %d", 480, 240);
+            static bool was_pressed = false;
+
+            ImVec2 size = ImGui::GetContentRegionAvail();
+
+            float img_width = sim::brain_screen::brain_screen_width;
+            float img_height = sim::brain_screen::brain_screen_height;
+
+            // scale image to fit window
+            float scale_factor = size.x / img_width;
+            img_width *= scale_factor;
+            img_height *= scale_factor;
+
+
+            ImVec2 mousepos = {ImGui::GetMousePos().x - ImGui::GetCursorScreenPos().x, ImGui::GetMousePos().y - ImGui::GetCursorScreenPos().y};
+
+            ImGui::Image((void *)(intptr_t)(brain_screen::get_gltex_handle()), ImVec2(img_width, img_height));
+
+            bool over_image = (mousepos.x) < img_width && (mousepos.x) >= 0;
+            over_image &= (mousepos.y) < img_height && (mousepos.y) >= 0;
+
+
+            bool pressed = ImGui::IsMouseDown(ImGuiMouseButton_Left) && over_image;
+            bool just_pressed = pressed && !was_pressed;
+            bool just_released = !pressed && was_pressed;
+
+            if (pressed)
+            {
+                // calculate x and y
+                int16_t x = (int16_t)mousepos.x;
+                int16_t y = (int16_t)mousepos.y;
+                last_touch_status.lastXpos = x;
+                last_touch_status.lastYpos = y;
+                last_touch_status.pressCount++;
+            }
+            else
+            {
+                last_touch_status.releaseCount++;
+            }
+
+            const int brain_index = 0;
+            const int pressed_eid = 0;
+            const int released_eid = 1;
+            if (just_pressed)
+            {
+                last_touch_status.lastEvent = V5_TouchEvent::kTouchEventPress;
+                last_touch_status.pressCount = 1;
+
+                sim::event_handler::send_mevent(brain_index, pressed_eid);
+            }
+            if (just_released)
+            {
+                last_touch_status.lastEvent = V5_TouchEvent::kTouchEventPress;
+                last_touch_status.releaseCount = 1;
+
+                sim::event_handler::send_mevent(brain_index, released_eid);
+            }
+
+            was_pressed = pressed;
+            ImGui::End();
         }
 
     }

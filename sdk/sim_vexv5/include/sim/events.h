@@ -15,7 +15,7 @@ namespace sim::event_handler
 
     typedef void (*mevent_func)();
 
-    void register_mevent(int index, int event_id, mevent_func callback);
+    void register_mevent(int index, int event_id);
 
     void set_event_callback(int index, int event_id, mevent_func callback);
 
