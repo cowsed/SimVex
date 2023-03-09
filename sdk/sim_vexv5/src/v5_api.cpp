@@ -1105,7 +1105,7 @@ void vexDisplayDoubleBufferDisable(void)
 
 void vexDisplayClipRegionSet(int32_t x1, int32_t y1, int32_t x2, int32_t y2)
 {
-    print_unimplimented();
+    sim::brain_screen::set_clip_space_internal(x1, y1, x2, y2);
 }
 // Replace 
 void vexDisplayClipRegionClear()
@@ -1303,8 +1303,8 @@ void vexTouchUserCallbackSet(void (*callback)(V5_TouchEvent, int32_t, int32_t))
 }
 bool vexTouchDataGet(V5_TouchStatus *status)
 {
-    print_unimplimented();
-    return false;
+    status = sim::brain_screen::get_touch_status_internal();
+    return true;
 }
 
 // system utility

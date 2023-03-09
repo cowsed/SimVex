@@ -9,6 +9,7 @@
 
 #include "../util.h" //TODO figure out why this include is funky
 #include "../time.h"
+#include "../events.h"
 #include "ui.h"
 #include "embedded_font.h"
 

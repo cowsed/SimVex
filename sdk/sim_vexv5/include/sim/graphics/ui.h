@@ -10,6 +10,7 @@
 #include "../terminal.h"
 #include "brain_screen.h"
 #include "../sim.h"
+#include "../events.h"
 namespace sim
 {
     void drawUI(GLFWwindow *window);

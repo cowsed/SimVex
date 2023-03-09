@@ -2,9 +2,17 @@
 
 namespace vex
 {
-    int32_t controller::value(V5_ControllerIndex channel) { print_unimplimented(); return -1;}
+    int32_t controller::value(V5_ControllerIndex channel)
+    {
+        print_unimplimented();
+        return -1;
+    }
 
-    int32_t controller::_getIndex() { print_unimplimented(); return -1;}
+    int32_t controller::_getIndex()
+    {
+        print_unimplimented();
+        return -1;
+    }
 
     controller::controller() { print_unimplimented(); }
 
@@ -12,7 +20,11 @@ namespace vex
 
     controller::~controller() { print_unimplimented(); }
 
-    bool controller::installed() { print_unimplimented();  return false;}
+    bool controller::installed()
+    {
+        print_unimplimented();
+        return false;
+    }
 
     void controller::rumble(const char *str) { print_unimplimented(); }
 
@@ -44,14 +56,30 @@ namespace vex
      * @brief Gets the status of a button.
      * @return Returns a Boolean value based on the pressed states of the button. If the button is pressed it will return true.
      */
-    bool controller::button::pressing(void) const { print_unimplimented();  return false;}
+    bool controller::button::pressing(void) const
+    {
+        print_unimplimented();
+        return false;
+    }
 
     // Axis
 
     controller::tEventType controller::axis::_joystickToChangedEvent() const
     {
-        print_unimplimented();
-        return tEventType::EVENT_A_CHANGED;
+        switch (_id)
+        {
+        case tAxisType::kAxisA:
+            return tEventType::EVENT_A_CHANGED;
+        case tAxisType::kAxisB:
+            return tEventType::EVENT_B_CHANGED;
+        case tAxisType::kAxisC:
+            return tEventType::EVENT_C_CHANGED;
+        case tAxisType::kAxisD:
+            return tEventType::EVENT_D_CHANGED;
+        default:
+            return tEventType::EVENT_D_CHANGED;
+
+        }
     }
 
     /**
@@ -67,7 +95,7 @@ namespace vex
     int32_t controller::axis::value(void) const
     {
         print_unimplimented();
-        return -1;
+        return 0;
     }
 
     /**
@@ -78,64 +106,69 @@ namespace vex
     int32_t controller::axis::position(percentUnits units) const
     {
         print_unimplimented();
+        return 0;
+    }
+
+    controllerType getControllerId();
+
+    controller::lcd::lcd() { print_unimplimented(); }
+
+    controller::lcd::lcd(controller *parent) { print_unimplimented(); }
+
+    /**
+     * @brief Sets the cursor to the row and column number set in the parameters.
+     * @param row Sets the row number for where the cursor is placed.
+     * @param col Sets the column number for where the cursor is placed.
+     */
+    void controller::lcd::setCursor(int32_t row, int32_t col) { print_unimplimented(); }
+
+    /**
+     * @brief An integer that tracks the current cursor position's column, starting at 1.
+     * @return Returns an integer that tracks the current cursor position's column, starting at 1.
+     */
+    int32_t controller::lcd::column()
+    {
+        print_unimplimented();
         return -1;
     }
 
+    /**
+     * @brief An integer that tracks the current cursor position's row, starting at 1.
+     * @return Returns an integer that tracks the current cursor position's row, starting at 1.
+     */
+    int32_t controller::lcd::row()
+    {
+        print_unimplimented();
+        return -1;
+    }
 
+    /**
+     * @brief Prints a number, string, or Boolean.
+     * @param format This is a reference to a char format that prints the value of variables.
+     * @param ... A variable list of parameters to insert into format string.
+     */
+    void controller::lcd::print(const char *format, ...) { print_unimplimented(); }
+    void controller::lcd::print(char *format, ...) { print_unimplimented(); }
 
-          controllerType  getControllerId();
+    /**
+     * @brief Clears the controller's LCD screen.
+     */
+    void controller::lcd::clearScreen(void) { print_unimplimented(); }
 
-          controller::lcd::lcd(){print_unimplimented();}
+    /**
+     * @brief Clears the line specified by the parameter.
+     * @param number The line number to be cleared.
+     */
+    void controller::lcd::clearLine(int number) { print_unimplimented(); }
 
-          controller::lcd::lcd(controller *parent){print_unimplimented();}
+    /**
+     * @brief Clears the current line.
+     */
+    void controller::lcd::clearLine(void) { print_unimplimented(); }
 
-
-        /**
-         * @brief Sets the cursor to the row and column number set in the parameters.
-         * @param row Sets the row number for where the cursor is placed.
-         * @param col Sets the column number for where the cursor is placed.
-        */
-        void     controller::lcd::setCursor( int32_t row, int32_t col ){print_unimplimented();}
-
-        /** 
-         * @brief An integer that tracks the current cursor position's column, starting at 1.
-         * @return Returns an integer that tracks the current cursor position's column, starting at 1.
-        */
-        int32_t  controller::lcd::column(){print_unimplimented(); return -1;}
-
-        /** 
-         * @brief An integer that tracks the current cursor position's row, starting at 1.
-         * @return Returns an integer that tracks the current cursor position's row, starting at 1.
-        */
-        int32_t  controller::lcd::row(){print_unimplimented(); return -1;}
-
-        /** 
-           * @brief Prints a number, string, or Boolean.
-           * @param format This is a reference to a char format that prints the value of variables.
-           * @param ... A variable list of parameters to insert into format string.  
-          */           
-        void     controller::lcd::print( const char *format, ... ){print_unimplimented();}
-        void     controller::lcd::print( char *format, ... ){print_unimplimented();}
-        
-        /**
-         * @brief Clears the controller's LCD screen.
-        */
-        void     controller::lcd::clearScreen( void ){print_unimplimented();}
-
-        /**
-         * @brief Clears the line specified by the parameter.
-         * @param number The line number to be cleared.
-        */
-        void     controller::lcd::clearLine( int number ){print_unimplimented();}
-
-        /**
-         * @brief Clears the current line.
-        */
-        void     controller::lcd::clearLine( void ){print_unimplimented();}
-
-        /**
-         * @brief Moves the cursor to the next line.
-        */
-        void     controller::lcd::newLine( void ){print_unimplimented();}
+    /**
+     * @brief Moves the cursor to the next line.
+     */
+    void controller::lcd::newLine(void) { print_unimplimented(); }
 
 }

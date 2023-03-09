@@ -90,6 +90,12 @@ namespace sim
 
         ImGui::End();
 
+
+        if (ImGui::Button("Send Event")){
+            send_mevent(0, 1);
+        }
+
+
         ImGui::Begin("Control");
         if (ImGui::CollapsingHeader("Simulation Control", ImGuiTreeNodeFlags_DefaultOpen))
         {

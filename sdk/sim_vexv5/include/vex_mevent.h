@@ -1,3 +1,4 @@
+#pragma once
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Copyright (c) Innovation First 2018-2019, All rights reserved.          */
@@ -14,6 +15,7 @@
 #ifndef   VEX_MEVENT_CLASS_H
 #define   VEX_MEVENT_CLASS_H
 #include "v5_api.h"
+#include "sim/events.h"
 
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_mevent.h
@@ -27,9 +29,9 @@ namespace vex {
           int   _index;
           
         public:
-          mevent() : _event_id(-1){};
+          mevent() : _event_id(-1), _index(-1){};
           mevent( uint32_t index, uint32_t id );
-          ~mevent() {};
+          ~mevent();
                     
           operator int() const{return _event_id;};
     };

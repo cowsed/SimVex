@@ -26,6 +26,7 @@
 #include "sim/util.h"
 #include "sim/terminal.h"
 #include "sim/graphics/brain_screen.h"
+#include "sim/events.h"
 
 #include "v5_apitypes.h"
 #include "v5_apiuser.h"

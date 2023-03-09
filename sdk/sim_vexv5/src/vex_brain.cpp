@@ -161,7 +161,8 @@ namespace vex
     /**
      * @brief Clears the whole Screen to a default color or otherwise specified color.
      */
-    void brain::lcd::clearScreen(void) { 
+    void brain::lcd::clearScreen(void)
+    {
         // clear to black
         // UNKNOWN: does clearScreen work with clipRect or does it really clear the whole screen
         vexDisplayClipRegionClear();
@@ -344,8 +345,9 @@ namespace vex
      */
     int32_t brain::lcd::xPosition()
     {
-        print_unimplimented();
-        return 0;
+        static V5_TouchStatus td;
+        vexTouchDataGet(&td);
+        return td.lastXpos;
     }
 
     /**
@@ -354,8 +356,9 @@ namespace vex
      */
     int32_t brain::lcd::yPosition()
     {
-        print_unimplimented();
-        return 0;
+        static V5_TouchStatus td;
+        vexTouchDataGet(&td);
+        return td.lastYpos;
     }
 
     /**
@@ -364,8 +367,9 @@ namespace vex
      */
     bool brain::lcd::pressing()
     {
-        print_unimplimented();
-        return false;
+        static V5_TouchStatus td;
+        vexTouchDataGet(&td);
+        return td.lastEvent == V5_TouchEvent::kTouchEventPress;
     }
 
     /**
@@ -397,7 +401,10 @@ namespace vex
      * @param width The width of the clip region.
      * @param height The height of the clip region.
      */
-    void brain::lcd::setClipRegion(int x, int y, int width, int height) { print_unimplimented(); }
+    void brain::lcd::setClipRegion(int x, int y, int width, int height)
+    {
+        sim::brain_screen::set_clip_space_internal(x, y, x + width, y + height);
+    }
 
     /**
      * @brief Draws an image on the screen using the contents of the memory buffer.

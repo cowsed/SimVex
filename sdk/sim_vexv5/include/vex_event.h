@@ -37,9 +37,9 @@ namespace vex {
       
       static void     init( uint32_t index, uint32_t mask, void (* callback)(void) );
       // Do not use for now - here for testing
-      static void     init( uint32_t index, uint32_t mask, void (* callback)(int) );
-      static void     init( uint32_t index, uint32_t mask, void (* callback)(void *), void *arg );
-      static int32_t  userindex(void);
+      // static void     init( uint32_t index, uint32_t mask, void (* callback)(int) );
+      // static void     init( uint32_t index, uint32_t mask, void (* callback)(void *), void *arg );
+      // static int32_t  userindex(void);
 
       void            set( void (* callback)(void) );
       void            operator()( void (* callback)(void) );
