@@ -59,10 +59,6 @@ namespace sim
                     {
                         buf[y][x] = 0xFF000000;
                     }
-                    if (y > 120)
-                    {
-                        buf[y][x] = 0xFFFF0000;
-                    }
                 }
             }
         }
@@ -235,9 +231,11 @@ namespace sim
 
             if (pressed)
             {
+                std::cerr << " x = " << mousepos.x << " y = " << mousepos.y << std::endl;
                 // calculate x and y
                 int16_t x = (int16_t)mousepos.x;
                 int16_t y = (int16_t)mousepos.y;
+                std::cerr << " x = " << x << " y = " << y << std::endl;
                 last_touch_status.lastXpos = x;
                 last_touch_status.lastYpos = y;
                 last_touch_status.pressCount++;

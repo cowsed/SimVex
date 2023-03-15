@@ -1,5 +1,5 @@
 #include "sim/terminal.h"
-
+// todo, make this a https://pubs.opengroup.org/onlinepubs/9699919799/functions/open_memstream.html
 static std::string terminal_text = "";
 
 void print_to_terminal(char * str){

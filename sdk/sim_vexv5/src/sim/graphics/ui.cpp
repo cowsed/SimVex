@@ -163,6 +163,8 @@ namespace sim
         {
             ImGui::Begin("Event Sender", &show_event_sender);
             ImGui::TextWrapped("Send arbitrary mevent 'interrupts' to the system. Consult docs for names and numbers of these");
+            ImGui::TextColored(ImVec4(1, .1, .1, 1.0), "BE CAREFUL");
+            ImGui::TextWrapped("if you use this wrong you can do weird things like start opcontrol and auto at the sametime; what scholars call 'not good'");
             static int event_index = 0;
             static int event_id = 0;
             if (ImGui::Button("Send Event"))

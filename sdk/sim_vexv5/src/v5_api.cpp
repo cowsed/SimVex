@@ -31,23 +31,22 @@ void vexBackgroundProcessing(void)
 // Console output
 
 // same thing as vex_printf
-//int32_t vexDebug(char const *fmt, ...){}
+// int32_t vexDebug(char const *fmt, ...){}
 
-//UNKNOWN: if 2048 is big enough. kinda dont wanna allocate memory but software team does weird things
 int32_t vex_printf(char const *fmt, ...)
 {
-    static char adding_buffer[2048];   
+    char *adding_buffer;
     va_list arg;
     int done;
+
     va_start(arg, fmt);
-    done = sprintf(adding_buffer, fmt, arg);
+    done = vasprintf(&adding_buffer, fmt, arg); // shoutout to gnu extensions, they homies
     va_end(arg);
 
     print_to_terminal(adding_buffer);
 
+    free(adding_buffer);
     return done;
-
-
 }
 int32_t vex_sprintf(char *out, const char *format, ...)
 {
@@ -1107,7 +1106,7 @@ void vexDisplayClipRegionSet(int32_t x1, int32_t y1, int32_t x2, int32_t y2)
 {
     sim::brain_screen::set_clip_space_internal(x1, y1, x2, y2);
 }
-// Replace 
+// Replace
 void vexDisplayClipRegionClear()
 {
     sim::brain_screen::clear_clip_space_internal();

@@ -54,6 +54,8 @@ namespace sim::event_handler
                     lk.unlock();
                     break;
                 }
+
+
                 // else run the callback, if non null
                 if (me->callback != NULL)
                 {
@@ -83,6 +85,7 @@ namespace sim::event_handler
 
         if (mevent_array[index][event_id] != NULL)
         {
+            
             std::cerr << "=====================================" << std::endl;
             std::cerr << "A mevent is already registered in index " << index << " event " << event_id << "> THERE IS PROBABLY AN INITILIZATION BUG" << std::endl;
             std::cerr << "=====================================" << std::endl;
@@ -105,10 +108,11 @@ namespace sim::event_handler
         if (!(index >= 0 && index < NUM_INDICES && event_id >= 0 && event_id < MAX_EVENTS_PER_INDEX))
         {
             std::cerr << "INVALID MEVENT" << std::endl;
+            return;
         }
 
         // take lock, make sure callback isnt already running
-        // tell it its ok to start running
+        // tell it it should to start running
         {
             std::lock_guard<std::mutex> lk(*(mevent_array[index][event_id]->my_mutex));
 

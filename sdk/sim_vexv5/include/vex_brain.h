@@ -474,7 +474,7 @@ namespace vex {
            * @brief Gets the last x location pressed on the screen.
            * @return Returns an integer that represents the last x location pressed on the screen.
           */
-          int32_t  xPosition();
+        int32_t  xPosition();
 
           /** 
            * @brief Gets the last y location pressed on the screen.

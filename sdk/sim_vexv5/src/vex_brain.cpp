@@ -351,9 +351,7 @@ namespace vex
      */
     int32_t brain::lcd::xPosition()
     {
-        static V5_TouchStatus td;
-        vexTouchDataGet(&td);
-        return td.lastXpos;
+        return sim::brain_screen::get_touch_status_internal()->lastXpos;
     }
 
     /**
@@ -362,9 +360,7 @@ namespace vex
      */
     int32_t brain::lcd::yPosition()
     {
-        static V5_TouchStatus td;
-        vexTouchDataGet(&td);
-        return td.lastYpos;
+        return sim::brain_screen::get_touch_status_internal()->lastYpos;
     }
 
     /**
