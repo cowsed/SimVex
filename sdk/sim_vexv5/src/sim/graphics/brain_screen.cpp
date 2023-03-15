@@ -129,20 +129,44 @@ namespace sim
         }
 
         // Implementations of vex functions
-        void draw_rect_internal(int x, int y, int width, int height, uint32_t argb)
+        void draw_rect_internal(int x, int y, int width, int height, uint32_t fill_argb)
         {
             for (int iy = max(brain_stats::clip_rect_y, y); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height); iy++)
             {
                 for (int ix = max(brain_stats::clip_rect_x, x); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width); ix++)
                 {
-                    screen_buffer1[iy][ix] = argb;
+                    screen_buffer1[iy][ix] = fill_argb;
+                }
+            }
+            mark_dirty();
+        }
+        /// @brief draws a rectangle with
+        /// @param x x position of the rectangle in screen coordinates
+        /// @param y y position of the rectanlge in screen coordinates
+        /// @param width width of the rectangle
+        /// @param height height of the rectangle
+        /// @param fill_argb fill color in argb format
+        /// @param border_argb border color in argb format
+        void draw_rect_border_internal(int x, int y, int width, int height, uint32_t fill_argb, uint32_t border_argb, int border_width)
+        {
+            for (int iy = max(brain_stats::clip_rect_y, y); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height); iy++)
+            {
+                for (int ix = max(brain_stats::clip_rect_x, x); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width); ix++)
+                {
+                    bool isBorder = (ix < x + border_width) || (ix >= x + width - border_width) || (iy < y + border_width) || (iy >= y + height - border_width);
+                    if (!isBorder)
+                    {
+                        screen_buffer1[iy][ix] = fill_argb;
+                    } else {
+                        screen_buffer1[iy][ix] = border_argb;
+                    }
                 }
             }
             mark_dirty();
         }
 
         ///@brief clears the current clip space with defualt color
-        /// This function only affects the current thread TODO: make this only affect the current thread
+        /// This function only affects the current thread 
         void clear_clip_space_internal()
         {
             for (int y = 0; y < brain_screen_height; y++)
@@ -156,7 +180,7 @@ namespace sim
         /// @brief clears the current clip space with specified color
         /// This function only affects the current thread TODO: make this only affect the current thread
         /// @param col specified color
-        void clear_clip_space_internal(uint32_t col)
+    void clear_clip_space_internal(uint32_t col)
         {
             for (int y = 0; y < brain_screen_height; y++)
             {
@@ -182,15 +206,17 @@ namespace sim
         }
         /// @brief  sets the background (fill) color of this threads rendering parameters
         /// @param col the color to set it to
+        /// TODO: make this only affect the current thread
         void set_bg_col_internal(uint32_t col)
         {
-            brain_stats::bg_col = col; // | alpha_mask;
+            brain_stats::bg_col = col;
         }
         /// @brief sets the foreground (pen) color of this threads rendering parameters
         /// @param col the color to set it to
+        /// TODO: make this only affect the current thread
         void set_fg_col_internal(uint32_t col)
         {
-            brain_stats::fg_col = col; // | alpha_mask;
+            brain_stats::fg_col = col;
         }
 
         /// @brief  gets the background (fill) color of this threads rendering parameters
@@ -205,6 +231,16 @@ namespace sim
         {
             return brain_stats::fg_col;
         }
+        /// @brief gets the size of the pen aka width of lines or borders
+        /// @return the size of the pen
+        int get_pen_width(){return brain_stats::line_width;}
+
+        /// @brief sets the size of the pen aka width of lines or borders
+        /// @param width the new size to set to
+        void set_pen_width(int width){
+            brain_stats::line_width = width; 
+        }
+
 
         V5_TouchStatus *get_touch_status_internal()
         {

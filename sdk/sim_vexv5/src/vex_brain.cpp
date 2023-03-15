@@ -79,37 +79,55 @@ namespace vex
      * @brief Sets the color of the pen to a specified color.
      * @param color A color unit where colors can be defined as names.
      */
-    void brain::lcd::setPenColor(const color &color) { print_unimplimented(); }
+    void brain::lcd::setPenColor(const color &color)
+    {
+        _setPenColor(color.rgb());
+    }
 
     /**
      * @brief Sets the color of the pen to a specified color using a hex value.
      * @param color A hexadecimal value that represents color.
      */
-    void brain::lcd::setPenColor(const char *color) { print_unimplimented(); }
+    void brain::lcd::setPenColor(const char *color)
+    {
+        _setPenColor(webColorToRgb(color));
+    }
 
     /**
      * @brief Sets the color of the pen to a specified color.
      * @param hue The integer represents the hue of the color.
      */
-    void brain::lcd::setPenColor(int hue) { print_unimplimented(); }
+    void brain::lcd::setPenColor(int hue)
+    {
+        _setPenColor(hueToRgb(hue));
+    }
 
     /**
      * @brief Sets the default fill color for any subsequent draw command.
      * @param color In a color unit, colors can be defined as names.
      */
-    void brain::lcd::setFillColor(const color &color) { print_unimplimented(); }
+    void brain::lcd::setFillColor(const color &color)
+    {
+        _setFillColor(color.rgb());
+    }
 
     /**
      * @brief Sets the default fill color for any subsequent draw command..
      * @param color A hexadecimal value that represents color.
      */
-    void brain::lcd::setFillColor(const char *color) { print_unimplimented(); }
+    void brain::lcd::setFillColor(const char *color)
+    {
+        _setFillColor(webColorToRgb(color));
+    }
 
     /**
      * @brief Sets the default fill color for any subsequent draw command.
      * @param hue The integer represents the hue of the color.
      */
-    void brain::lcd::setFillColor(int hue) { print_unimplimented(); }
+    void brain::lcd::setFillColor(int hue)
+    {
+        _setFillColor(hueToRgb(hue));
+    }
 
     /**
      * @brief Gets the width in pixels of the given string.
@@ -164,7 +182,6 @@ namespace vex
     void brain::lcd::clearScreen(void)
     {
         // clear to black
-        // UNKNOWN: does clearScreen work with clipRect or does it really clear the whole screen
         vexDisplayClipRegionClear();
     }
 
@@ -172,19 +189,27 @@ namespace vex
      * @brief Clears the whole Screen to a default color or otherwise specified color.
      * @param color In a color unit, colors can be defined as names.
      */
-    void brain::lcd::clearScreen(const color &color) { print_unimplimented(); }
+    void brain::lcd::clearScreen(const color &color)
+    {
+        sim::brain_screen::clear_clip_space_internal(color.rgb());
+    }
 
     /**
      * @brief Clears the whole Screen to a default color or otherwise specified color.
      * @param color A hexadecimal value that represents color.
      */
-    void brain::lcd::clearScreen(const char *color) { print_unimplimented(); }
+    void brain::lcd::clearScreen(const char *color)
+    {
+        sim::brain_screen::clear_clip_space_internal(webColorToRgb(color));
+    }
 
     /**
      * @brief Clears the whole Screen to a default color or otherwise specified color.
      * @param hue The integer represents the hue of the color.
      */
-    void brain::lcd::clearScreen(int hue) { print_unimplimented(); }
+    void brain::lcd::clearScreen(int hue) { 
+        sim::brain_screen::clear_clip_space_internal(hueToRgb(hue));
+     }
 
     /**
      * @brief Clears the specified line and sets it to a specified color.
@@ -247,7 +272,10 @@ namespace vex
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
-    void brain::lcd::drawRectangle(int x, int y, int width, int height) { print_unimplimented(); }
+    void brain::lcd::drawRectangle(int x, int y, int width, int height)
+    {
+        sim::brain_screen::draw_rect_border_internal(x, y, width, height, sim::brain_screen::get_bg_col_internal(), sim::brain_screen::get_fg_col_internal(), sim::brain_screen::get_pen_width());
+    }
 
     /**
      * @brief Draws a rectangle using the specified points and attributes set in the parameters. Fills the rectangle with the color specified.
@@ -283,7 +311,7 @@ namespace vex
     void brain::lcd::drawRectangle(int x, int y, int width, int height, int hue)
     {
         vex::color col;
-        drawRectangle(x, y, width, height, col.hsv(hue, 1.0, 1.0));
+        _drawRectangle(x, y, width, height, hueToRgb(hue));
     }
 
     /**
@@ -482,9 +510,19 @@ namespace vex
     void brain::lcd::waitForRefresh() { print_unimplimented(); }
     void brain::lcd::renderDisable() { print_unimplimented(); }
 
-    void brain::lcd::_setPenColor(uint32_t rgb) { print_unimplimented(); }
-    void brain::lcd::_setFillColor(uint32_t rgb) { print_unimplimented(); }
-    void brain::lcd::_clearScreen(uint32_t rgb) { print_unimplimented(); }
+    /// @brief base set pen color using system format
+    /// @param rgb integer color 0xAARRGGBB
+    void brain::lcd::_setPenColor(uint32_t rgb)
+    {
+        sim::brain_screen::set_fg_col_internal(rgb);
+    }
+    /// @brief base set fill color using system format
+    /// @param rgb integer color 0xAARRGGBB
+    void brain::lcd::_setFillColor(uint32_t rgb)
+    {
+        sim::brain_screen::set_bg_col_internal(rgb);
+    }
+    void brain::lcd::_clearScreen(uint32_t rgb) { sim::brain_screen::clear_clip_space_internal(rgb); }
     void brain::lcd::_clearLine(int number, uint32_t rgb) { print_unimplimented(); }
     void brain::lcd::_drawRectangle(int x, int y, int width, int height, uint32_t rgb)
     {
@@ -500,13 +538,15 @@ namespace vex
 
     uint32_t brain::lcd::webColorToRgb(const char *color)
     {
-        print_unimplimented();
-        return 0;
+        vex::color col;
+        col.web(color);
+        return col.rgb();
     }
     uint32_t brain::lcd::hueToRgb(uint32_t color)
     {
-        print_unimplimented();
-        return 0;
+        vex::color col;
+        col.hsv(color, 1.0, 1.0);
+        return col.rgb();
     }
 
     /**

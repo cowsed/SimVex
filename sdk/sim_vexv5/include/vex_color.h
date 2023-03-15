@@ -16,6 +16,7 @@
 #include "stdint.h"
 #include "stdio.h"
 #include "math.h"
+#include <string.h>
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_color.h
   * @brief   V5 color class header

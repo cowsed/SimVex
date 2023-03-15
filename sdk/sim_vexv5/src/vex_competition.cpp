@@ -20,6 +20,27 @@
 
 namespace vex
 {
+    void (*competition::_initialize_callback)(void);
+    void (*competition::_autonomous_callback)(void);
+    void (*competition::_drivercontrol_callback)(void);
+
+
+    void competition::_disable(void *arg) {}
+    void competition::_autonomous(void)
+    {
+        if (_autonomous_callback != NULL)
+        {
+            _autonomous_callback();
+        }
+    }
+    void competition::_drivercontrol(void)
+    {
+        if (_drivercontrol_callback != NULL)
+        {
+            _drivercontrol_callback();
+        }
+    }
+
     /**
      * @brief Use this class to set up your program for competitions.
      */
@@ -33,6 +54,8 @@ namespace vex
         {
             exit(1);
         }
+        sim::event_handler::set_event_callback(brain::_getIndex(), (uint32_t)tEventType::EVENT_DRIVER_CTL, _drivercontrol);
+        sim::event_handler::set_event_callback(brain::_getIndex(), (uint32_t)tEventType::EVENT_AUTONOMOUS, _autonomous);
     }
     competition::~competition()
     {
@@ -48,7 +71,7 @@ namespace vex
      */
     void competition::autonomous(void (*callback)(void))
     {
-        sim::event_handler::set_event_callback(brain::_getIndex(), (uint32_t)tEventType::EVENT_AUTONOMOUS, callback);
+        _autonomous_callback = callback;
     }
 
     /**
@@ -57,7 +80,7 @@ namespace vex
      */
     void competition::drivercontrol(void (*callback)(void))
     {
-        sim::event_handler::set_event_callback(brain::_getIndex(), (uint32_t)tEventType::EVENT_DRIVER_CTL, callback);
+        _drivercontrol_callback = callback;
     }
 
     // check competition states
