@@ -131,7 +131,6 @@ namespace sim
         // Implementations of vex functions
         void draw_rect_internal(int x, int y, int width, int height, uint32_t argb)
         {
-            printf("argb: 0x%08x\n", argb); // gives 0x00000007
             for (int iy = max(brain_stats::clip_rect_y, y); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height); iy++)
             {
                 for (int ix = max(brain_stats::clip_rect_x, x); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width); ix++)

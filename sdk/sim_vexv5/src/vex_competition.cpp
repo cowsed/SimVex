@@ -26,13 +26,16 @@ namespace vex
     /**
      * @brief Creates a competition object that has access to competition methods.
      */
-    competition::competition() {
+    competition::competition()
+    {
         bool succeeded = sim::initWindow();
-        if (!succeeded){
+        if (!succeeded)
+        {
             exit(1);
         }
     }
-    competition::~competition() {
+    competition::~competition()
+    {
         print_unimplimented();
     }
 
@@ -45,14 +48,17 @@ namespace vex
      */
     void competition::autonomous(void (*callback)(void))
     {
-        print_unimplimented();
+        sim::event_handler::set_event_callback(brain::_getIndex(), (uint32_t)tEventType::EVENT_AUTONOMOUS, callback);
     }
 
     /**
      * @brief Calls back a function when the driver control period starts.
      * @param callback A reference to a function.
      */
-    void competition::drivercontrol(void (*callback)(void)) {}
+    void competition::drivercontrol(void (*callback)(void))
+    {
+        sim::event_handler::set_event_callback(brain::_getIndex(), (uint32_t)tEventType::EVENT_DRIVER_CTL, callback);
+    }
 
     // check competition states
     /**
@@ -71,8 +77,8 @@ namespace vex
      */
     bool competition::isDriverControl()
     {
-        print_unimplimented();
-        return false;
+
+        return sim::is_driver_control();
     }
 
     /**
@@ -81,8 +87,7 @@ namespace vex
      */
     bool competition::isAutonomous()
     {
-        print_unimplimented();
-        return false;
+        return sim::is_auto_control();
     }
 
     /**

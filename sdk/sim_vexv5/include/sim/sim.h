@@ -1,4 +1,6 @@
-
+#pragma once
+#include <iostream>
+#include "sim/events.h"
 
 namespace sim
 {
@@ -13,7 +15,7 @@ namespace sim
     {
         Waiting,
         Driver,
-        Autonamous,
+        Autonomous,
     };
 
     /// @brief starts or unpauses the simulation
@@ -33,6 +35,9 @@ namespace sim
     /// @brief Start Driver Control (the function registered in `competition.opcontrol())
     /// If autonomous or driver control is already running, this function does nothing
     void start_driver_control();
+
+    /// @brief Disable the robot
+    void disable_robot();
 
     bool is_driver_control();
     bool is_auto_control();

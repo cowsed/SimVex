@@ -259,7 +259,6 @@ namespace vex
      */
     void brain::lcd::drawRectangle(int x, int y, int width, int height, const color &color)
     {
-        printf("color & rgb = 0x%08x\n", color.rgb());
         _drawRectangle(x, y, width, height, color.rgb());
     }
 
@@ -489,7 +488,6 @@ namespace vex
     void brain::lcd::_clearLine(int number, uint32_t rgb) { print_unimplimented(); }
     void brain::lcd::_drawRectangle(int x, int y, int width, int height, uint32_t rgb)
     {
-        printf("_drawRectangle 0x%08x\n", rgb);
         sim::brain_screen::draw_rect_internal(x, y, width, height, rgb);
     }
     void brain::lcd::_drawCircle(int x, int y, int radius, uint32_t rgb) { print_unimplimented(); }

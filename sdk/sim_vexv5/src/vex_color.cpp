@@ -43,7 +43,6 @@ namespace vex
     // Assignment
     uint32_t color::rgb(uint32_t value)
     {
-    printf("rgb uint32T\n");
 
         _argb = value;
         _transparent = false;
@@ -56,7 +55,6 @@ namespace vex
     }
     void color::operator=(uint32_t value)
     {
-        printf("operator equalling\n");
         rgb(value);
         _transparent = false;
     }

@@ -121,9 +121,20 @@ namespace sim
         {
 
             ImGui::BeginDisabled(((is_driver_control() || is_auto_control()))); // disable if we've already selected
-            ImGui::Button("driver");
+            if (ImGui::Button("driver"))
+            {
+                start_driver_control();
+            }
             ImGui::SameLine();
-            ImGui::Button("auto");
+            if (ImGui::Button("auto"))
+            {
+                start_auto_control();
+            }
+            ImGui::EndDisabled();
+
+            ImGui::SameLine();
+            ImGui::BeginDisabled((!(is_driver_control() || is_auto_control()))); // enable if we've already selected
+            ImGui::Button("disable");
             ImGui::EndDisabled();
 
             ImGui::SameLine();
@@ -136,6 +147,8 @@ namespace sim
         ImGui::Begin("Devices");
         if (ImGui::CollapsingHeader("Motor : Port1"))
         {
+            static bool test_plugged_in_bool = false;
+            ImGui::Checkbox("Plugged in", &test_plugged_in_bool);
             ImGui::Text("59 *C");
             ImGui::SameLine();
             ImGui::TextDisabled("(throttled)");

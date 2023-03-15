@@ -39,7 +39,6 @@ namespace sim::event_handler
 
         static void do_calling_back(int index, int id)
         {
-            printf("before while\n");
             while (!end_callbacks)
             {
                 auto me = mevent_array[index][id];
@@ -63,7 +62,6 @@ namespace sim::event_handler
                 // else run the callback, if non null
                 if (me->callback != NULL)
                 {
-                    std::cerr << "doing callback on thread " << std::this_thread::get_id() << std::endl;
                     me->callback();
                 }
                 // did a good job, we can rest
@@ -114,6 +112,12 @@ namespace sim::event_handler
             std::cerr << "INVALID MEVENT" << std::endl;
             return;
         }
+        if (mevent_array[index][event_id] == NULL){
+            std::cerr << "NULL MEVENT" << std::endl;
+            return;
+        }
+
+
 
         // take lock, make sure callback isnt already running
         // tell it it should to start running
