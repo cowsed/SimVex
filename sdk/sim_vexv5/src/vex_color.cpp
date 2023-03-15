@@ -180,6 +180,56 @@ namespace vex
         return *this;
     }
 
+    static uint32_t charToHexValue(const char c)
+    {
+        if (c <= '9' && c >= '0')
+        {
+            return c - '0';
+        }
+        if (c >= 'a' && c <= 'f')
+        {
+            return c - 'a';
+        }
+        if (c >= 'A' && c <= 'F')
+        {
+            return c - 'A';
+        }
+
+        // error
+        return -1;
+    }
+
+    /**
+     * @brief Creates a color using a hexadecimal value.
+     * @return Returns a reference to a color.
+     * @param color A hexadecimal or web color value that defines a specific color.
+     */
+    color &color::web(const char *color)
+    {
+        uint32_t out = 0xFF;
+        if (strlen(color) != 6)
+        {
+            goto invalid_color;
+        }
+
+        for (int i = 0; i < 6; i++)
+        {
+            uint32_t digit_value = charToHexValue(color[i]);
+            if (digit_value < 0 || digit_value > 15)
+            {
+                goto invalid_color;
+            }
+            out += digit_value;
+            out = out << 4;
+        }
+        return *this;
+
+    invalid_color:
+        printf("INVALID WEB COLOR\n");
+        this->_argb = 0x00000000;
+        return *this;
+    }
+
     const color color::black = 0xFF000000;
     /**
      *@brief Represents the color white.
