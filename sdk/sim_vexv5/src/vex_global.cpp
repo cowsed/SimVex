@@ -43,16 +43,18 @@ namespace vex
     /// @brief wait for the specified amount of time in units
     /// @param time number of units to delay for
     /// @param units the unit: second or millisecond
-    /// @return 
-    void wait(double time, timeUnits units){
+    /// @return
+    void wait(double time, timeUnits units)
+    {
         uint32_t ms;
-        switch (units){
-            case timeUnits::sec:
-                ms = static_cast<uint32_t>((time)*1000);
-                break;
-            case timeUnits::msec:
-                ms = static_cast<uint32_t>(time);
-                break;
+        switch (units)
+        {
+        case timeUnits::sec:
+            ms = static_cast<uint32_t>((time)*1000);
+            break;
+        case timeUnits::msec:
+            ms = static_cast<uint32_t>(time);
+            break;
         }
         vexDelay(ms);
     }
@@ -110,16 +112,16 @@ namespace vex
     const gearSetting ratio18_1 = gearSetting::ratio18_1;
     const gearSetting ratio6_1 = gearSetting::ratio6_1;
 
-    //const color &               black = color::black;
-    //const color &               white = color::white;
-    //const color &               red =color::red;
-    //const color &               green = color::green;
-    //const color &               blue = color::blue;
-    //const color &               yellow = color::yellow;
-    //const color &               orange  =color::orange;
-    //const color &               purple = color::purple;
-    //const color &               cyan = color::cyan;
-    //const color &               transparent = color::transparent;
+    const color &black = color::black;
+    const color &white = color::white;
+    const color &red = color::red;
+    const color &green = color::green;
+    const color &blue = color::blue;
+    const color &yellow = color::yellow;
+    const color &orange = color::orange;
+    const color &purple = color::purple;
+    const color &cyan = color::cyan;
+    const color &transparent = color::transparent;
 
     const fontType mono20 = fontType::mono20;
     const fontType mono30 = fontType::mono30;

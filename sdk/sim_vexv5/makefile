@@ -16,6 +16,7 @@ SRC_C += vendor/imgui/backends/imgui_impl_opengl3.cpp
 SRC_H = $(wildcard include/*.h)
 SRC_H = $(wildcard include/*/*.h)
 SRC_H = $(wildcard include/*/*/*.h)
+SRC_H = $(wildcard include/*/*/*/*.h)
 SRC_H = $(wildcard vendor/imgui/*.h)
 
 

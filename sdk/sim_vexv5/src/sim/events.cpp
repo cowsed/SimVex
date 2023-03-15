@@ -22,6 +22,8 @@ namespace sim::event_handler
         {
             my_mutex = new std::mutex();
             my_cv = new std::condition_variable();
+            mevent_array[index][event_id] = this;
+
             my_runner_thread = new std::thread(do_calling_back, index, event_id);
         }
 
@@ -37,10 +39,12 @@ namespace sim::event_handler
 
         static void do_calling_back(int index, int id)
         {
+            printf("before while\n");
             while (!end_callbacks)
             {
                 auto me = mevent_array[index][id];
                 // aquire unique lock on my_mutex
+
                 std::unique_lock<std::mutex>
                     lk(*me->my_mutex);
 
@@ -94,8 +98,8 @@ namespace sim::event_handler
 
 
         event_handler *my_mevent = new event_handler(index, event_id, NULL);
-
         mevent_array[index][event_id] = my_mevent;
+
     }
     void set_event_callback(int index, int event_id, mevent_func callback)
     {

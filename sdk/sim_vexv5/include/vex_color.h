@@ -13,7 +13,9 @@
 
 #ifndef   VEX_COLOR_CLASS_H
 #define   VEX_COLOR_CLASS_H
-
+#include "stdint.h"
+#include "stdio.h"
+#include "math.h"
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_color.h
   * @brief   V5 color class header

@@ -257,7 +257,11 @@ namespace vex
      * @param height The height of the rectangle.
      * @param color A color unit where colors can be defined as names.
      */
-    void brain::lcd::drawRectangle(int x, int y, int width, int height, const color &color) { print_unimplimented(); }
+    void brain::lcd::drawRectangle(int x, int y, int width, int height, const color &color)
+    {
+        printf("color & rgb = 0x%08x\n", color.rgb());
+        _drawRectangle(x, y, width, height, color.rgb());
+    }
 
     /**
      * @brief Draws a rectangle using the specified points and attributes set in the parameters. Fills the rectangle with the color specified.
@@ -277,7 +281,11 @@ namespace vex
      * @param height The height of the rectangle.
      * @param hue The color of the rectangle.
      */
-    void brain::lcd::drawRectangle(int x, int y, int width, int height, int hue) { print_unimplimented(); }
+    void brain::lcd::drawRectangle(int x, int y, int width, int height, int hue)
+    {
+        vex::color col;
+        drawRectangle(x, y, width, height, col.hsv(hue, 1.0, 1.0));
+    }
 
     /**
      * @brief Draws a circle using the specified points and attributes set in the parameters. Fills the circle with the current pen and fill color.
@@ -479,7 +487,11 @@ namespace vex
     void brain::lcd::_setFillColor(uint32_t rgb) { print_unimplimented(); }
     void brain::lcd::_clearScreen(uint32_t rgb) { print_unimplimented(); }
     void brain::lcd::_clearLine(int number, uint32_t rgb) { print_unimplimented(); }
-    void brain::lcd::_drawRectangle(int x, int y, int width, int height, uint32_t rgb) { print_unimplimented(); }
+    void brain::lcd::_drawRectangle(int x, int y, int width, int height, uint32_t rgb)
+    {
+        printf("_drawRectangle 0x%08x\n", rgb);
+        sim::brain_screen::draw_rect_internal(x, y, width, height, rgb);
+    }
     void brain::lcd::_drawCircle(int x, int y, int radius, uint32_t rgb) { print_unimplimented(); }
 
     brain::lcd::tImageBufferType brain::lcd::_validateImageBuffer(uint8_t *buffer)
@@ -492,12 +504,10 @@ namespace vex
     {
         print_unimplimented();
         return 0;
-        return 0;
     }
     uint32_t brain::lcd::hueToRgb(uint32_t color)
     {
         print_unimplimented();
-        return 0;
         return 0;
     }
 

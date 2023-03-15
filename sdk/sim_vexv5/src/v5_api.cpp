@@ -941,13 +941,11 @@ void vexDisplayBackgroundColor(uint32_t col)
 }
 uint32_t vexDisplayForegroundColorGet(void)
 {
-    print_unimplimented();
-    return -1;
+    return sim::brain_screen::get_fg_col_internal();
 }
 uint32_t vexDisplayBackgroundColorGet(void)
 {
-    print_unimplimented();
-    return -1;
+    return sim::brain_screen::get_bg_col_internal();
 }
 void vexDisplayErase(void)
 {

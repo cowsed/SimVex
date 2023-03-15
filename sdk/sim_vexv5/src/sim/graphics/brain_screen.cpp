@@ -129,13 +129,14 @@ namespace sim
         }
 
         // Implementations of vex functions
-        void draw_rect_internal(int x, int y, int width, int height)
+        void draw_rect_internal(int x, int y, int width, int height, uint32_t argb)
         {
+            printf("argb: 0x%08x\n", argb); // gives 0x00000007
             for (int iy = max(brain_stats::clip_rect_y, y); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height); iy++)
             {
                 for (int ix = max(brain_stats::clip_rect_x, x); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width); ix++)
                 {
-                    screen_buffer1[iy][ix] = brain_stats::bg_col;
+                    screen_buffer1[iy][ix] = argb;
                 }
             }
             mark_dirty();
@@ -193,6 +194,19 @@ namespace sim
             brain_stats::fg_col = col; // | alpha_mask;
         }
 
+        /// @brief  gets the background (fill) color of this threads rendering parameters
+        /// @return the color to set it to
+        uint32_t get_bg_col_internal()
+        {
+            return brain_stats::bg_col;
+        }
+        /// @brief sets the foreground (pen) color of this threads rendering parameters
+        /// @param col the color to set it to
+        uint32_t get_fg_col_internal()
+        {
+            return brain_stats::fg_col;
+        }
+
         V5_TouchStatus *get_touch_status_internal()
         {
             return &last_touch_status;
@@ -216,7 +230,6 @@ namespace sim
             img_width *= scale_factor;
             img_height *= scale_factor;
 
-
             ImVec2 mousepos = {ImGui::GetMousePos().x - ImGui::GetCursorScreenPos().x, ImGui::GetMousePos().y - ImGui::GetCursorScreenPos().y};
 
             ImGui::Image((void *)(intptr_t)(brain_screen::get_gltex_handle()), ImVec2(img_width, img_height));
@@ -224,18 +237,15 @@ namespace sim
             bool over_image = (mousepos.x) < img_width && (mousepos.x) >= 0;
             over_image &= (mousepos.y) < img_height && (mousepos.y) >= 0;
 
-
             bool pressed = ImGui::IsMouseDown(ImGuiMouseButton_Left) && over_image;
             bool just_pressed = pressed && !was_pressed;
             bool just_released = !pressed && was_pressed;
 
             if (pressed)
             {
-                std::cerr << " x = " << mousepos.x << " y = " << mousepos.y << std::endl;
                 // calculate x and y
                 int16_t x = (int16_t)mousepos.x;
                 int16_t y = (int16_t)mousepos.y;
-                std::cerr << " x = " << x << " y = " << y << std::endl;
                 last_touch_status.lastXpos = x;
                 last_touch_status.lastYpos = y;
                 last_touch_status.pressCount++;
