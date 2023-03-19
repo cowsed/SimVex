@@ -6,7 +6,8 @@
 #include <condition_variable>
 #include "assert.h"
 
-namespace sim::event_handler
+namespace sim{
+namespace event_handler
 {
     const int MAX_EVENTS_PER_INDEX = 128; // 128
 
@@ -22,4 +23,4 @@ namespace sim::event_handler
     void send_mevent(int index, int event_id);
 
     void stop_mevent(int index, int id);
-}
+}}
