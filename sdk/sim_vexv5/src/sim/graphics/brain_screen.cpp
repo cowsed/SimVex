@@ -44,6 +44,17 @@ namespace sim
             texture_dirty = true;
         }
 
+        typedef struct
+        {
+            font::font_info font_info;
+            std::map<char, font::glyph_info> *font_glyph_info;
+            int font_tex_size;
+            int font_tex_width;
+            int font_tex_height;
+            const uint8_t *font_tex;
+
+        } full_font_info;
+
         /// @brief queries our known fonts for data about them
         /// @param font_name vex name for the font
         /// @param font_info return ptr for font_info struct
@@ -52,8 +63,14 @@ namespace sim
         /// @param font_tex_width return ptr for width of the font texture
         /// @param font_tex_height return ptr for height of the font texture
         /// @param font_tex return ptr to the font texture
-        void get_font_info(vex::fontType font_name, font::font_info *font_info, std::map<char, font::glyph_info> *font_glyph_info, const int *font_tex_size, const int *font_tex_width, const int *font_tex_height, uint8_t **font_tex)
+        full_font_info get_font_info(vex::fontType font_name)
         {
+            font::font_info font_info;
+            std::map<char, font::glyph_info> *font_glyph_info;
+            int font_tex_size;
+            int font_tex_width;
+            int font_tex_height;
+            const uint8_t *font_tex;
             switch (font_name)
             {
             case vex::fontType::cjk16:
@@ -65,48 +82,65 @@ namespace sim
                 printf("Unimplemented Font Type\n");
                 // passthrough to mono12 just so we don't null ptr shenanigans
             case vex::fontType::mono12:
-                font_info = &font::noto_sans_mono_12_info;
+                font_info = font::noto_sans_mono_12_info;
                 font_glyph_info = &font::noto_sans_mono_12_glyph_info;
-                font_tex_size = &font::noto_sans_mono_12_tex_size;
-                font_tex_width = &font::noto_sans_mono_12_tex_width;
-                font_tex_height = &font::noto_sans_mono_12_tex_height;
+                font_tex_size = font::noto_sans_mono_12_tex_size;
+                font_tex_width = font::noto_sans_mono_12_tex_width;
+                font_tex_height = font::noto_sans_mono_12_tex_height;
+                font_tex = font::noto_sans_mono_12_tex;
                 break;
             case vex::fontType::mono15:
-                font_info = &font::noto_sans_mono_15_info;
+                font_info = font::noto_sans_mono_15_info;
                 font_glyph_info = &font::noto_sans_mono_15_glyph_info;
-                font_tex_size = &font::noto_sans_mono_15_tex_size;
-                font_tex_width = &font::noto_sans_mono_15_tex_width;
-                font_tex_height = &font::noto_sans_mono_15_tex_height;
+                font_tex_size = font::noto_sans_mono_15_tex_size;
+                font_tex_width = font::noto_sans_mono_15_tex_width;
+                font_tex_height = font::noto_sans_mono_15_tex_height;
+                font_tex = font::noto_sans_mono_15_tex;
+
                 break;
             case vex::fontType::mono20:
-                font_info = &font::noto_sans_mono_20_info;
+                font_info = font::noto_sans_mono_20_info;
                 font_glyph_info = &font::noto_sans_mono_20_glyph_info;
-                font_tex_size = &font::noto_sans_mono_20_tex_size;
-                font_tex_width = &font::noto_sans_mono_20_tex_width;
-                font_tex_height = &font::noto_sans_mono_20_tex_height;
+                font_tex_size = font::noto_sans_mono_20_tex_size;
+                font_tex_width = font::noto_sans_mono_20_tex_width;
+                font_tex_height = font::noto_sans_mono_20_tex_height;
+                font_tex = font::noto_sans_mono_20_tex;
                 break;
             case vex::fontType::mono30:
-                font_info = &font::noto_sans_mono_30_info;
+                font_info = font::noto_sans_mono_30_info;
                 font_glyph_info = &font::noto_sans_mono_30_glyph_info;
-                font_tex_size = &font::noto_sans_mono_30_tex_size;
-                font_tex_width = &font::noto_sans_mono_30_tex_width;
-                font_tex_height = &font::noto_sans_mono_30_tex_height;
+                font_tex_size = font::noto_sans_mono_30_tex_size;
+                font_tex_width = font::noto_sans_mono_30_tex_width;
+                font_tex_height = font::noto_sans_mono_30_tex_height;
+                font_tex = font::noto_sans_mono_30_tex;
                 break;
             case vex::fontType::mono40:
-                font_info = &font::noto_sans_mono_40_info;
+                font_info = font::noto_sans_mono_40_info;
                 font_glyph_info = &font::noto_sans_mono_40_glyph_info;
-                font_tex_size = &font::noto_sans_mono_40_tex_size;
-                font_tex_width = &font::noto_sans_mono_40_tex_width;
-                font_tex_height = &font::noto_sans_mono_40_tex_height;
+                font_tex_size = font::noto_sans_mono_40_tex_size;
+                font_tex_width = font::noto_sans_mono_40_tex_width;
+                font_tex_height = font::noto_sans_mono_40_tex_height;
+                font_tex = font::noto_sans_mono_40_tex;
                 break;
             case vex::fontType::mono60:
-                font_info = &font::noto_sans_mono_60_info;
+                printf("chose 60\n");
+                font_info = font::noto_sans_mono_60_info;
                 font_glyph_info = &font::noto_sans_mono_60_glyph_info;
-                font_tex_size = &font::noto_sans_mono_60_tex_size;
-                font_tex_width = &font::noto_sans_mono_60_tex_width;
-                font_tex_height = &font::noto_sans_mono_60_tex_height;
+                font_tex_size = font::noto_sans_mono_60_tex_size;
+                font_tex_width = font::noto_sans_mono_60_tex_width;
+                font_tex_height = font::noto_sans_mono_60_tex_height;
+                font_tex = font::noto_sans_mono_60_tex;
                 break;
             }
+            return full_font_info
+            {
+                .font_info = font_info,
+                .font_glyph_info = font_glyph_info,
+                .font_tex_size = font_tex_size,
+                .font_tex_width = font_tex_width,
+                .font_tex_height = font_tex_height,
+                .font_tex = font_tex,
+            };
         }
 
         /// @brief calculates the width in pixels of a string
@@ -116,27 +150,21 @@ namespace sim
         /// @return the width in pixels that the font would take up
         int calc_string_width(char *str, vex::fontType font_name)
         {
-            font::font_info *this_font_info = nullptr;
-            std::map<char, font::glyph_info> *this_font_glyph_info = nullptr;
-            const int *this_font_tex_size = nullptr;
-            const int *this_font_tex_width = nullptr;
-            const int *this_font_tex_height = nullptr;
-            uint8_t **this_font_tex = nullptr;
-            get_font_info(font_name, this_font_info, this_font_glyph_info, this_font_tex_size, this_font_tex_width, this_font_tex_height, this_font_tex);
+            full_font_info this_font = get_font_info(font_name);
 
             int i = 0;
             int length_sum = 0;
             while (str[i] != 0x00)
             {
-                if (this_font_glyph_info->count(str[i]))
+                if (this_font.font_glyph_info->count(str[i]))
                 {
-                    font::glyph_info gi = (*this_font_glyph_info)[str[i]];
+                    font::glyph_info gi = (*this_font.font_glyph_info)[str[i]];
                     length_sum += gi.width;
                 }
                 else
                 {
                     // unknown character
-                    length_sum += (*this_font_glyph_info)[0x0].width;
+                    length_sum += (*this_font.font_glyph_info)[0x0].width;
                 }
                 i++;
             }
@@ -173,6 +201,7 @@ namespace sim
         /// @param B second integer (return = B if F = 255)
         /// @param F fraction to mix with
         /// @return  mixture of A and B according to F
+
         uint8_t uint8Mix(uint8_t A, uint8_t B, uint8_t F)
         {
             if (F == 255)
@@ -181,14 +210,6 @@ namespace sim
             }
             uint8_t I = A + (uint8_t)(((int16_t)(B - A) * F) >> 8);
             return I;
-            // if (F < 125)
-            //{
-            //     return A;
-            // }
-            // else
-            //{
-            //     return B;
-            // }
         }
         /// @brief mix two uint32 colors according to F
         /// used for anti aliasing of fonts
@@ -219,6 +240,7 @@ namespace sim
             val = ((uint32_t)val + Ib);
             return val;
         }
+
         /// @brief draw a single character to the screen
         /// UNKNOWN: whether using vex::transparent as a background actually draws text with no background or if its just black
         /// @param glyph the glyph to draw
@@ -238,7 +260,7 @@ namespace sim
             {
                 for (int screenX = x; screenX < x + glyph_width; screenX++)
                 {
-                    int texX = screenX - x;
+                    int texX = screenX - x + glyph_x;
                     int texY = screenY - y;
                     uint8_t pix_amt = font_tex[texY * font_tex_stride + texX];
                     uint32_t screen_col = uint32Mix(bg_color, fg_color, pix_amt);
@@ -248,7 +270,26 @@ namespace sim
             }
         }
 
-        void blitString(char *str, uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, vex::fontType font_type, int x, int y) {}
+        void blitString(char *str, uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, vex::fontType font_name, int x, int y)
+        {
+            full_font_info this_font = get_font_info(font_name);
+
+            int curx = x;
+            int i = 0;
+            while (str[i] != 0x00)
+            {
+                font::glyph_info gi; // = (*this_font_glyph_info)[0x0]; // unknown character
+                if (this_font.font_glyph_info->count(str[i]))
+                {
+                    printf("blitted %c at x = %d\n", str[i], curx);
+                    gi = (*this_font.font_glyph_info)[str[i]];
+                    blitGlyph(buf, fg_color, bg_color, gi.width, this_font.font_tex_height, gi.x, this_font.font_tex_width, this_font.font_tex, curx, y);
+                    curx += gi.width;
+                }
+
+                i++;
+            }
+        }
 
         /// @brief draws a test screen to test screen rendering
         /// @param buf the buffer on which to draw
@@ -279,7 +320,9 @@ namespace sim
                     buf[y + 40][x + 40] = 0xFF000000 + (val << 16) + (val << 8) + val;
                 }
             }
-            blitGlyph(buf, 0xFF00FF00, 0xFF000000, 180, font::noto_sans_mono_60_info.height, 0, font::noto_sans_mono_60_tex_width, font::noto_sans_mono_60_tex, 50, 150);
+            char *my_str = (char *)"hello world";
+            printf("blitting %s\n", my_str);
+            blitString(my_str, buf, 0xFFFF0000, 0xFF000000, vex::mono20, 100, 100);
         }
 
         // Take the buffer currently on the CPU with updates and upload it to the GPU

@@ -8,7 +8,7 @@ font_info noto_sans_mono_60_info = {
 	.name = "noto_sans_mono_60"
 };
 std::map<char, glyph_info> noto_sans_mono_60_glyph_info = {
-	{32, {.x = 0, .width = 0}},
+	{32, {.x = 0, .width = 30}},
 	{33, {.x = 78, .width = 11}},
 	{34, {.x = 139, .width = 19}},
 	{35, {.x = 196, .width = 35}},
