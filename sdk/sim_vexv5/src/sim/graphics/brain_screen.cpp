@@ -332,7 +332,7 @@ namespace sim
         /// @param str string to print
         void print_at_internal(int x, int y, bool opaque, char *str)
         {
-            blitString(str, working_screen_buffer, brain_stats::fg_col, brain_stats::bg_col, brain_stats::current_font, opaque, x, y);
+            blitString(str, working_screen_buffer, get_fg_col_internal(), get_bg_col_internal(), brain_stats::current_font, opaque, x, y);
         }
 
         /// @brief draws a test screen to test screen rendering
@@ -512,6 +512,10 @@ namespace sim
             brain_stats::clip_rect_width = abs(x1 - x2);
             brain_stats::clip_rect_height = abs(y1 - y2);
         }
+        void set_font_internal(vex::fontType font){
+            brain_stats::current_font = font;
+        }
+
         /// @brief  sets the background (fill) color of this threads rendering parameters
         /// @param col the color to set it to
         /// TODO: make this only affect the current thread

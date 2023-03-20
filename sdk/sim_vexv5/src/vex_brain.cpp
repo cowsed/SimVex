@@ -40,7 +40,9 @@ namespace vex
      * @brief Sets the font type to be displayed on the Screen that is determined by the parameter.
      * @param font The type of font that is displayed.
      */
-    void brain::lcd::setFont(fontType font) { print_unimplimented(); }
+    void brain::lcd::setFont(fontType font) { 
+        sim::brain_screen::set_font_internal(font);
+     }
 
     /**
      * @brief Sets the pen's width.
