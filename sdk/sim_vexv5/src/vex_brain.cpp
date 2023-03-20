@@ -164,7 +164,18 @@ namespace vex
      * @param format A reference to a char format to print the value of variables.
      * @param ... A variable list of parameters to insert into format string.
      */
-    void brain::lcd::printAt(int32_t x, int32_t y, const char *format, ...) { print_unimplimented(); }
+    void brain::lcd::printAt(int32_t x, int32_t y, const char *format, ...)
+    {
+        char *adding_buffer;
+        va_list arg;
+        va_start(arg, format);
+        vasprintf(&adding_buffer, format, arg);
+        va_end(arg);
+
+        sim::brain_screen::print_at_internal(x, y, true, adding_buffer);
+
+        free(adding_buffer);
+    }
 
     /**
      * @brief Prints a number, string, or Boolean at an x, y pixel location with the ability to be transparent.
@@ -174,7 +185,18 @@ namespace vex
      * @param format A reference to a char format to print the value of variables.
      * @param ... A variable list of parameters to insert into format string.
      */
-    void brain::lcd::printAt(int32_t x, int32_t y, bool bOpaque, const char *format, ...) { print_unimplimented(); }
+    void brain::lcd::printAt(int32_t x, int32_t y, bool bOpaque, const char *format, ...)
+    {
+        char *adding_buffer;
+        va_list arg;
+        va_start(arg, format);
+        vasprintf(&adding_buffer, format, arg);
+        va_end(arg);
+
+        sim::brain_screen::print_at_internal(x, y, bOpaque, adding_buffer);
+
+        free(adding_buffer);
+    }
 
     /**
      * @brief Clears the whole Screen to a default color or otherwise specified color.
@@ -207,9 +229,10 @@ namespace vex
      * @brief Clears the whole Screen to a default color or otherwise specified color.
      * @param hue The integer represents the hue of the color.
      */
-    void brain::lcd::clearScreen(int hue) { 
+    void brain::lcd::clearScreen(int hue)
+    {
         sim::brain_screen::clear_clip_space_internal(hueToRgb(hue));
-     }
+    }
 
     /**
      * @brief Clears the specified line and sets it to a specified color.

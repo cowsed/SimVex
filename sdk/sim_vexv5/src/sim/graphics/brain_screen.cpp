@@ -36,6 +36,7 @@ namespace sim
             int clip_rect_y = 0;
             int clip_rect_width = 480;
             int clip_rect_height = 240;
+            vex::fontType current_font = vex::mono20;
         }
 
         ///@brief marks the texture on the GPU as out of sync with the texture on the CPU. When we get there, we will have to sync them back up
@@ -79,7 +80,6 @@ namespace sim
             case vex::fontType::prop40:
             case vex::fontType::prop60:
                 print_unimplimented();
-                printf("Unimplemented Font Type\n");
                 // passthrough to mono12 just so we don't null ptr shenanigans
             case vex::fontType::mono12:
                 font_info = font::noto_sans_mono_12_info;
@@ -123,7 +123,6 @@ namespace sim
                 font_tex = font::noto_sans_mono_40_tex;
                 break;
             case vex::fontType::mono60:
-                printf("chose 60\n");
                 font_info = font::noto_sans_mono_60_info;
                 font_glyph_info = &font::noto_sans_mono_60_glyph_info;
                 font_tex_size = font::noto_sans_mono_60_tex_size;
@@ -132,8 +131,7 @@ namespace sim
                 font_tex = font::noto_sans_mono_60_tex;
                 break;
             }
-            return full_font_info
-            {
+            return full_font_info{
                 .font_info = font_info,
                 .font_glyph_info = font_glyph_info,
                 .font_tex_size = font_tex_size,
@@ -193,6 +191,28 @@ namespace sim
                 buf[screenY][screenX] = col;
             }
         }
+        /// @brief gets a pixel in the working buffer
+        /// this function respects the origin and the clip rectangle
+        /// UNKNOWN: if origin affects where the clip rect is placed
+        //// getting from outside the bounds of the image is undefined
+        /// @param buf the buffer to set in
+        /// @param x the x position to set
+        /// @param y the y position to set
+        /// @param col the color to set
+        uint32_t getPixelAccordingly(uint32_t buf[brain_screen_height][brain_screen_width], int x, int y)
+        {
+            int screenX = x + brain_stats::origin_x; // x pos in screen
+            int screenY = y + brain_stats::origin_y; // y pos in screen
+
+            bool inX = (screenX > brain_stats::clip_rect_x) && (screenX < brain_stats::clip_rect_x + brain_stats::clip_rect_width);
+            bool inY = (screenY > brain_stats::clip_rect_y) && (screenY < brain_stats::clip_rect_y + brain_stats::clip_rect_height);
+
+            if (inX && inY)
+            {
+                return buf[screenY][screenX];
+            }
+            return 0x00000000;
+        }
 
         // https://stackoverflow.com/questions/48073159/most-efficient-linear-interpolation-using-integer-fraction
 
@@ -247,14 +267,14 @@ namespace sim
         /// @param buf the buffer to draw to
         /// @param fg_color the color of the text
         /// @param bg_color the color of the brackground of the text
-        /// @param glyph_width the width
-        /// @param glyph_height
-        /// @param glyph_x
-        /// @param font_height
-        /// @param font_tex_stride
-        /// @param x position on the screen
-        /// @param y
-        void blitGlyph(uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, int glyph_width, int glyph_height, int glyph_x, int font_tex_stride, const uint8_t *font_tex, int x, int y)
+        /// @param glyph_width the width of the glyph we will draw
+        /// @param glyph_height the height of the glyph we will draw
+        /// @param glyph_x x position in texture of the glyph
+        /// @param font_height height of the glyphs in the font texture
+        /// @param font_tex_stride width of font tex image
+        /// @param x x position on the screen
+        /// @param y y position on the screen
+        void blitGlyph(uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, bool opaque, int glyph_width, int glyph_height, int glyph_x, int font_tex_stride, const uint8_t *font_tex, int x, int y)
         {
             for (int screenY = y; screenY < y + glyph_height; screenY++)
             {
@@ -263,14 +283,29 @@ namespace sim
                     int texX = screenX - x + glyph_x;
                     int texY = screenY - y;
                     uint8_t pix_amt = font_tex[texY * font_tex_stride + texX];
-                    uint32_t screen_col = uint32Mix(bg_color, fg_color, pix_amt);
+                    uint32_t bg_col = bg_color;
+                    if (!opaque)
+                    {
+                        bg_col = getPixelAccordingly(buf, screenX, screenY);
+                    }
+                    uint32_t screen_col = uint32Mix(bg_col, fg_color, pix_amt);
 
                     setPixelAccordingly(buf, screenX, screenY, screen_col);
                 }
             }
         }
 
-        void blitString(char *str, uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, vex::fontType font_name, int x, int y)
+        /// @brief blit a string to the specified buffer
+        /// does anti aliasing
+        /// @param str string to write
+        /// @param buf buffer to write to
+        /// @param fg_color color of text
+        /// @param bg_color color of background. if not opaque, this color is unused
+        /// @param font_name vex name of font to use
+        /// @param opaque true to use bg_color as background, false to draw only text to the screen
+        /// @param x x position to start at
+        /// @param y y position to start at
+        void blitString(char *str, uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, vex::fontType font_name, bool opaque, int x, int y)
         {
             full_font_info this_font = get_font_info(font_name);
 
@@ -278,17 +313,26 @@ namespace sim
             int i = 0;
             while (str[i] != 0x00)
             {
-                font::glyph_info gi; // = (*this_font_glyph_info)[0x0]; // unknown character
+                font::glyph_info gi = (*this_font.font_glyph_info)[0x0]; // unknown character
                 if (this_font.font_glyph_info->count(str[i]))
                 {
-                    printf("blitted %c at x = %d\n", str[i], curx);
                     gi = (*this_font.font_glyph_info)[str[i]];
-                    blitGlyph(buf, fg_color, bg_color, gi.width, this_font.font_tex_height, gi.x, this_font.font_tex_width, this_font.font_tex, curx, y);
-                    curx += gi.width;
                 }
+                blitGlyph(buf, fg_color, bg_color, opaque, gi.width, this_font.font_tex_height, gi.x, this_font.font_tex_width, this_font.font_tex, curx, y);
+                curx += gi.width;
 
                 i++;
             }
+        }
+
+        /// @brief outside facing printAt
+        /// @param x x position to start string at
+        /// @param y y position to start the string at
+        /// @param opaque true to use screen.background color to fill background, false to draw only text over background
+        /// @param str string to print
+        void print_at_internal(int x, int y, bool opaque, char *str)
+        {
+            blitString(str, working_screen_buffer, brain_stats::fg_col, brain_stats::bg_col, brain_stats::current_font, opaque, x, y);
         }
 
         /// @brief draws a test screen to test screen rendering
@@ -322,7 +366,7 @@ namespace sim
             }
             char *my_str = (char *)"hello world";
             printf("blitting %s\n", my_str);
-            blitString(my_str, buf, 0xFFFF0000, 0xFF000000, vex::mono20, 100, 100);
+            blitString(my_str, buf, 0xFFFF0000, 0xFF000000, vex::mono20, true, 100, 100);
         }
 
         // Take the buffer currently on the CPU with updates and upload it to the GPU
