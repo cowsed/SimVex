@@ -7,7 +7,7 @@ namespace sim
         const int brain_screen_width = 480;
         const int brain_screen_height = 240;
 
-        static uint32_t screen_buffer1[brain_screen_height][brain_screen_width];
+        static uint32_t working_screen_buffer[brain_screen_height][brain_screen_width];
         static GLuint brain_screen_texture_handle1;
 
         static bool texture_dirty = true;
@@ -29,6 +29,9 @@ namespace sim
             uint32_t fg_col = 0xFFFFFFFF;
             int line_width = 1;
 
+            int origin_x = 0;
+            int origin_y = 0;
+
             int clip_rect_x = 0;
             int clip_rect_y = 0;
             int clip_rect_width = 480;
@@ -40,6 +43,213 @@ namespace sim
         {
             texture_dirty = true;
         }
+
+        /// @brief queries our known fonts for data about them
+        /// @param font_name vex name for the font
+        /// @param font_info return ptr for font_info struct
+        /// @param font_glyph_info return ptr for map of glphs
+        /// @param font_tex_size return ptr for size in pixels of the font texture
+        /// @param font_tex_width return ptr for width of the font texture
+        /// @param font_tex_height return ptr for height of the font texture
+        /// @param font_tex return ptr to the font texture
+        void get_font_info(vex::fontType font_name, font::font_info *font_info, std::map<char, font::glyph_info> *font_glyph_info, const int *font_tex_size, const int *font_tex_width, const int *font_tex_height, uint8_t **font_tex)
+        {
+            switch (font_name)
+            {
+            case vex::fontType::cjk16:
+            case vex::fontType::prop20:
+            case vex::fontType::prop30:
+            case vex::fontType::prop40:
+            case vex::fontType::prop60:
+                print_unimplimented();
+                printf("Unimplemented Font Type\n");
+                // passthrough to mono12 just so we don't null ptr shenanigans
+            case vex::fontType::mono12:
+                font_info = &font::noto_sans_mono_12_info;
+                font_glyph_info = &font::noto_sans_mono_12_glyph_info;
+                font_tex_size = &font::noto_sans_mono_12_tex_size;
+                font_tex_width = &font::noto_sans_mono_12_tex_width;
+                font_tex_height = &font::noto_sans_mono_12_tex_height;
+                break;
+            case vex::fontType::mono15:
+                font_info = &font::noto_sans_mono_15_info;
+                font_glyph_info = &font::noto_sans_mono_15_glyph_info;
+                font_tex_size = &font::noto_sans_mono_15_tex_size;
+                font_tex_width = &font::noto_sans_mono_15_tex_width;
+                font_tex_height = &font::noto_sans_mono_15_tex_height;
+                break;
+            case vex::fontType::mono20:
+                font_info = &font::noto_sans_mono_20_info;
+                font_glyph_info = &font::noto_sans_mono_20_glyph_info;
+                font_tex_size = &font::noto_sans_mono_20_tex_size;
+                font_tex_width = &font::noto_sans_mono_20_tex_width;
+                font_tex_height = &font::noto_sans_mono_20_tex_height;
+                break;
+            case vex::fontType::mono30:
+                font_info = &font::noto_sans_mono_30_info;
+                font_glyph_info = &font::noto_sans_mono_30_glyph_info;
+                font_tex_size = &font::noto_sans_mono_30_tex_size;
+                font_tex_width = &font::noto_sans_mono_30_tex_width;
+                font_tex_height = &font::noto_sans_mono_30_tex_height;
+                break;
+            case vex::fontType::mono40:
+                font_info = &font::noto_sans_mono_40_info;
+                font_glyph_info = &font::noto_sans_mono_40_glyph_info;
+                font_tex_size = &font::noto_sans_mono_40_tex_size;
+                font_tex_width = &font::noto_sans_mono_40_tex_width;
+                font_tex_height = &font::noto_sans_mono_40_tex_height;
+                break;
+            case vex::fontType::mono60:
+                font_info = &font::noto_sans_mono_60_info;
+                font_glyph_info = &font::noto_sans_mono_60_glyph_info;
+                font_tex_size = &font::noto_sans_mono_60_tex_size;
+                font_tex_width = &font::noto_sans_mono_60_tex_width;
+                font_tex_height = &font::noto_sans_mono_60_tex_height;
+                break;
+            }
+        }
+
+        /// @brief calculates the width in pixels of a string
+        /// if the str contains an unknown character, the unknown character width is used
+        /// @param str the string we are measuring
+        /// @param font_name which font we are drawing with
+        /// @return the width in pixels that the font would take up
+        int calc_string_width(char *str, vex::fontType font_name)
+        {
+            font::font_info *this_font_info = nullptr;
+            std::map<char, font::glyph_info> *this_font_glyph_info = nullptr;
+            const int *this_font_tex_size = nullptr;
+            const int *this_font_tex_width = nullptr;
+            const int *this_font_tex_height = nullptr;
+            uint8_t **this_font_tex = nullptr;
+            get_font_info(font_name, this_font_info, this_font_glyph_info, this_font_tex_size, this_font_tex_width, this_font_tex_height, this_font_tex);
+
+            int i = 0;
+            int length_sum = 0;
+            while (str[i] != 0x00)
+            {
+                if (this_font_glyph_info->count(str[i]))
+                {
+                    font::glyph_info gi = (*this_font_glyph_info)[str[i]];
+                    length_sum += gi.width;
+                }
+                else
+                {
+                    // unknown character
+                    length_sum += (*this_font_glyph_info)[0x0].width;
+                }
+                i++;
+            }
+
+            return length_sum;
+        }
+
+        /// @brief sets a pixel in the working buffer
+        /// this function respects the origin and the clip rectangle
+        /// UNKNOWN: if origin affects where the clip rect is placed
+        ////
+        /// @param buf the buffer to set in
+        /// @param x the x position to set
+        /// @param y the y position to set
+        /// @param col the color to set
+        void setPixelAccordingly(uint32_t buf[brain_screen_height][brain_screen_width], int x, int y, uint32_t col)
+        {
+            int screenX = x + brain_stats::origin_x; // x pos in screen
+            int screenY = y + brain_stats::origin_y; // y pos in screen
+
+            bool inX = (screenX > brain_stats::clip_rect_x) && (screenX < brain_stats::clip_rect_x + brain_stats::clip_rect_width);
+            bool inY = (screenY > brain_stats::clip_rect_y) && (screenY < brain_stats::clip_rect_y + brain_stats::clip_rect_height);
+
+            if (inX && inY)
+            {
+                buf[screenY][screenX] = col;
+            }
+        }
+
+        // https://stackoverflow.com/questions/48073159/most-efficient-linear-interpolation-using-integer-fraction
+
+        /// @brief linear interpolate between two integers
+        /// @param A first integer (return = A if F = 0)
+        /// @param B second integer (return = B if F = 255)
+        /// @param F fraction to mix with
+        /// @return  mixture of A and B according to F
+        uint8_t uint8Mix(uint8_t A, uint8_t B, uint8_t F)
+        {
+            if (F == 255)
+            {
+                return B;
+            }
+            uint8_t I = A + (uint8_t)(((int16_t)(B - A) * F) >> 8);
+            return I;
+            // if (F < 125)
+            //{
+            //     return A;
+            // }
+            // else
+            //{
+            //     return B;
+            // }
+        }
+        /// @brief mix two uint32 colors according to F
+        /// used for anti aliasing of fonts
+        /// @param A first integer (return = A if F = 0)
+        /// @param B second integer (return = B if F = 255)
+        /// @param F fraction to mix with
+        /// @return  mixture of A and B according to F
+        uint32_t uint32Mix(uint32_t A, uint32_t B, uint8_t F)
+        {
+            uint8_t Aa = (uint8_t)(0xFF & (A >> 24));
+            uint8_t Ar = (uint8_t)(0xFF & (A >> 16));
+            uint8_t Ag = (uint8_t)(0xFF & (A >> 8));
+            uint8_t Ab = (uint8_t)(0xFF & (A >> 0));
+
+            uint8_t Ba = (uint8_t)(0xFF & (B >> 24));
+            uint8_t Br = (uint8_t)(0xFF & (B >> 16));
+            uint8_t Bg = (uint8_t)(0xFF & (B >> 8));
+            uint8_t Bb = (uint8_t)(0xFF & (B >> 0));
+
+            uint8_t Ia = uint8Mix(Aa, Ba, F);
+            uint8_t Ir = uint8Mix(Ar, Br, F);
+            uint8_t Ig = uint8Mix(Ag, Bg, F);
+            uint8_t Ib = uint8Mix(Ab, Bb, F);
+
+            uint32_t val = (uint32_t)Ia << 8;
+            val = ((uint32_t)val + Ir) << 8;
+            val = ((uint32_t)val + Ig) << 8;
+            val = ((uint32_t)val + Ib);
+            return val;
+        }
+        /// @brief draw a single character to the screen
+        /// UNKNOWN: whether using vex::transparent as a background actually draws text with no background or if its just black
+        /// @param glyph the glyph to draw
+        /// @param buf the buffer to draw to
+        /// @param fg_color the color of the text
+        /// @param bg_color the color of the brackground of the text
+        /// @param glyph_width the width
+        /// @param glyph_height
+        /// @param glyph_x
+        /// @param font_height
+        /// @param font_tex_stride
+        /// @param x position on the screen
+        /// @param y
+        void blitGlyph(uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, int glyph_width, int glyph_height, int glyph_x, int font_tex_stride, const uint8_t *font_tex, int x, int y)
+        {
+            for (int screenY = y; screenY < y + glyph_height; screenY++)
+            {
+                for (int screenX = x; screenX < x + glyph_width; screenX++)
+                {
+                    int texX = screenX - x;
+                    int texY = screenY - y;
+                    uint8_t pix_amt = font_tex[texY * font_tex_stride + texX];
+                    uint32_t screen_col = uint32Mix(bg_color, fg_color, pix_amt);
+
+                    setPixelAccordingly(buf, screenX, screenY, screen_col);
+                }
+            }
+        }
+
+        void blitString(char *str, uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, vex::fontType font_type, int x, int y) {}
+
         /// @brief draws a test screen to test screen rendering
         /// @param buf the buffer on which to draw
         void draw_start_screen(uint32_t buf[brain_screen_height][brain_screen_width])
@@ -61,6 +271,15 @@ namespace sim
                     }
                 }
             }
+            for (int y = 0; y < 60; y++)
+            {
+                for (int x = 0; x < 300; x++)
+                {
+                    uint8_t val = font::noto_sans_mono_60_tex[y * font::noto_sans_mono_60_tex_width + x];
+                    buf[y + 40][x + 40] = 0xFF000000 + (val << 16) + (val << 8) + val;
+                }
+            }
+            blitGlyph(buf, 0xFF00FF00, 0xFF000000, 180, font::noto_sans_mono_60_info.height, 0, font::noto_sans_mono_60_tex_width, font::noto_sans_mono_60_tex, 50, 150);
         }
 
         // Take the buffer currently on the CPU with updates and upload it to the GPU
@@ -69,7 +288,7 @@ namespace sim
         {
             if (texture_dirty)
             {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, brain_screen_width, brain_screen_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, screen_buffer1);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, brain_screen_width, brain_screen_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, working_screen_buffer);
                 texture_dirty = false;
             }
         }
@@ -79,7 +298,7 @@ namespace sim
         bool setup()
         {
             // defualt screen image
-            draw_start_screen(screen_buffer1);
+            draw_start_screen(working_screen_buffer);
             // make gl texture
             glGenTextures(1, &brain_screen_texture_handle1);
             glBindTexture(GL_TEXTURE_2D, brain_screen_texture_handle1);
@@ -135,7 +354,7 @@ namespace sim
             {
                 for (int ix = max(brain_stats::clip_rect_x, x); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width); ix++)
                 {
-                    screen_buffer1[iy][ix] = fill_argb;
+                    working_screen_buffer[iy][ix] = fill_argb;
                 }
             }
             mark_dirty();
@@ -156,9 +375,11 @@ namespace sim
                     bool isBorder = (ix < x + border_width) || (ix >= x + width - border_width) || (iy < y + border_width) || (iy >= y + height - border_width);
                     if (!isBorder)
                     {
-                        screen_buffer1[iy][ix] = fill_argb;
-                    } else {
-                        screen_buffer1[iy][ix] = border_argb;
+                        working_screen_buffer[iy][ix] = fill_argb;
+                    }
+                    else
+                    {
+                        working_screen_buffer[iy][ix] = border_argb;
                     }
                 }
             }
@@ -166,27 +387,27 @@ namespace sim
         }
 
         ///@brief clears the current clip space with defualt color
-        /// This function only affects the current thread 
+        /// This function only affects the current thread
         void clear_clip_space_internal()
         {
             for (int y = 0; y < brain_screen_height; y++)
             {
                 for (int x = 0; x < brain_screen_width; x++)
                 {
-                    screen_buffer1[y][x] = 0x00000000;
+                    working_screen_buffer[y][x] = 0x00000000;
                 }
             }
         }
         /// @brief clears the current clip space with specified color
         /// This function only affects the current thread TODO: make this only affect the current thread
         /// @param col specified color
-    void clear_clip_space_internal(uint32_t col)
+        void clear_clip_space_internal(uint32_t col)
         {
             for (int y = 0; y < brain_screen_height; y++)
             {
                 for (int x = 0; x < brain_screen_width; x++)
                 {
-                    screen_buffer1[y][x] = col;
+                    working_screen_buffer[y][x] = col;
                 }
             }
         }
@@ -233,14 +454,14 @@ namespace sim
         }
         /// @brief gets the size of the pen aka width of lines or borders
         /// @return the size of the pen
-        int get_pen_width(){return brain_stats::line_width;}
+        int get_pen_width() { return brain_stats::line_width; }
 
         /// @brief sets the size of the pen aka width of lines or borders
         /// @param width the new size to set to
-        void set_pen_width(int width){
-            brain_stats::line_width = width; 
+        void set_pen_width(int width)
+        {
+            brain_stats::line_width = width;
         }
-
 
         V5_TouchStatus *get_touch_status_internal()
         {

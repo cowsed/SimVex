@@ -2,12 +2,14 @@ VERBOSE = 0
 
 PROJECT = simv5rt
 
-PROJECTLIB = lib$(PROJECT)#libsimvexv5
+PROJECTLIB = lib$(PROJECT)#libsimv5rt
 
 
 SRC_C = $(wildcard src/*.cpp) 
 SRC_C += $(wildcard src/*/*.cpp) 
 SRC_C += $(wildcard src/*/*/*.cpp) 
+SRC_C += $(wildcard src/*/*/*/*.cpp) 
+SRC_C += $(wildcard src/*/*/*/*/*.cpp) 
 
 SRC_C += $(wildcard vendor/imgui/*.cpp) 
 SRC_C += vendor/imgui/backends/imgui_impl_glfw.cpp
@@ -17,6 +19,7 @@ SRC_H = $(wildcard include/*.h)
 SRC_H = $(wildcard include/*/*.h)
 SRC_H = $(wildcard include/*/*/*.h)
 SRC_H = $(wildcard include/*/*/*/*.h)
+SRC_H = $(wildcard include/*/*/*/*/*.h)
 SRC_H = $(wildcard vendor/imgui/*.h)
 
 

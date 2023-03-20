@@ -113,6 +113,8 @@ func makeHeader(fontname string, img image.Image) string {
 	s += fmt.Sprintf("extern font_info %s_info;\n\n", fontname)
 	s += fmt.Sprintf("extern std::map<char, glyph_info> %s_glyph_info;\n\n", fontname)
 	s += fmt.Sprintf("extern const int %s_tex_size;\n", fontname)
+	s += fmt.Sprintf("extern const int %s_tex_width;\n", fontname)
+	s += fmt.Sprintf("extern const int %s_tex_height;\n", fontname)
 	s += fmt.Sprintf("extern const uint8_t %s_tex[%d];\n", fontname, img.Bounds().Dx()*img.Bounds().Dy())
 
 	s += "}\n"
@@ -152,6 +154,10 @@ func makeSource(fontname string, fontinfo FontConfig, img image.Image) string {
 	s += "};\n"
 
 	s += fmt.Sprintf("const int %s_tex_size = %d;\n", fontname, img.Bounds().Dx()*img.Bounds().Dy())
+
+	s += fmt.Sprintf("const int %s_tex_width = %d;\n", fontname, img.Bounds().Dx())
+	s += fmt.Sprintf("const int %s_tex_height = %d;\n", fontname, img.Bounds().Dy())
+
 	s += fmt.Sprintf("const uint8_t %s_tex[%s_tex_size] = {\n", fontname, fontname)
 
 	for y := 0; y < img.Bounds().Dy(); y++ {
