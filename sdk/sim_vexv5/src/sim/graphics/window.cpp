@@ -158,8 +158,7 @@ namespace sim
         (void)io;
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
-        ImGui_ImplOpenGL3_Init((char *)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
-
+        ImGui_ImplOpenGL3_Init(nullptr);//((char *)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
         main_font = io.Fonts->AddFontFromMemoryCompressedTTF(embedded_font_compressed_data, embedded_font_compressed_size, font_size);
 
         ImGui::StyleColorsDark();
@@ -193,7 +192,7 @@ namespace sim
 
         // stop any background threads
         // We're really done
-        sim_time_end();
+        sim::time_end();
         exit(0);
     }
 
@@ -249,7 +248,7 @@ namespace sim
         brain_screen::setup();
         // glfwSetKeyCallback(window, key_callback);
 
-        sim_time_start();
+        sim::time_start();
         while (!glfwWindowShouldClose(window))
         {
             imguiNewFrame();

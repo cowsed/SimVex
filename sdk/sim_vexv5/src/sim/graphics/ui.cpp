@@ -107,11 +107,11 @@ namespace sim
             ImGui::SameLine();
             ImGui::TextDisabled("%s", sim_state_text());
 
-            double seconds = sim_time_sec();
+            double seconds = sim::time_sec();
             int minutes = (int)(seconds / 60);
             int remainder = (int)(seconds - (minutes * 60));
             ImGui::Text("Sim Time: %dm %ds", minutes, remainder);
-            ImGui::Combo("Type", sim_time_type(), sim_time_labels_separated_by_zeroes());
+            ImGui::Combo("Type", sim::get_time_type(), sim::time_labels_separated_by_zeroes());
             // ImGui::SetTooltip("Time Type\n Steady: description of steady time\n Accurate: description of accurate");
         }
 

@@ -8,8 +8,10 @@
 
 namespace vex
 {
-    timer::timer() : _offset(0), _initial(sim_time_ms()) {}
-    timer::~timer() { print_unimplimented(); }
+    timer::timer() : _offset(0), _initial(sim::time_ms()) {}
+    timer::~timer() { 
+        // cleanup events set
+     }
 
     // Assignment
     void timer::operator=(uint32_t value)
@@ -19,7 +21,7 @@ namespace vex
     }
 
     // Get value - time since this timer started
-    timer::operator uint32_t() const { return sim_time_ms() - _initial; }
+    timer::operator uint32_t() const { return sim::time_ms() - _initial; }
 
     /**
      * @brief Gets the current value of the timer in mS.
@@ -27,7 +29,7 @@ namespace vex
      */
     uint32_t timer::time() const
     {
-        return sim_time_ms() - _initial;
+        return sim::time_ms() - _initial;
     }
 
     /**
@@ -37,13 +39,12 @@ namespace vex
      */
     double timer::time(timeUnits units) const
     {  
-        uint32_t elapsed = sim_time_ms() - _initial;
-        switch (units){
-            case timeUnits::sec:
-                return (double)elapsed / 1000.0;
-            case timeUnits::msec:
-                return elapsed;
+        uint32_t time_ms = time();
+        if (units==vex::msec){
+            return (double)time_ms;
         }
+
+        return ((double)time_ms)/1000.0;
     }
 
     /**
@@ -58,24 +59,24 @@ namespace vex
     /**
      * @brief Sets the current value of the timer to 0.
      */
-    void timer::clear() { _initial = sim_time_ms(); _offset = 0; }
+    void timer::clear() { _initial = sim::time_ms(); _offset = 0; }
 
     /**
      * @brief Sets the current value of the timer to 0.
      */
-    void timer::reset() { _initial = sim_time_ms(); _offset = 0; }
+    void timer::reset() { _initial = sim::time_ms(); _offset = 0; }
 
     /**
      * @brief Gets the current value of the system timer in mS.
      * @return Returns the value of the system timer in mS.
      */
-    uint32_t timer::system() { return sim_time_ms(); }
+    uint32_t timer::system() { return sim::time_ms(); }
 
     /**
      * @brief Gets the current value of the high-resolution timer (in microseconds).
      * @return Returns the current value of the high-resolution timer (in microseconds).
      */
-    uint64_t timer::systemHighResolution() { return sim_time_microseconds(); }
+    uint64_t timer::systemHighResolution() { return sim::time_microseconds(); }
 
     /**
      * @brief Sets a callback that will be called in the future.

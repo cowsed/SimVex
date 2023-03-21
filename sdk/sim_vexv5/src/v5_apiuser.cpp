@@ -8,8 +8,8 @@
 
 void vexDelay(uint32_t timems)
 {
-  int32_t now_ms = sim_time_ms();
-  while (sim_time_ms() < now_ms + timems)
+  int32_t now_ms = sim::time_ms();
+  while (sim::time_ms() < now_ms + timems)
   {
   }
 }
