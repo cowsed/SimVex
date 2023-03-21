@@ -25,7 +25,10 @@ namespace vex
     void (*competition::_drivercontrol_callback)(void);
 
 
-    void competition::_disable(void *arg) {}
+    void competition::_disable(void *arg) {
+        print_unimplimented();
+        //probably like stop motors and stuff
+    }
     void competition::_autonomous(void)
     {
         if (_autonomous_callback != NULL)
@@ -90,8 +93,8 @@ namespace vex
      */
     bool competition::isEnabled()
     {
-        print_unimplimented();
-        return false;
+
+        return sim::is_auto_control() || sim::is_driver_control();
     }
 
     /**

@@ -20,11 +20,7 @@ namespace sim::event_handler
 
         event_handler(int index, int event_id, mevent_func callback) : index(index), id(event_id), callback(callback), should_run(false)
         {
-            my_mutex = new std::mutex();
-            my_cv = new std::condition_variable();
-            mevent_array[index][event_id] = this;
-
-            my_runner_thread = new std::thread(do_calling_back, index, event_id);
+            setup_event();
         }
 
 
@@ -33,15 +29,24 @@ namespace sim::event_handler
         {
             printf("cancelling %d:%d\n", index, id);
 
-            reset_event();
+            stop_event();
 
             delete mevent_array[index][id]->my_cv;
             delete mevent_array[index][id]->my_mutex;
             delete mevent_array[index][id]->my_runner_thread;
         }
 
-        // called at disable when we wan't to stop the threads
-        void reset_event()
+        /// @brief sets up event such that it is ready to run when needed
+        void setup_event(){
+            my_mutex = new std::mutex();
+            my_cv = new std::condition_variable();
+            mevent_array[index][id] = this;
+            my_runner_thread = new std::thread(do_calling_back, index, id);
+        }
+
+        /// @brief resets (stops) an event task. 
+        /// callback function is retained it's just stopped
+        void stop_event()
         {
             // ask nicely to end event
             end_callbacks = true;
@@ -153,7 +158,7 @@ namespace sim::event_handler
             {
                 if (index >= 0 && index < NUM_INDICES && id >= 0 && id < MAX_EVENTS_PER_INDEX && mevent_array[index][id] != NULL)
                 {
-                    mevent_array[index][id]->reset_event();
+                    mevent_array[index][id]->stop_event();
                 }
             }
         }

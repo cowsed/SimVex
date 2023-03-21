@@ -13,7 +13,7 @@ namespace sim
 
     enum VexState
     {
-        Waiting,
+        Disabled,
         Driver,
         Autonomous,
     };

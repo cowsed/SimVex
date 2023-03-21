@@ -25,7 +25,7 @@ namespace sim
 
         void send_mevent(int index, int event_id);
 
-        void stop_all_mevent();
+        void stop_all_mevents();
         void end_mevent(int index, int id);
     }
 }
