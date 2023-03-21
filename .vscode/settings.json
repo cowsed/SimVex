@@ -38,6 +38,8 @@
         "system_error": "cpp",
         "thread": "cpp",
         "tuple": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "cstddef": "cpp",
+        "map": "cpp"
     }
 }

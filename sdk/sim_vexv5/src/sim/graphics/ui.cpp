@@ -134,7 +134,10 @@ namespace sim
 
             ImGui::SameLine();
             ImGui::BeginDisabled((!(is_driver_control() || is_auto_control()))); // enable if we've already selected
-            ImGui::Button("disable");
+            if (ImGui::Button("disable")){
+                sim::disable_robot();
+
+            }
             ImGui::EndDisabled();
 
             ImGui::SameLine();

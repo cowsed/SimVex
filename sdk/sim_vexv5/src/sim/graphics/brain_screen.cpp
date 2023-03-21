@@ -155,8 +155,9 @@ namespace sim
         /// @param str the string we are measuring
         /// @param font_name which font we are drawing with
         /// @return the width in pixels that the font would take up
-        int calc_string_width(char *str, vex::fontType font_name)
+        int calc_string_width(const char *str)
         {
+            vex::fontType font_name = brain_stats::current_font;
             full_font_info this_font = get_font_info(font_name);
 
             int i = 0;

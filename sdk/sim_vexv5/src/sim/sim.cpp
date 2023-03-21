@@ -39,6 +39,11 @@ namespace sim
         sim::event_handler::send_mevent(comp_index, auto_eid);
     }
 
+    void disable_robot(){
+        //sim::event_handler::stop_mevent();
+    }
+
+
     bool is_driver_control() { return vex_state == VexState::Driver; }
     bool is_auto_control() { return vex_state == VexState::Autonomous; }
 

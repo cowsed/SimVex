@@ -8,7 +8,7 @@ namespace vex
     }
     mevent::~mevent()
     {
-        sim::event_handler::stop_mevent(_index, _event_id);
+        sim::event_handler::end_mevent(_index, _event_id);
     }
 
 };

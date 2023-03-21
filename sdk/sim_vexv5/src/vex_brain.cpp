@@ -137,8 +137,7 @@ namespace vex
      */
     int32_t brain::lcd::getStringWidth(const char *cstr)
     {
-        print_unimplimented();
-        return 0;
+        return sim::brain_screen::calc_string_width(cstr);
     }
 
     /**

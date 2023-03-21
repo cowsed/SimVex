@@ -37,7 +37,7 @@ namespace sim
         void draw_rect_internal(int x, int y, int width, int height, uint32_t argb);
         void draw_rect_border_internal(int x, int y, int width, int height, uint32_t fill_argb, uint32_t border_argb, int border_width);
         void print_at_internal(int x, int y, bool opaque, char *str);
-
+        int calc_string_width(const char *str);
 
         void clear_clip_space_internal();
         void clear_clip_space_internal(uint32_t col);

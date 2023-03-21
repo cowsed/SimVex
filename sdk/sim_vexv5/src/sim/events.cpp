@@ -27,14 +27,32 @@ namespace sim::event_handler
             my_runner_thread = new std::thread(do_calling_back, index, event_id);
         }
 
+
+        // call at end of program or event going out of scope to free resources
         ~event_handler()
         {
-            end_callbacks = true;
-            send_mevent(index, id); // tell it to wake up so it knows to end
-            (*mevent_array[index][id]->my_runner_thread).join();
+            printf("cancelling %d:%d\n", index, id);
+
+            reset_event();
+
             delete mevent_array[index][id]->my_cv;
             delete mevent_array[index][id]->my_mutex;
             delete mevent_array[index][id]->my_runner_thread;
+        }
+
+        // called at disable when we wan't to stop the threads
+        void reset_event()
+        {
+            // ask nicely to end event
+            end_callbacks = true;
+            send_mevent(index, id);
+            (*mevent_array[index][id]->my_runner_thread).join();
+
+            //// find and kill running thread
+            //std::thread::native_handle_type native_handle = (*mevent_array[index][id]->my_runner_thread).native_handle();
+            //(*mevent_array[index][id]->my_runner_thread).detach();
+            //pthread_kill(native_handle, SIGKILL);
+
         }
 
         static void do_calling_back(int index, int id)
@@ -57,7 +75,6 @@ namespace sim::event_handler
                     lk.unlock();
                     break;
                 }
-
 
                 // else run the callback, if non null
                 if (me->callback != NULL)
@@ -87,17 +104,15 @@ namespace sim::event_handler
 
         if (mevent_array[index][event_id] != NULL)
         {
-            
+
             std::cerr << "=====================================" << std::endl;
             std::cerr << "A mevent is already registered in index " << index << " event " << event_id << "> THERE IS PROBABLY AN INITILIZATION BUG" << std::endl;
             std::cerr << "=====================================" << std::endl;
             return;
         }
 
-
         event_handler *my_mevent = new event_handler(index, event_id, NULL);
         mevent_array[index][event_id] = my_mevent;
-
     }
     void set_event_callback(int index, int event_id, mevent_func callback)
     {
@@ -112,12 +127,11 @@ namespace sim::event_handler
             std::cerr << "INVALID MEVENT" << std::endl;
             return;
         }
-        if (mevent_array[index][event_id] == NULL){
+        if (mevent_array[index][event_id] == NULL)
+        {
             std::cerr << "NULL MEVENT" << std::endl;
             return;
         }
-
-
 
         // take lock, make sure callback isnt already running
         // tell it it should to start running
@@ -131,9 +145,23 @@ namespace sim::event_handler
         mevent_array[index][event_id]->my_cv->notify_one();
     }
 
-    void stop_mevent(int index, int id)
+    void stop_all_mevents()
     {
-        if (index >= 0 && index < NUM_INDICES && id >= 0 && id < MAX_EVENTS_PER_INDEX)
+        for (int index = 0; index < NUM_INDICES; index++)
+        {
+            for (int id = 0; id < NUM_INDICES; id++)
+            {
+                if (index >= 0 && index < NUM_INDICES && id >= 0 && id < MAX_EVENTS_PER_INDEX && mevent_array[index][id] != NULL)
+                {
+                    mevent_array[index][id]->reset_event();
+                }
+            }
+        }
+    }
+
+    void end_mevent(int index, int id)
+    {
+        if (index >= 0 && index < NUM_INDICES && id >= 0 && id < MAX_EVENTS_PER_INDEX && mevent_array[index][id] != NULL)
         {
             delete mevent_array[index][id];
         }
