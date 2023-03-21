@@ -235,6 +235,15 @@ namespace sim
             return false;
         }
 
+        // print stats
+        printf("GLFW Version: %d.%d\n",GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR);
+        GLint gl_major;
+        GLint gl_minor;
+        glGetIntegerv(GL_MAJOR_VERSION, &gl_major); glGetIntegerv(GL_MINOR_VERSION, &gl_minor);
+        printf("OpenGL Version: %d.%d\n",gl_major, gl_minor);
+        printf("Dear ImGui Version: %s\n", ImGui::GetVersion());
+        printf("SimVex Version: %s, %s\n", __DATE__, __TIME__);
+
         return true;
     }
     bool mainLoop()
