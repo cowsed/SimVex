@@ -440,8 +440,9 @@ namespace vex
      */
     bool brain::lcd::render()
     {
-        print_unimplimented();
-        return false;
+        sim::brain_screen::setVSYNC(true);
+        sim::brain_screen::render_internal();
+        return true;
     }
 
     /**

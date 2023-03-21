@@ -55,9 +55,12 @@ namespace sim
         int get_pen_width();
         void set_pen_width(int size);
 
-        void makeUI();
-
         V5_TouchStatus *get_touch_status_internal();
+
+        void setVSYNC(bool doit);
+        void render_internal();
+
+        void makeUI();
 
     }
 }

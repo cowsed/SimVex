@@ -7,7 +7,14 @@ namespace sim
         const int brain_screen_width = 480;
         const int brain_screen_height = 240;
 
-        static uint32_t working_screen_buffer[brain_screen_height][brain_screen_width];
+        typedef uint32_t brain_screen_buffer[brain_screen_height][brain_screen_width];
+
+        static brain_screen_buffer screen_buffer1;
+        static brain_screen_buffer screen_buffer2;
+
+        brain_screen_buffer *working_screen_buffer = &screen_buffer1;
+        brain_screen_buffer *drawing_screen_buffer = &screen_buffer2;
+
         static GLuint brain_screen_texture_handle1;
 
         static bool texture_dirty = true;
@@ -37,6 +44,8 @@ namespace sim
             int clip_rect_width = 480;
             int clip_rect_height = 240;
             vex::fontType current_font = vex::mono20;
+
+            bool doingVSYNC = false;
         }
 
         ///@brief marks the texture on the GPU as out of sync with the texture on the CPU. When we get there, we will have to sync them back up
@@ -178,7 +187,7 @@ namespace sim
         /// @param x the x position to set
         /// @param y the y position to set
         /// @param col the color to set
-        void setPixelAccordingly(uint32_t buf[brain_screen_height][brain_screen_width], int x, int y, uint32_t col)
+        void setPixelAccordingly(brain_screen_buffer buf, int x, int y, uint32_t col)
         {
             int screenX = x + brain_stats::origin_x; // x pos in screen
             int screenY = y + brain_stats::origin_y; // y pos in screen
@@ -199,7 +208,7 @@ namespace sim
         /// @param x the x position to set
         /// @param y the y position to set
         /// @param col the color to set
-        uint32_t getPixelAccordingly(uint32_t buf[brain_screen_height][brain_screen_width], int x, int y)
+        uint32_t getPixelAccordingly(brain_screen_buffer buf, int x, int y)
         {
             int screenX = x + brain_stats::origin_x; // x pos in screen
             int screenY = y + brain_stats::origin_y; // y pos in screen
@@ -274,7 +283,7 @@ namespace sim
         /// @param font_tex_stride width of font tex image
         /// @param x x position on the screen
         /// @param y y position on the screen
-        void blitGlyph(uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, bool opaque, int glyph_width, int glyph_height, int glyph_x, int font_tex_stride, const uint8_t *font_tex, int x, int y)
+        void blitGlyph(brain_screen_buffer buf, uint32_t fg_color, uint32_t bg_color, bool opaque, int glyph_width, int glyph_height, int glyph_x, int font_tex_stride, const uint8_t *font_tex, int x, int y)
         {
             for (int screenY = y; screenY < y + glyph_height; screenY++)
             {
@@ -305,7 +314,7 @@ namespace sim
         /// @param opaque true to use bg_color as background, false to draw only text to the screen
         /// @param x x position to start at
         /// @param y y position to start at
-        void blitString(char *str, uint32_t buf[brain_screen_height][brain_screen_width], uint32_t fg_color, uint32_t bg_color, vex::fontType font_name, bool opaque, int x, int y)
+        void blitString(char *str, brain_screen_buffer buf, uint32_t fg_color, uint32_t bg_color, vex::fontType font_name, bool opaque, int x, int y)
         {
             full_font_info this_font = get_font_info(font_name);
 
@@ -332,13 +341,13 @@ namespace sim
         /// @param str string to print
         void print_at_internal(int x, int y, bool opaque, char *str)
         {
-            blitString(str, working_screen_buffer, get_fg_col_internal(), get_bg_col_internal(), brain_stats::current_font, opaque, x, y);
+            blitString(str, *working_screen_buffer, get_fg_col_internal(), get_bg_col_internal(), brain_stats::current_font, opaque, x, y);
             mark_dirty();
         }
 
         /// @brief draws a test screen to test screen rendering
         /// @param buf the buffer on which to draw
-        void draw_start_screen(uint32_t buf[brain_screen_height][brain_screen_width])
+        void draw_start_screen(brain_screen_buffer buf)
         {
             for (int y = 0; y < brain_screen_height; y++)
             {
@@ -366,7 +375,6 @@ namespace sim
                 }
             }
             char *my_str = (char *)"hello world";
-            printf("blitting %s\n", my_str);
             blitString(my_str, buf, 0xFFFF0000, 0xFF000000, vex::mono20, true, 100, 100);
         }
 
@@ -376,7 +384,11 @@ namespace sim
         {
             if (texture_dirty)
             {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, brain_screen_width, brain_screen_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, working_screen_buffer);
+                brain_screen_buffer *to_draw = drawing_screen_buffer;
+                if (!brain_stats::doingVSYNC){
+                    to_draw = working_screen_buffer;
+                }
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, brain_screen_width, brain_screen_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, *to_draw);
                 texture_dirty = false;
             }
         }
@@ -386,7 +398,7 @@ namespace sim
         bool setup()
         {
             // defualt screen image
-            draw_start_screen(working_screen_buffer);
+            draw_start_screen(*working_screen_buffer);
             // make gl texture
             glGenTextures(1, &brain_screen_texture_handle1);
             glBindTexture(GL_TEXTURE_2D, brain_screen_texture_handle1);
@@ -442,7 +454,7 @@ namespace sim
             {
                 for (int ix = max(brain_stats::clip_rect_x, x); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width); ix++)
                 {
-                    working_screen_buffer[iy][ix] = fill_argb;
+                    (*working_screen_buffer)[iy][ix] = fill_argb;
                 }
             }
             mark_dirty();
@@ -463,11 +475,11 @@ namespace sim
                     bool isBorder = (ix < x + border_width) || (ix >= x + width - border_width) || (iy < y + border_width) || (iy >= y + height - border_width);
                     if (!isBorder)
                     {
-                        working_screen_buffer[iy][ix] = fill_argb;
+                        (*working_screen_buffer)[iy][ix] = fill_argb;
                     }
                     else
                     {
-                        working_screen_buffer[iy][ix] = border_argb;
+                        (*working_screen_buffer)[iy][ix] = border_argb;
                     }
                 }
             }
@@ -482,7 +494,7 @@ namespace sim
             {
                 for (int x = 0; x < brain_screen_width; x++)
                 {
-                    working_screen_buffer[y][x] = 0x00000000;
+                    (*working_screen_buffer)[y][x] = 0x00000000;
                 }
             }
             mark_dirty();
@@ -496,23 +508,29 @@ namespace sim
             {
                 for (int x = 0; x < brain_screen_width; x++)
                 {
-                    working_screen_buffer[y][x] = col;
+                    (*working_screen_buffer)[y][x] = col;
                 }
             }
             mark_dirty();
         }
 
-
-        void draw_image_from_buffer_internal(uint32_t * buf, int img_width, int img_height, int x, int y){
-            for (int iy = y; iy < y+img_height; iy++){
-                for (int ix = x; ix < x + img_width; ix++){
+        /// @brief draws an image from uint32_ts in memory
+        /// @param buf pointer to start of buffer
+        /// @param img_width width of the image
+        /// @param img_height height of the image
+        /// @param x x position of top left of image
+        /// @param y y position of top left of image
+        void draw_image_from_buffer_internal(uint32_t *buf, int img_width, int img_height, int x, int y)
+        {
+            for (int iy = y; iy < y + img_height; iy++)
+            {
+                for (int ix = x; ix < x + img_width; ix++)
+                {
                     int img_x = ix - x;
                     int img_y = iy - y;
                     uint32_t col = buf[img_y * img_width + img_x];
-                    setPixelAccordingly(working_screen_buffer, ix, iy, col);
-                    
+                    setPixelAccordingly(*working_screen_buffer, ix, iy, col);
                 }
-
             }
             mark_dirty();
         }
@@ -530,7 +548,8 @@ namespace sim
             brain_stats::clip_rect_width = abs(x1 - x2);
             brain_stats::clip_rect_height = abs(y1 - y2);
         }
-        void set_font_internal(vex::fontType font){
+        void set_font_internal(vex::fontType font)
+        {
             brain_stats::current_font = font;
         }
 
@@ -575,6 +594,19 @@ namespace sim
         V5_TouchStatus *get_touch_status_internal()
         {
             return &last_touch_status;
+        }
+
+        void setVSYNC(bool doit)
+        {
+            brain_stats::doingVSYNC = doit;
+        }
+
+        void render_internal()
+        {
+            auto tmp = drawing_screen_buffer;
+            drawing_screen_buffer = working_screen_buffer;
+            working_screen_buffer = tmp;
+            
         }
 
         void makeUI()
