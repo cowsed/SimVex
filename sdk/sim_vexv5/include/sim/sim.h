@@ -32,7 +32,7 @@ namespace sim
     /// @brief Start autonomous control (the function registered in `competition.autonomous())
     /// If autonomous or driver control is already running, this function does nothing
     void start_auto_control();
-    /// @brief Start Driver Control (the function registered in `competition.opcontrol())
+    /// @brief Start Driver Control (the function registered in `competition.usercontrol())
     /// If autonomous or driver control is already running, this function does nothing
     void start_driver_control();
 

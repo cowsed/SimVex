@@ -333,6 +333,7 @@ namespace sim
         void print_at_internal(int x, int y, bool opaque, char *str)
         {
             blitString(str, working_screen_buffer, get_fg_col_internal(), get_bg_col_internal(), brain_stats::current_font, opaque, x, y);
+            mark_dirty();
         }
 
         /// @brief draws a test screen to test screen rendering
@@ -484,6 +485,7 @@ namespace sim
                     working_screen_buffer[y][x] = 0x00000000;
                 }
             }
+            mark_dirty();
         }
         /// @brief clears the current clip space with specified color
         /// This function only affects the current thread TODO: make this only affect the current thread
@@ -497,6 +499,22 @@ namespace sim
                     working_screen_buffer[y][x] = col;
                 }
             }
+            mark_dirty();
+        }
+
+
+        void draw_image_from_buffer_internal(uint32_t * buf, int img_width, int img_height, int x, int y){
+            for (int iy = y; iy < y+img_height; iy++){
+                for (int ix = x; ix < x + img_width; ix++){
+                    int img_x = ix - x;
+                    int img_y = iy - y;
+                    uint32_t col = buf[img_y * img_width + img_x];
+                    setPixelAccordingly(working_screen_buffer, ix, iy, col);
+                    
+                }
+
+            }
+            mark_dirty();
         }
 
         /// @brief sets the bounds of the clip space. drawing functions will not affect anywhere outside the rectangle defined by the arguments to this function

@@ -508,8 +508,8 @@ namespace vex
      */
     bool brain::lcd::drawImageFromBuffer(uint32_t *buffer, int x, int y, int width, int height)
     {
-        print_unimplimented();
-        return false;
+        sim::brain_screen::draw_image_from_buffer_internal(buffer, width, height, x, y);
+        return true;
     }
 
     /**

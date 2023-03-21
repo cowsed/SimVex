@@ -41,6 +41,7 @@ namespace sim
 
         void clear_clip_space_internal();
         void clear_clip_space_internal(uint32_t col);
+        void draw_image_from_buffer_internal(uint32_t * buf, int img_width, int img_height, int x, int y);
 
         void set_clip_space_internal(int x1, int y1, int x2, int y2);
 
