@@ -193,6 +193,7 @@ namespace sim
         // stop any background threads
         // We're really done
         sim::time_end();
+        printf("exitting 0\n");
         exit(0);
     }
 
@@ -255,7 +256,6 @@ namespace sim
         }
         glfwMakeContextCurrent(window);
         brain_screen::setup();
-        // glfwSetKeyCallback(window, key_callback);
 
         sim::time_start();
         while (!glfwWindowShouldClose(window))

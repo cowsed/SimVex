@@ -62,6 +62,7 @@ namespace vex
     }
     competition::~competition()
     {
+        //sim::event_handler::stop_all_mevents();
         print_unimplimented();
     }
 

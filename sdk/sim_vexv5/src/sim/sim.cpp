@@ -15,7 +15,6 @@ namespace sim
         return (char *[]){(char *)"Not Ready", (char *)"Paused", (char *)"Running"}[sim_state];
     }
 
-
     /// @brief begins the driver control part of the program
     /// if the robot is not disabled when this function is called, it does nothing
     void start_driver_control()
@@ -28,6 +27,7 @@ namespace sim
             return;
         }
         vex_state = Driver;
+        sim::event_handler::enable_all_mevents();
         sim::event_handler::send_mevent(comp_index, driver_ctl_eid);
     }
 
@@ -43,13 +43,14 @@ namespace sim
             return;
         }
         vex_state = Autonomous;
+        sim::event_handler::enable_all_mevents();
         sim::event_handler::send_mevent(comp_index, auto_eid);
     }
 
     /// @brief disables the robot
     /// stops tasks and executes competition disable (TODO)
-    void disable_robot(){
-        //sim::event_handler::stop_mevent();
+    void disable_robot()
+    {
         sim::event_handler::stop_all_mevents();
         vex_state = VexState::Disabled;
     }

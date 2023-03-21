@@ -23,9 +23,11 @@ namespace sim
 
         void set_event_callback(int index, int event_id, mevent_func callback);
 
-        void send_mevent(int index, int event_id);
+        bool send_mevent(int index, int event_id);
 
         void stop_all_mevents();
         void end_mevent(int index, int id);
+        void enable_all_mevents();
+
     }
 }
