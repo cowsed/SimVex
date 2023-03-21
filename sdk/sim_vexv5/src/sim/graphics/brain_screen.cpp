@@ -468,11 +468,11 @@ namespace sim
         /// @param border_argb border color in argb format
         void draw_rect_border_internal(int x, int y, int width, int height, uint32_t fill_argb, uint32_t border_argb, int border_width)
         {
-            for (int iy = max(brain_stats::clip_rect_y, y); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height); iy++)
+            for (int iy = max(brain_stats::clip_rect_y, y-border_width); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height + border_width); iy++)
             {
-                for (int ix = max(brain_stats::clip_rect_x, x); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width); ix++)
+                for (int ix = max(brain_stats::clip_rect_x, x - border_width); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width + border_width); ix++)
                 {
-                    bool isBorder = (ix < x + border_width) || (ix >= x + width - border_width) || (iy < y + border_width) || (iy >= y + height - border_width);
+                    bool isBorder = (ix < x) || (ix >= x + width) || (iy < y) || (iy >= y + height);
                     if (!isBorder)
                     {
                         (*working_screen_buffer)[iy][ix] = fill_argb;

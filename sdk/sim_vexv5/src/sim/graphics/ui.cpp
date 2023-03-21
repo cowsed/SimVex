@@ -148,11 +148,14 @@ namespace sim
         if (ImGui::CollapsingHeader("Motor : Port1"))
         {
             static bool test_plugged_in_bool = false;
-            ImGui::Checkbox("Plugged in", &test_plugged_in_bool);
+            ImGui::Checkbox("Plugged in", &test_plugged_in_bool);       
             ImGui::Text("59 *C");
             ImGui::SameLine();
             ImGui::TextDisabled("(throttled)");
             ImGui::Text("36:1 ratio");
+            ImGui::Text("current: 2.34 amps");
+            ImGui::Text("Effeciency");
+            
         }
         ImGui::End();
 
