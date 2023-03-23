@@ -430,6 +430,7 @@ namespace vex
     {
         static V5_TouchStatus td;
         vexTouchDataGet(&td);
+        //return sim::brain_screen::get_touch_status_internal()->lastEvent == V5_TouchEvent::kTouchEventPress;
         return td.lastEvent == V5_TouchEvent::kTouchEventPress;
     }
 

@@ -1300,7 +1300,7 @@ void vexTouchUserCallbackSet(void (*callback)(V5_TouchEvent, int32_t, int32_t))
 }
 bool vexTouchDataGet(V5_TouchStatus *status)
 {
-    status = sim::brain_screen::get_touch_status_internal();
+    *status = *sim::brain_screen::get_touch_status_internal();
     return true;
 }
 

@@ -647,14 +647,16 @@ namespace sim
             if (pressed)
             {
                 // calculate x and y
-                int16_t x = (int16_t)mousepos.x;
-                int16_t y = (int16_t)mousepos.y;
+                last_touch_status.lastEvent = V5_TouchEvent::kTouchEventPress;
+                int16_t x = (int16_t)(mousepos.x / scale_factor);
+                int16_t y = (int16_t)(mousepos.y / scale_factor);
                 last_touch_status.lastXpos = x;
                 last_touch_status.lastYpos = y;
                 last_touch_status.pressCount++;
             }
             else
             {
+                last_touch_status.lastEvent = V5_TouchEvent::kTouchEventRelease;
                 last_touch_status.releaseCount++;
             }
 
