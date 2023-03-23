@@ -192,6 +192,7 @@ namespace sim
 
         // stop any background threads
         // We're really done
+        sim::event_handler::stop_all_mevents();
         sim::time_end();
         printf("exitting 0\n");
         exit(0);
@@ -208,7 +209,7 @@ namespace sim
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        window = glfwCreateWindow(800, 600, "Vex Sim", NULL, NULL);
+        window = glfwCreateWindow(1200, 800, "Vex Sim", NULL, NULL);
 
         if (!window)
         {
@@ -235,6 +236,7 @@ namespace sim
         {
             return false;
         }
+
 
         // print stats
         printf("GLFW Version: %d.%d\n",GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR);

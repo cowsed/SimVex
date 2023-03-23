@@ -15,6 +15,7 @@ namespace sim
         brain_screen_buffer *working_screen_buffer = &screen_buffer1;
         brain_screen_buffer *drawing_screen_buffer = &screen_buffer2;
 
+        static std::mutex switching_mutex;
         static GLuint brain_screen_texture_handle1;
 
         static bool texture_dirty = true;
@@ -385,12 +386,15 @@ namespace sim
         {
             if (texture_dirty)
             {
+                switching_mutex.lock();
                 brain_screen_buffer *to_draw = drawing_screen_buffer;
-                if (!brain_stats::doingVSYNC){
+                if (!brain_stats::doingVSYNC)
+                {
                     to_draw = working_screen_buffer;
                 }
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, brain_screen_width, brain_screen_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, *to_draw);
                 texture_dirty = false;
+                switching_mutex.unlock();
             }
         }
 
@@ -469,7 +473,7 @@ namespace sim
         /// @param border_argb border color in argb format
         void draw_rect_border_internal(int x, int y, int width, int height, uint32_t fill_argb, uint32_t border_argb, int border_width)
         {
-            for (int iy = max(brain_stats::clip_rect_y, y-border_width); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height + border_width); iy++)
+            for (int iy = max(brain_stats::clip_rect_y, y - border_width); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height + border_width); iy++)
             {
                 for (int ix = max(brain_stats::clip_rect_x, x - border_width); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width + border_width); ix++)
                 {
@@ -604,10 +608,11 @@ namespace sim
 
         void render_internal()
         {
+            switching_mutex.lock();
             auto tmp = drawing_screen_buffer;
             drawing_screen_buffer = working_screen_buffer;
             working_screen_buffer = tmp;
-            
+            switching_mutex.unlock();
         }
 
         void makeUI()

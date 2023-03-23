@@ -2,6 +2,8 @@
 #include <iostream>
 #include "sim/events.h"
 
+#define isSim 1
+
 namespace sim
 {
     enum SimState

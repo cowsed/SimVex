@@ -7,6 +7,7 @@
 #include "imgui.h"
 
 #include "v5_apitypes.h"
+#include "vex_units.h"
 #include "vex_global.h"
 #include "sim/events.h"
 

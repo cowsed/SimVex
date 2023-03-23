@@ -21,6 +21,7 @@ namespace sim::event_handler
 
         event_handler(int index, int event_id, mevent_func callback) : index(index), id(event_id), callback(callback), should_run(false)
         {
+            mevent_array[index][id] = this;
             setup_event();
         }
 
@@ -44,12 +45,15 @@ namespace sim::event_handler
             // /delete my_cv;
             // /delete my_runner_thread;
 
-            if(my_runner_thread == NULL || my_runner_thread->joinable() == false)
+            if (my_runner_thread == NULL || my_runner_thread->joinable() == false)
             {
+                delete my_mutex;
+                delete my_cv;
+                delete my_runner_thread;
+
                 should_run = false;
                 my_mutex = new std::mutex();
                 my_cv = new std::condition_variable();
-                mevent_array[index][id] = this;
                 my_runner_thread = new std::thread(do_calling_back, index, id);
             }
         }
@@ -67,6 +71,7 @@ namespace sim::event_handler
 
             if (sent)
             {
+                printf("Nice thread: %p\n", (void *)mevent_array[index][id]->my_runner_thread);
                 // thread was nice and not doing anything, we can just join
                 mevent_array[index][id]->my_runner_thread->join();
             }
@@ -79,6 +84,7 @@ namespace sim::event_handler
                 mevent_array[index][id]->my_runner_thread->detach();
                 printf("native handle %lu\n", native_handle);
                 pthread_cancel(native_handle);
+                delete mevent_array[index][id]->my_runner_thread;
             }
             end_callbacks = false;
         }

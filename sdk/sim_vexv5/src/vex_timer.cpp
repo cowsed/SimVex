@@ -11,8 +11,6 @@ namespace vex
     timer::timer() : _offset(0), _initial(sim::time_ms()) {}
     timer::~timer() { 
         // cleanup events set
-        print_unimplimented();
-        printf("goodbye time\n");
      }
 
     // Assignment
