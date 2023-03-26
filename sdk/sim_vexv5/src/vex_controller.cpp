@@ -30,14 +30,94 @@ namespace vex
 
     controller::tEventType controller::button::_buttonToPressedEvent() const
     {
+        using namespace vex;
+
         print_unimplimented();
+        // return tEventType::EVENT_5_DN_PRESSED;
+        switch (this->_id)
+        {
+            // XYZA - right D pad
+        case controller::tButtonType::kButtonA:
+            return tEventType::EVENT_8_R_PRESSED;
+        case controller::tButtonType::kButtonB:
+            return tEventType::EVENT_8_DN_PRESSED;
+        case controller::tButtonType::kButtonY:
+            return tEventType::EVENT_8_L_PRESSED;
+        case controller::tButtonType::kButtonX:
+            return tEventType::EVENT_8_UP_PRESSED;
+
+            // UPLR - left D Pad
+
+        case controller::tButtonType::kButtonRight:
+            return tEventType::EVENT_7_R_PRESSED;
+        case controller::tButtonType::kButtonLeft:
+            return tEventType::EVENT_7_L_PRESSED;
+        case controller::tButtonType::kButtonUp:
+            return tEventType::EVENT_7_UP_PRESSED;
+        case controller::tButtonType::kButtonDown:
+            return tEventType::EVENT_7_DN_PRESSED;
+
+            // Left Shoulder
+        case controller::tButtonType::kButtonL1:
+            return tEventType::EVENT_5_UP_PRESSED;
+        case controller::tButtonType::kButtonL2:
+            return tEventType::EVENT_5_DN_PRESSED;
+
+            // Right Shoulder
+        case controller::tButtonType::kButtonR1:
+            return tEventType::EVENT_6_UP_PRESSED;
+        case controller::tButtonType::kButtonR2:
+            return tEventType::EVENT_6_DN_PRESSED;
+
+        default:
+            return tEventType::EVENT_5_DN_PRESSED;
+        }
+
         return tEventType::EVENT_5_DN_PRESSED;
     }
 
     controller::tEventType controller::button::_buttonToReleasedEvent() const
     {
-        print_unimplimented();
-        return tEventType::EVENT_5_DN_PRESSED;
+        switch (this->_id)
+        {
+            // XYZA - right D pad
+        case controller::tButtonType::kButtonA:
+            return tEventType::EVENT_8_R_RELEASED;
+        case controller::tButtonType::kButtonB:
+            return tEventType::EVENT_8_DN_RELEASED;
+        case controller::tButtonType::kButtonY:
+            return tEventType::EVENT_8_L_RELEASED;
+        case controller::tButtonType::kButtonX:
+            return tEventType::EVENT_8_UP_RELEASED;
+
+            // UPLR - left D Pad
+
+        case controller::tButtonType::kButtonRight:
+            return tEventType::EVENT_7_R_RELEASED;
+        case controller::tButtonType::kButtonLeft:
+            return tEventType::EVENT_7_L_RELEASED;
+        case controller::tButtonType::kButtonUp:
+            return tEventType::EVENT_7_UP_RELEASED;
+        case controller::tButtonType::kButtonDown:
+            return tEventType::EVENT_7_DN_RELEASED;
+
+            // Left Shoulder
+        case controller::tButtonType::kButtonL1:
+            return tEventType::EVENT_5_UP_RELEASED;
+        case controller::tButtonType::kButtonL2:
+            return tEventType::EVENT_5_DN_RELEASED;
+
+            // Right Shoulder
+        case controller::tButtonType::kButtonR1:
+            return tEventType::EVENT_6_UP_RELEASED;
+        case controller::tButtonType::kButtonR2:
+            return tEventType::EVENT_6_DN_RELEASED;
+
+        default:
+            return tEventType::EVENT_5_DN_RELEASED;
+        }
+
+        return tEventType::EVENT_5_DN_RELEASED;
     }
 
     /**
@@ -58,8 +138,39 @@ namespace vex
      */
     bool controller::button::pressing(void) const
     {
-        print_unimplimented();
-        return false;
+
+        switch (this->_id)
+        {
+        case tButtonType::kButtonA:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonA);
+        case tButtonType::kButtonB:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonB);
+        case tButtonType::kButtonX:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonX);
+        case tButtonType::kButtonY:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonY);
+
+        case tButtonType::kButtonLeft:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonLeft);
+        case tButtonType::kButtonRight:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonRight);
+        case tButtonType::kButtonUp:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonUp);
+        case tButtonType::kButtonDown:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonDown);
+
+        case tButtonType::kButtonL1:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonL1);
+        case tButtonType::kButtonL2:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonL2);
+        case tButtonType::kButtonR1:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonR1);
+        case tButtonType::kButtonR2:
+            return sim::controller::get_button_pressing(_V5_ControllerIndex::ButtonR2);
+
+        default:
+            return false;
+        }
     }
 
     // Axis
@@ -78,7 +189,6 @@ namespace vex
             return tEventType::EVENT_D_CHANGED;
         default:
             return tEventType::EVENT_D_CHANGED;
-
         }
     }
 
@@ -94,8 +204,19 @@ namespace vex
      */
     int32_t controller::axis::value(void) const
     {
-        print_unimplimented();
-        return 0;
+        switch (this->_id)
+        {
+        case tAxisType::kAxisA:
+            return (int32_t)(127 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis3));
+        case tAxisType::kAxisB:
+            return (int32_t)(127 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis4));
+        case tAxisType::kAxisC:
+            return (int32_t)(127 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis1));
+        case tAxisType::kAxisD:
+            return (int32_t)(127 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis2));
+        default:
+            return 0;
+        }
     }
 
     /**
@@ -105,11 +226,26 @@ namespace vex
      */
     int32_t controller::axis::position(percentUnits units) const
     {
-        print_unimplimented();
-        return 0;
+        switch (this->_id)
+        {
+        case tAxisType::kAxisA:
+            return (int32_t)(100 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis3));
+        case tAxisType::kAxisB:
+            return (int32_t)(100 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis4));
+        case tAxisType::kAxisC:
+            return (int32_t)(100 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis1));
+        case tAxisType::kAxisD:
+            return (int32_t)(100 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis2));
+        default:
+            return 0;
+        }
     }
 
-    controllerType getControllerId();
+    controllerType getControllerId()
+    {
+        print_unimplimented();
+        return controllerType::primary;
+    }
 
     controller::lcd::lcd() { print_unimplimented(); }
 
@@ -170,5 +306,4 @@ namespace vex
      * @brief Moves the cursor to the next line.
      */
     void controller::lcd::newLine(void) { print_unimplimented(); }
-
 }

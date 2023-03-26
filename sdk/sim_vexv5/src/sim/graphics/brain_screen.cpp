@@ -181,6 +181,23 @@ namespace sim
             return length_sum;
         }
 
+        /// @brief calculates the height in pixels of a string
+        /// if the str contains an unknown character, the unknown character height is used
+        /// @param str the string we are measuring
+        /// @param font_name which font we are drawing with
+        /// @return the height in pixels that the font would take up
+        int calc_string_height(const char *str)
+        {
+            vex::fontType font_name = brain_stats::current_font;
+            full_font_info this_font = get_font_info(font_name);
+
+
+            return this_font.font_info.height;
+        }
+
+
+
+
         /// @brief sets a pixel in the working buffer
         /// this function respects the origin and the clip rectangle
         /// UNKNOWN: if origin affects where the clip rect is placed
@@ -615,7 +632,7 @@ namespace sim
             switching_mutex.unlock();
         }
 
-        void makeUI()
+        void build_brain_ui()
         {
             ImGui::Begin("Brain Screen");
 

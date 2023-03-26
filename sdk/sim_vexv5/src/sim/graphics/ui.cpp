@@ -95,7 +95,10 @@ namespace sim
         ImGui::End();
 
         //  Brain screen to tap on
-        sim::brain_screen::makeUI();
+        sim::brain_screen::build_brain_ui();
+
+        // Vex Controller
+        sim::controller::build_controller_ui();
 
         // Simulation Control
         ImGui::Begin("Control");

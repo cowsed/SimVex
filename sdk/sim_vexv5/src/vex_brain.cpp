@@ -146,8 +146,7 @@ namespace vex
      */
     int32_t brain::lcd::getStringHeight(const char *cstr)
     {
-        print_unimplimented();
-        return 0;
+        return sim::brain_screen::calc_string_height(cstr);
     }
 
     /**

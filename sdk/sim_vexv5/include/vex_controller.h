@@ -17,7 +17,7 @@
 #include "vex_mevent.h"
 #include "vex_units.h"
 #include <type_traits>
-
+#include "sim/controller.h"
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_controller.h
  * @brief   V5 controller class header

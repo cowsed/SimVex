@@ -258,6 +258,7 @@ namespace sim
         }
         glfwMakeContextCurrent(window);
         brain_screen::setup();
+        controller::setup();
 
         sim::time_start();
         while (!glfwWindowShouldClose(window))

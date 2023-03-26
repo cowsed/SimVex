@@ -9,6 +9,7 @@
 #include "../time.h"
 #include "../terminal.h"
 #include "brain_screen.h"
+#include "../controller.h"
 #include "../sim.h"
 #include "../events.h"
 namespace sim
