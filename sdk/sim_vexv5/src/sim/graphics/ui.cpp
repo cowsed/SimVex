@@ -4,7 +4,7 @@ namespace sim
 {
     bool show_imgui_demo = false;
     bool show_imgui_stats = false;
-    bool show_event_sender = true;
+    bool show_event_sender = false;
     void setupDockspace()
     {
         ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -104,9 +104,13 @@ namespace sim
         ImGui::Begin("Control");
         if (ImGui::CollapsingHeader("Simulation Control", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            ImGui::Button("Play");
+            if (ImGui::Button("Play")){
+                sim::start_sim();
+            }
             ImGui::SameLine();
-            ImGui::Button("Pause");
+            if (ImGui::Button("Pause")){
+                sim::pause_sim();
+            }
             ImGui::SameLine();
             ImGui::TextDisabled("%s", sim_state_text());
 

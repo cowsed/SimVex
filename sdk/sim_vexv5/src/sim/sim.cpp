@@ -2,8 +2,28 @@
 
 namespace sim
 {
-    static SimState sim_state = SimState::NotReady;
+    static SimState sim_state = SimState::Playing;
     static VexState vex_state = VexState::Disabled;
+
+    /// @brief starts or unpauses the simulation
+    void start_sim()
+    {
+        if (sim_state == SimState::Paused)
+        {
+            sim_state = SimState::Playing;
+            sim::time_start();
+        }
+    }
+
+    /// @brief pauses the simulation (physics stops, vex code will continue running with no effect until any time delay is hit, then it will hold until simulation is unpaused)
+    void pause_sim()
+    {
+        if (sim_state == SimState::Playing)
+        {
+            sim_state = SimState::Paused;
+            sim::time_pause();
+        }
+    }
 
     bool is_paused() { return sim_state == Paused; }
     bool is_running() { return sim_state == Playing; }
