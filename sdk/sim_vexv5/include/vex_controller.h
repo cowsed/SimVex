@@ -136,12 +136,8 @@ namespace vex
 
     public:
       button() : _id(tButtonType::kButtonUndefined), _parent(NULL) { print_unimplimented(); };
-      button(const tButtonType id, controller *parent) : _id(id), _parent(parent)
-      {
-        // register event
-        print_unimplimented();
-      };
-      ~button() { print_unimplimented(); };
+      button(const tButtonType id, controller *parent) : _id(id), _parent(parent){};
+      ~button(){};
       /**
        * @brief Sets the function to be called when the button is pressed.
        * @param callback A reference to a function.

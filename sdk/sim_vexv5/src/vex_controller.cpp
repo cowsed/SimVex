@@ -10,8 +10,8 @@ namespace vex
 
     int32_t controller::_getIndex()
     {
-        print_unimplimented();
-        return -1;
+        // UNKNOWN ACTUAL INDEX OF CONTROLLER
+        return 27;
     }
 
     controller::controller() { print_unimplimented(); }
@@ -32,7 +32,6 @@ namespace vex
     {
         using namespace vex;
 
-        print_unimplimented();
         // return tEventType::EVENT_5_DN_PRESSED;
         switch (this->_id)
         {
@@ -124,13 +123,19 @@ namespace vex
      * @brief Sets the function to be called when the button is pressed.
      * @param callback A reference to a function.
      */
-    void controller::button::pressed(void (*callback)(void)) const { print_unimplimented(); }
+    void controller::button::pressed(void (*callback)(void)) const
+    {
+        sim::event_handler::set_event_callback(this->_parent->_getIndex(), (int)_buttonToPressedEvent(), callback);
+    }
 
     /**
      * @brief Sets the function to be called when the button is released.
      * @param callback A reference to a function.
      */
-    void controller::button::released(void (*callback)(void)) const { print_unimplimented(); }
+    void controller::button::released(void (*callback)(void)) const
+    {
+        sim::event_handler::set_event_callback(this->_parent->_getIndex(), (int)_buttonToReleasedEvent(), callback);
+    }
 
     /**
      * @brief Gets the status of a button.
@@ -196,7 +201,10 @@ namespace vex
      * @brief Sets the function to be called when the joystick axis value changes.
      * @param callback A reference to a function.
      */
-    void controller::axis::changed(void (*callback)(void)) const { print_unimplimented(); }
+    void controller::axis::changed(void (*callback)(void)) const
+    {
+        sim::event_handler::set_event_callback(this->_parent->_getIndex(), (int)_joystickToChangedEvent(), callback);
+    }
 
     /**
      * @brief Gets the value of the joystick axis on a scale from -127 to 127.
@@ -229,9 +237,9 @@ namespace vex
         switch (this->_id)
         {
         case tAxisType::kAxisA:
-            return (int32_t)(100 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis3));
-        case tAxisType::kAxisB:
             return (int32_t)(100 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis4));
+        case tAxisType::kAxisB:
+            return (int32_t)(100 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis3));
         case tAxisType::kAxisC:
             return (int32_t)(100 * sim::controller::get_axis_position(_V5_ControllerIndex::Axis1));
         case tAxisType::kAxisD:

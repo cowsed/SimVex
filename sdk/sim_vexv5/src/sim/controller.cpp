@@ -6,6 +6,8 @@ namespace sim
     {
         namespace controller_state
         {
+            int controller_index = 27;
+            float max_amt = 1.0;
             /// @brief button states
             /// true is pressed, false is not
             static std::map<_V5_ControllerIndex, bool> buttons = {
@@ -32,6 +34,72 @@ namespace sim
                 {_V5_ControllerIndex::Axis4, 0},
             };
         }
+        
+        int _axisIndexToChangedEvent(_V5_ControllerIndex index){
+        switch (index)
+        {
+        case _V5_ControllerIndex::Axis3: // A
+            return 24;
+        case _V5_ControllerIndex::Axis4: // B
+            return 25;
+        case _V5_ControllerIndex::Axis1: // C
+            return 26;
+        case _V5_ControllerIndex::Axis2: // D
+            return 27;
+        default:
+            return -1;
+        }
+
+        }
+        int _buttonIndexToPressedEvent(_V5_ControllerIndex index)
+        {
+
+            // adapted from vex_controller.cpp
+            switch (index)
+            {
+                // XYZA - right D pad
+            case _V5_ControllerIndex::ButtonA:
+                return 22;
+            case _V5_ControllerIndex::ButtonB:
+                return 18;
+            case _V5_ControllerIndex::ButtonY:
+                return 20;
+            case _V5_ControllerIndex::ButtonX:
+                return 16;
+
+                // UPLR - left D Pad
+
+            case _V5_ControllerIndex::ButtonRight:
+                return 14;
+            case _V5_ControllerIndex::ButtonLeft:
+                return 12;
+            case _V5_ControllerIndex::ButtonUp:
+                return 8;
+            case _V5_ControllerIndex::ButtonDown:
+                return 10;
+
+                // Left Shoulder
+            case _V5_ControllerIndex::ButtonL1:
+                return 0;
+            case _V5_ControllerIndex::ButtonL2:
+                return 2;
+
+                // Right Shoulder
+            case _V5_ControllerIndex::ButtonR1:
+                return 4;
+            case _V5_ControllerIndex::ButtonR2:
+                return 6;
+
+            default:
+                return 0;
+            }
+        }
+        int _buttonIndexToReleasedEvent(_V5_ControllerIndex index)
+        {
+            // epic code reuse
+            return 1 + _buttonIndexToPressedEvent(index);
+        }
+
         bool get_button_pressing(_V5_ControllerIndex index)
         {
             if (controller_state::buttons.contains(index))
@@ -57,6 +125,7 @@ namespace sim
             {
                 const auto check_axis = [](ImGuiKey key_pos, ImGuiKey key_neg, _V5_ControllerIndex index)
                 {
+                    double last_val = controller_state::axes[index];
                     if (ImGui::IsKeyDown(key_pos))
                     {
                         controller_state::axes[index] = +1.0;
@@ -69,6 +138,9 @@ namespace sim
                     {
                         controller_state::axes[index] = 0.0;
                     }
+                    if (controller_state::axes[index] != last_val){
+                        sim::event_handler::send_mevent(controller_state::controller_index, _axisIndexToChangedEvent(index));
+                    }
                 };
                 const auto check_button = [](ImGuiKey key, _V5_ControllerIndex index)
                 {
@@ -79,6 +151,14 @@ namespace sim
                     else
                     {
                         controller_state::buttons[index] = false;
+                    }
+                    if (ImGui::IsKeyPressed(key))
+                    {
+                        sim::event_handler::send_mevent(controller_state::controller_index, _buttonIndexToPressedEvent(index));
+                    }
+                    if (ImGui::IsKeyReleased(key))
+                    {
+                        sim::event_handler::send_mevent(controller_state::controller_index, _buttonIndexToReleasedEvent(index));
                     }
                 };
 
@@ -167,6 +247,8 @@ namespace sim
             DrawList->AddCircleFilled(ImVec2Add(lpad_center, {0, -pad_dist}), pad_button_radius, IM_COL32(0, 0, 0, 255));
 
             ImGui::SetCursorPos(ImVec2Add(ImGui::GetCursorPos(), {0, size.y / 30.f}));
+
+            ImGui::DragFloat("Max Amount", &controller_state::max_amt, 0.01, 0.f, 1.f);
 
             ImGui::Text("1: %.1f", controller_state::axes[_V5_ControllerIndex::Axis1]);
             ImGui::Text("2: %.1f", controller_state::axes[_V5_ControllerIndex::Axis2]);
