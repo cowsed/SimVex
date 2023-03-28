@@ -6,7 +6,8 @@ namespace sim
     {
         namespace controller_state
         {
-            int controller_index = 27;
+            const int primary_controller_index = 30;
+            const int partner_controller_index = 29;
             float max_amt = 1.0;
             /// @brief button states
             /// true is pressed, false is not

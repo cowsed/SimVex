@@ -2,6 +2,8 @@
 
 namespace vex
 {
+    const int primary_controller_index = 30;
+    const int partner_controller_index = 29;
     int32_t controller::value(V5_ControllerIndex channel)
     {
         print_unimplimented();
@@ -10,13 +12,16 @@ namespace vex
 
     int32_t controller::_getIndex()
     {
-        // UNKNOWN ACTUAL INDEX OF CONTROLLER
-        return 27;
+        if (_controllerId == controllerType::primary){
+            return primary_controller_index;
+        } else {
+            return partner_controller_index;
+        }
     }
 
-    controller::controller() { print_unimplimented(); }
+    controller::controller(): _controllerId(vex::controllerType::primary) {  }
 
-    controller::controller(controllerType id) { print_unimplimented(); }
+    controller::controller(controllerType id) { _controllerId = id; }
 
     controller::~controller() { print_unimplimented(); }
 

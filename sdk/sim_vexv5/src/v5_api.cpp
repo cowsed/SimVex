@@ -104,8 +104,7 @@ void vexSystemExitRequest(void)
 }
 uint64_t vexSystemHighResTimeGet(void)
 {
-    print_unimplimented();
-    return -1;
+    return sim::time_ms() * 1000 * 1000;
 }
 uint64_t vexSystemPowerupTimeGet(void)
 {
