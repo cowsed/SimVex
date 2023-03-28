@@ -191,12 +191,8 @@ namespace sim
             vex::fontType font_name = brain_stats::current_font;
             full_font_info this_font = get_font_info(font_name);
 
-
             return this_font.font_info.height;
         }
-
-
-
 
         /// @brief sets a pixel in the working buffer
         /// this function respects the origin and the clip rectangle
@@ -508,6 +504,82 @@ namespace sim
             mark_dirty();
         }
 
+        inline void draw_line_octant1(int x1, int y1, int x2, int y2)
+        {
+            int dx = x2 - x1;
+            int dy = y2 - y1;
+            int D = 2 * dy - dx;
+            int y = y1;
+
+            for (int x = x1; x < x2; x++)
+            {
+                setPixelAccordingly(*working_screen_buffer, x, y, brain_stats::fg_col);
+                // plot(x, y)
+                if (D > 0)
+                {
+                    y = y + 1;
+                    D = D - 2 * dx;
+                }
+                D = D + 2 * dy;
+            }
+        }
+        inline void draw_all_octants(int x0, int y0, int x1, int y1)
+        {
+            int dx = abs(x1 - x0);
+            int sx = x0 < x1 ? 1 : -1;
+            int dy = -abs(y1 - y0);
+            int sy = y0 < y1 ? 1 : -1;
+            int error = dx + dy;
+
+            uint32_t col = brain_stats::fg_col;
+            while (true)
+            {
+                setPixelAccordingly(*working_screen_buffer, x0, y0, col);
+
+                if (x0 == x1 && y0 == y1)
+                {
+                    break;
+                }
+                int e2 = 2 * error;
+
+                if (e2 >= dy)
+                {
+                    if (x0 == x1)
+                    {
+                        break;
+                    }
+                    error = error + dy;
+                    x0 = x0 + sx;
+                }
+
+                if (e2 <= dx)
+                {
+                    if (y0 == y1)
+                    {
+                        break;
+                    }
+                    error = error + dx;
+                    y0 = y0 + sy;
+                }
+            }
+        }
+
+        void draw_line_internal(int x1, int y1, int x2, int y2)
+        {
+            if (y1 > y2)
+            {
+                // flip so we can Bresenham with confidence
+                int tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+                tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+            }
+
+            draw_all_octants(x1, y1, x2, y2);
+        }
+
         ///@brief clears the current clip space with defualt color
         /// This function only affects the current thread
         void clear_clip_space_internal()
@@ -570,6 +642,8 @@ namespace sim
             brain_stats::clip_rect_width = abs(x1 - x2);
             brain_stats::clip_rect_height = abs(y1 - y2);
         }
+        /// @brief sets this threads font
+        /// @param font the font to set to
         void set_font_internal(vex::fontType font)
         {
             brain_stats::current_font = font;
@@ -632,6 +706,7 @@ namespace sim
             switching_mutex.unlock();
         }
 
+        /// @brief ImGui build function. also responsible for touch and release events
         void build_brain_ui()
         {
             ImGui::Begin("Brain Screen");
@@ -698,7 +773,5 @@ namespace sim
             was_pressed = pressed;
             ImGui::End();
         }
-
     }
-
 }

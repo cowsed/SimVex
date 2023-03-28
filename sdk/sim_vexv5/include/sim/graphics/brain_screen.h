@@ -37,14 +37,16 @@ namespace sim
 
         void draw_rect_internal(int x, int y, int width, int height, uint32_t argb);
         void draw_rect_border_internal(int x, int y, int width, int height, uint32_t fill_argb, uint32_t border_argb, int border_width);
+
+        void draw_line_internal(int x1, int y1, int x2, int y2);
+
         void print_at_internal(int x, int y, bool opaque, char *str);
         int calc_string_width(const char *str);
         int calc_string_height(const char *str);
 
-
         void clear_clip_space_internal();
         void clear_clip_space_internal(uint32_t col);
-        void draw_image_from_buffer_internal(uint32_t * buf, int img_width, int img_height, int x, int y);
+        void draw_image_from_buffer_internal(uint32_t *buf, int img_width, int img_height, int x, int y);
 
         void set_clip_space_internal(int x1, int y1, int x2, int y2);
 
@@ -64,6 +66,5 @@ namespace sim
         void render_internal();
 
         void build_brain_ui();
-
     }
 }

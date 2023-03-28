@@ -285,7 +285,9 @@ namespace vex
      * @param x2 The x location of the second point.
      * @param y2 The y location of the second point.
      */
-    void brain::lcd::drawLine(int x1, int y1, int x2, int y2) { print_unimplimented(); }
+    void brain::lcd::drawLine(int x1, int y1, int x2, int y2) { 
+        sim::brain_screen::draw_line_internal(x1, y1, x2, y2);
+     }
 
     // Rectangle
     /**

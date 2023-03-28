@@ -140,7 +140,7 @@ namespace sim
                         controller_state::axes[index] = 0.0;
                     }
                     if (controller_state::axes[index] != last_val){
-                        sim::event_handler::send_mevent(controller_state::controller_index, _axisIndexToChangedEvent(index));
+                        sim::event_handler::send_mevent(controller_state::primary_controller_index, _axisIndexToChangedEvent(index));
                     }
                 };
                 const auto check_button = [](ImGuiKey key, _V5_ControllerIndex index)
@@ -155,11 +155,11 @@ namespace sim
                     }
                     if (ImGui::IsKeyPressed(key))
                     {
-                        sim::event_handler::send_mevent(controller_state::controller_index, _buttonIndexToPressedEvent(index));
+                        sim::event_handler::send_mevent(controller_state::primary_controller_index, _buttonIndexToPressedEvent(index));
                     }
                     if (ImGui::IsKeyReleased(key))
                     {
-                        sim::event_handler::send_mevent(controller_state::controller_index, _buttonIndexToReleasedEvent(index));
+                        sim::event_handler::send_mevent(controller_state::primary_controller_index, _buttonIndexToReleasedEvent(index));
                     }
                 };
 
