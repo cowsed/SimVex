@@ -201,7 +201,7 @@ namespace sim::event_handler
                 }
             }
         }
-    }
+    } 
 
     void end_mevent(int index, int id)
     {
