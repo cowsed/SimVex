@@ -25,6 +25,8 @@ namespace sim
 
         bool send_mevent(int index, int event_id);
 
+        void pause_all_mevents();
+        void resume_all_mevents();
         void stop_all_mevents();
         void end_mevent(int index, int id);
         void enable_all_mevents();

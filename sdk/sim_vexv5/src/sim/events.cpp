@@ -2,6 +2,8 @@
 
 namespace sim::event_handler
 {
+    volatile bool threads_should_pause = true;
+
     /// @brief  true while callback threads should end. Should always be false except when we are tearing down the program where it will be false. EVEN WHEN THE SIM IS JUST PAUSED, this should be false.
     static bool end_callbacks = false;
     // array of all mevents on all devices
@@ -57,6 +59,10 @@ namespace sim::event_handler
                 my_runner_thread = new std::thread(do_calling_back, index, id);
             }
         }
+        void pause_event()
+        {
+            pthread_kill(my_runner_thread->native_handle(), SIGUSR1);
+        }
 
         /// @brief resets (stops) an event task.
         /// callback function is retained it's just stopped
@@ -74,6 +80,7 @@ namespace sim::event_handler
                 printf("Nice thread: %p\n", (void *)mevent_array[index][id]->my_runner_thread);
                 // thread was nice and not doing anything, we can just join
                 mevent_array[index][id]->my_runner_thread->join();
+                delete mevent_array[index][id]->my_runner_thread;
             }
             else
             {
@@ -154,8 +161,12 @@ namespace sim::event_handler
     {
         assert(mevent_array[index][event_id] != NULL); // make sure we're setting on an event that already exists
         mevent_array[index][event_id]->callback = callback;
+        mevent_array[index][event_id]->setup_event();
     }
-
+    /// @brief
+    /// @param index
+    /// @param event_id
+    /// @return false if failed to send. true if sent
     bool send_mevent(int index, int event_id)
     {
         if (!(index >= 0 && index < NUM_INDICES && event_id >= 0 && event_id < MAX_EVENTS_PER_INDEX))
@@ -173,6 +184,7 @@ namespace sim::event_handler
         // if we can't return false (failed)
         // similar to interrupts in embedded. if you trigger it before interrupt handler finishes that interrupt won't trigger
         // hoping this matches how the brain works
+        // TODO give the get a timeout. on the offchacne we have a one shot callback but we catch it on the wrong nanosecond
 
         bool got_lock = mevent_array[index][event_id]->my_mutex->try_lock();
         if (!got_lock)
@@ -190,7 +202,8 @@ namespace sim::event_handler
     }
 
     void stop_all_mevents()
-    {
+    {   
+        resume_all_mevents();
         for (int index = 0; index < NUM_INDICES; index++)
         {
             for (int id = 0; id < NUM_INDICES; id++)
@@ -201,6 +214,25 @@ namespace sim::event_handler
                 }
             }
         }
+    } 
+
+    void pause_all_mevents()
+    {
+        threads_should_pause = true;
+        for (int index = 0; index < NUM_INDICES; index++)
+        {
+            for (int id = 0; id < NUM_INDICES; id++)
+            {
+                if (index >= 0 && index < NUM_INDICES && id >= 0 && id < MAX_EVENTS_PER_INDEX && mevent_array[index][id] != NULL)
+                {
+                    mevent_array[index][id]->pause_event();
+                }
+            }
+        }
+    }
+    void resume_all_mevents()
+    {
+        threads_should_pause = false;
     }
 
     void end_mevent(int index, int id)
@@ -211,8 +243,36 @@ namespace sim::event_handler
         }
     }
 
+    void pause_thread(int signo, siginfo_t *info, void *extra)
+    {
+
+        printf("signal %d handled on thread %lu\n", signo, std::this_thread::get_id());
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        while (threads_should_pause)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+    }
+    void set_signal_handler()
+    {
+        printf("pause handler installed\n");
+
+        struct sigaction action;
+
+        action.sa_flags = SA_SIGINFO;
+        action.sa_sigaction = pause_thread;
+
+        if (sigaction(SIGUSR1, &action, NULL) == -1)
+        {
+            perror("sigusr: sigaction");
+            _exit(1);
+        }
+    }
+
     void enable_all_mevents()
     {
+        resume_all_mevents();
+        set_signal_handler();
         for (int index = 0; index < NUM_INDICES; index++)
         {
             for (int id = 0; id < NUM_INDICES; id++)

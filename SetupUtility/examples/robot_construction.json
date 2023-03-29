@@ -1,0 +1,61 @@
+{
+    "name": "drivebase bot",
+    "coordinate_system": "Y-Up", 
+    "devices": [
+        {
+            "type": "motor-11W",
+            "identifier": "fl_motor",
+            "port": "1",
+            "gearbox": "36to1",
+            "center": [-4, 1, 4],
+            "pointing": "-X",
+            "rotation": 180.0
+        },
+        {
+            "type": "motor-11W",
+            "identifier": "fr_motor",
+            "port": "2",
+            "gearbox": "36to1",
+            "center": [4, 1, 4],
+            "pointing": "+X",
+            "rotation": 180.0
+        },
+        {
+            "type": "motor-11W",
+            "identifier": "bl_motor",
+            "port": "3",
+            "gearbox": "36to1",
+            "center": [-4, 1, -4],
+            "pointing": "(-1, 0, 0)",
+            "rotation": 180.0
+
+        },
+        {
+            "type": "motor-11W",
+            "identifier": "br_motor",
+            "port": "4",
+            "gearbox": "36to1",
+            "center": [4, 1, -4],
+            "pointing": "(+1, 0, 0)",
+            "rotation": 180.0
+
+        },
+        {
+            "type": "imu",
+            "identifier": "imu",
+            "port": "5",
+            "center": [0, 1.5, 0]
+        },
+        {
+            "type": "3-wire-encoder",
+            "identifier": "left encoder",
+            "triport": "A"
+        },
+        {
+            "type": "3-wire-encoder",
+            "identifier": "right encoder",
+            "triport": "C"
+        }
+    ],
+    "sim_version": 0.1
+}

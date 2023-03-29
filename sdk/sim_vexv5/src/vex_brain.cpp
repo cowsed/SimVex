@@ -40,9 +40,10 @@ namespace vex
      * @brief Sets the font type to be displayed on the Screen that is determined by the parameter.
      * @param font The type of font that is displayed.
      */
-    void brain::lcd::setFont(fontType font) { 
+    void brain::lcd::setFont(fontType font)
+    {
         sim::brain_screen::set_font_internal(font);
-     }
+    }
 
     /**
      * @brief Sets the pen's width.
@@ -285,9 +286,10 @@ namespace vex
      * @param x2 The x location of the second point.
      * @param y2 The y location of the second point.
      */
-    void brain::lcd::drawLine(int x1, int y1, int x2, int y2) { 
+    void brain::lcd::drawLine(int x1, int y1, int x2, int y2)
+    {
         sim::brain_screen::draw_line_internal(x1, y1, x2, y2);
-     }
+    }
 
     // Rectangle
     /**
@@ -345,7 +347,14 @@ namespace vex
      * @param y The central y location of the circle.
      * @param radius Sets the radius of the circle to be drawn on the Screen.
      */
-    void brain::lcd::drawCircle(int x, int y, int radius) { print_unimplimented(); }
+    void brain::lcd::drawCircle(int x, int y, int radius)
+    {
+        print_unimplimented();
+        // https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
+        // that for borders.
+        // each iteration, get minX and maxX and iterate between the two to fill with fill color
+        // also have to do that mirrored 
+    }
 
     /**
      * @brief Draws a circle using the specified points and attributes set in the parameters. Fills the circle with the color specified.
@@ -431,7 +440,7 @@ namespace vex
     {
         static V5_TouchStatus td;
         vexTouchDataGet(&td);
-        //return sim::brain_screen::get_touch_status_internal()->lastEvent == V5_TouchEvent::kTouchEventPress;
+        // return sim::brain_screen::get_touch_status_internal()->lastEvent == V5_TouchEvent::kTouchEventPress;
         return td.lastEvent == V5_TouchEvent::kTouchEventPress;
     }
 

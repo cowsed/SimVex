@@ -126,7 +126,7 @@ func main() {
 	saveDefualts()
 }
 
-var defualts_file string = "defualts.json"
+var defaults_file string = "defaults.json"
 
 type Options struct {
 	RobotFolderPath   string
@@ -134,7 +134,7 @@ type Options struct {
 }
 
 func loadDefualts() {
-	f, err := os.Open(defualts_file)
+	f, err := os.Open(defaults_file)
 	if err != nil {
 		// Couldnt load file
 		return
@@ -145,7 +145,7 @@ func loadDefualts() {
 }
 
 func saveDefualts() {
-	f, err := os.Create(defualts_file)
+	f, err := os.Create(defaults_file)
 	if err != nil {
 		fmt.Println("error saving defualts: \n", err)
 	}

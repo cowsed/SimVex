@@ -11,7 +11,9 @@ namespace sim
         if (sim_state == SimState::Paused)
         {
             sim_state = SimState::Playing;
+            sim::event_handler::resume_all_mevents();
             sim::time_start();
+
         }
     }
 
@@ -21,6 +23,7 @@ namespace sim
         if (sim_state == SimState::Playing)
         {
             sim_state = SimState::Paused;
+            sim::event_handler::pause_all_mevents();
             sim::time_pause();
         }
     }
