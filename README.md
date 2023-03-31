@@ -1,16 +1,34 @@
 # Sim Vex API
 
-## Making
-Making the API - necessary for using the simulator for the first time. After it's been built once and you're testing robot code you will never have to do this build again. When the Sim build script is run it will link against the libsimv5rt.a rather than the actual libv5rt.a
+## Supported Platforms
 
+| Platform        | State | 
+|-----------------|-------|
+| My Computer     |  ✅   | 
+| Everything else |  ❌   |
 
-## Linking
+## Building the Sim
+Only have to do this once per update.
 
-Linking is the fancy part
+Enter the sdk/sim_vexv5 directory and use `make`
+You will probably have to change some paths in order to build on your computer
 
-Inputs:
-- libsimv5rt.a
-- Robot Code (.cpp/.h) including main.cpp
+Dependencies
+- OpenGL 4.something
+- GLFW 3.3
+- Bullet3D (eventually)
+
+## Building your robot code
+
+Use the supplied SetupUtility to build and run your code
+
+### Building manually
+(destructive)
+take the mkenv.mk and mkrules.mk from `makes/` and replace the ones in vex/ in your robot code with them
+then, from the root of the robot project, run make
+
+optional:
+specify name of project with `make P=ProjectName`
 
 Outputs:
-Binary that runs simulation and robot code
+- Binary that runs simulation and robot code
