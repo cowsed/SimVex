@@ -732,7 +732,7 @@ namespace sim
             bool over_image = (mousepos.x) < img_width && (mousepos.x) >= 0;
             over_image &= (mousepos.y) < img_height && (mousepos.y) >= 0;
 
-            bool pressed = ImGui::IsMouseDown(ImGuiMouseButton_Left) && over_image;
+            bool pressed = ImGui::IsMouseDown(ImGuiMouseButton_Left) && over_image && ImGui::IsWindowFocused();
             bool just_pressed = pressed && !was_pressed;
             bool just_released = !pressed && was_pressed;
 

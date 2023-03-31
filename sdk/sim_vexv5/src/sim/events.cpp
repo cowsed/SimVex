@@ -2,26 +2,36 @@
 
 namespace sim::event_handler
 {
-    volatile bool threads_should_pause = true;
+    volatile bool threads_should_pause = false;
 
-    /// @brief  true while callback threads should end. Should always be false except when we are tearing down the program where it will be false. EVEN WHEN THE SIM IS JUST PAUSED, this should be false.
+    /// @brief  true while callback threads should end. Should always be false except when we are stopping things to end the program or between modes
     static bool end_callbacks = false;
     // array of all mevents on all devices
     static struct event_handler *mevent_array[NUM_INDICES][MAX_EVENTS_PER_INDEX];
+
+#define SIG_PAUSE_THREAD SIGUSR1
+#define SIG_STOP_THREAD SIGUSR2
+
+    namespace text
+    {
+        auto red_color = "\033[1;31m";
+        auto reset_color = "\033[0m\n";
+    }
 
     struct event_handler
     {
         int index;
         int id;
         mevent_func callback = NULL;
-        bool should_run = false;
-        bool finished = false;
+        bool should_run = false; // true (and signled with cv) when this event is triggered. After running once, should_run is set to false
+
+        bool waiting_for_should_run = false;
 
         std::thread *my_runner_thread;
-        std::mutex *my_mutex; // locked until event happens
-        std::condition_variable *my_cv;
+        std::mutex *my_mutex;           // locked until event happens
+        std::condition_variable *my_cv; // variable to signal change in should_run
 
-        event_handler(int index, int event_id, mevent_func callback) : index(index), id(event_id), callback(callback), should_run(false)
+        event_handler(int index, int event_id) : index(index), id(event_id), callback(NULL), should_run(false)
         {
             mevent_array[index][id] = this;
             setup_event();
@@ -29,77 +39,38 @@ namespace sim::event_handler
 
         // call at end of program or event going out of scope to free resources
         ~event_handler()
+
         {
-            printf("cancelling %d:%d\n", index, id);
-
-            stop_event();
-            printf("finished stopping\n");
-
+            // end_event();
             delete mevent_array[index][id]->my_cv;
             delete mevent_array[index][id]->my_mutex;
             delete mevent_array[index][id]->my_runner_thread;
+            mevent_array[index][id] = NULL;
         }
 
         /// @brief sets up event such that it is ready to run when needed
         void setup_event()
         {
-            // /delete my_mutex;
-            // /delete my_cv;
-            // /delete my_runner_thread;
+            callback = NULL;
+            should_run = false;
 
-            if (my_runner_thread == NULL || my_runner_thread->joinable() == false)
-            {
-                delete my_mutex;
-                delete my_cv;
-                delete my_runner_thread;
-
-                should_run = false;
-                my_mutex = new std::mutex();
-                my_cv = new std::condition_variable();
-                my_runner_thread = new std::thread(do_calling_back, index, id);
-            }
+            my_mutex = new std::mutex();
+            my_cv = new std::condition_variable();
+            my_runner_thread = new std::thread(do_calling_back, index, id);
         }
-        void pause_event()
+        void pause_event_thread()
         {
-            pthread_kill(my_runner_thread->native_handle(), SIGUSR1);
+            should_run = false;
+            printf("pausing thread %p\n", my_runner_thread);
+            pthread_kill(my_runner_thread->native_handle(), SIG_PAUSE_THREAD);
         }
 
-        /// @brief resets (stops) an event task.
-        /// callback function is retained it's just stopped
-        void stop_event()
-        {
-            printf("stopping event %d.%d\n", index, id);
-            // ask nicely to end event
-            end_callbacks = true;
-            bool sent = send_mevent(index, id);
-
-            printf("is joinable; %d\n", mevent_array[index][id]->my_runner_thread->joinable());
-
-            if (sent)
-            {
-                printf("Nice thread: %p\n", (void *)mevent_array[index][id]->my_runner_thread);
-                // thread was nice and not doing anything, we can just join
-                mevent_array[index][id]->my_runner_thread->join();
-                delete mevent_array[index][id]->my_runner_thread;
-            }
-            else
-            {
-                printf("force killing %d:%d\n", index, id);
-
-                // find and kill running thread
-                std::thread::native_handle_type native_handle = (*mevent_array[index][id]->my_runner_thread).native_handle();
-                mevent_array[index][id]->my_runner_thread->detach();
-                printf("native handle %lu\n", native_handle);
-                pthread_cancel(native_handle);
-                delete mevent_array[index][id]->my_runner_thread;
-            }
-            end_callbacks = false;
-        }
-
+        /// @brief func that each mevent thread uses to run its callbacks
+        /// @param index the index of the mevent this function call is for
+        /// @param id the id of the mevent this function call is for
         static void do_calling_back(int index, int id)
         {
             auto me = mevent_array[index][id];
-            me->finished = false;
             while (!end_callbacks)
             {
                 // aquire unique lock on my_mutex
@@ -108,19 +79,23 @@ namespace sim::event_handler
                     lk(*me->my_mutex);
 
                 // wait until we should run
+                me->waiting_for_should_run = true;
                 me->my_cv->wait(lk, [&]
                                 { return me->should_run == true; });
+                me->waiting_for_should_run = false;
 
                 // check if we should just end
                 if (end_callbacks)
                 {
                     lk.unlock();
+                    printf("breaking %d:%d\n", index, id);
                     break;
                 }
 
                 // else run the callback, if non null
                 if (me->callback != NULL)
                 {
+                    printf("%d:%d callback = %p\n", index, id, me->callback);
                     me->callback();
                 }
                 // did a good job, we can rest
@@ -129,7 +104,6 @@ namespace sim::event_handler
                 // relock. will be unlocked by sim when we should run the callback again
                 lk.unlock();
             }
-            me->finished = true;
         }
     };
 
@@ -139,61 +113,80 @@ namespace sim::event_handler
     /// @param callback the function that should run when this guy happens
     void register_mevent(int index, int event_id)
     {
+
         if (!(index >= 0 && index < NUM_INDICES && event_id >= 0 && event_id < MAX_EVENTS_PER_INDEX))
         {
-            std::cerr << "INVALID MEVENT POSITION " << index << ":" << event_id << std::endl;
+            std::cerr << text::reset_color << "INVALID MEVENT POSITION " << index << ":" << event_id << text::reset_color << std::endl;
             return;
         }
 
         if (mevent_array[index][event_id] != NULL)
         {
 
-            std::cerr << "=====================================" << std::endl;
-            std::cerr << "A mevent is already registered in index " << index << " event " << event_id << "> THERE IS PROBABLY AN INITILIZATION BUG" << std::endl;
-            std::cerr << "=====================================" << std::endl;
+            std::cerr << text::red_color << "=====================================" << text::reset_color << std::endl;
+            std::cerr << text::red_color << "A mevent is already registered in index " << index << " event " << event_id << "> THERE IS PROBABLY A SIM BUG NOT A VEX BUG" << text::reset_color << std::endl;
+            std::cerr << text::red_color << "=====================================" << text::reset_color << std::endl;
             return;
         }
 
-        event_handler *my_mevent = new event_handler(index, event_id, NULL);
+        // make a new event and hold it for safekeeping
+        event_handler *my_mevent = new event_handler(index, event_id);
         mevent_array[index][event_id] = my_mevent;
     }
+    /// @brief set the callback function that will execute when a callback is triggered
+    /// @param index  index of the event - see reference manual
+    /// @param event_id id of the event - see reference manual
+    /// @param callback callback function that will be executed
     void set_event_callback(int index, int event_id, mevent_func callback)
     {
-        assert(mevent_array[index][event_id] != NULL); // make sure we're setting on an event that already exists
+        if (mevent_array[index][event_id] == NULL)
+        {
+            std::cerr << text::red_color << "Trying to set callback on an event that doesnt exist. Probably a sim implementation issue - or you're doing weird shenanigans. Don't do those please :(" << text::reset_color << std::endl;
+        }
+
         mevent_array[index][event_id]->callback = callback;
-        mevent_array[index][event_id]->setup_event();
     }
     /// @brief
     /// @param index
     /// @param event_id
-    /// @return false if failed to send. true if sent
+    /// @return false if thread is being difficult and we could not send an event. true if sent to a thread or that thread doesn't exist
     bool send_mevent(int index, int event_id)
     {
-        if (!(index >= 0 && index < NUM_INDICES && event_id >= 0 && event_id < MAX_EVENTS_PER_INDEX))
+        if (!(sim::is_auto_control() || sim::is_driver_control()))
         {
-            std::cerr << "INVALID MEVENT" << std::endl;
-            return false;
+            std::cerr << text::red_color << "Trying to send mevent while the robot isn't running. we'll just not send it" << text::reset_color << std::endl;
+            return true;
         }
-        if (mevent_array[index][event_id] == NULL)
+        if (!(index >= 0 && index < NUM_INDICES && event_id >= 0 && event_id < MAX_EVENTS_PER_INDEX) || (mevent_array[index][event_id] == NULL))
         {
-            std::cerr << "NULL MEVENT" << std::endl;
-            return false;
+            std::cerr << text::red_color << "INVALID MEVENT" << text::reset_color << std::endl;
+            return true;
         }
 
-        // try to take lock]
+        if (mevent_array[index][event_id] == NULL)
+        {
+            std::cerr << text::red_color << "NULL MEVENT" << text::reset_color << std::endl;
+            return true;
+        }
+
+        // try to take lock
         // if we can't return false (failed)
         // similar to interrupts in embedded. if you trigger it before interrupt handler finishes that interrupt won't trigger
         // hoping this matches how the brain works
         // TODO give the get a timeout. on the offchacne we have a one shot callback but we catch it on the wrong nanosecond
 
+        printf("Sending mevent %d:%d - callback = %p\n", index, event_id, mevent_array[index][event_id]->callback);
+
         bool got_lock = mevent_array[index][event_id]->my_mutex->try_lock();
         if (!got_lock)
         {
+            printf("failed\n");
             return false;
         }
 
-        mevent_array[index][event_id]->should_run = true;
+        printf("succeeded\n");
 
+        mevent_array[index][event_id]->should_run = true;
         mevent_array[index][event_id]->my_mutex->unlock();
 
         // notify that a change happened
@@ -201,23 +194,43 @@ namespace sim::event_handler
         return true;
     }
 
-    void stop_all_mevents()
-    {   
-        resume_all_mevents();
+    void end_all_mevents()
+    {
+        end_callbacks = true;
+        pause_all_mevents();
+
+        std::this_thread::yield();
+        end_callbacks = false;
+
+        // resume_all_mevents(); // make sure our signal handlers aren't interfering withthemselves. kinda heavy handed but seems to work
         for (int index = 0; index < NUM_INDICES; index++)
         {
             for (int id = 0; id < NUM_INDICES; id++)
             {
                 if (index >= 0 && index < NUM_INDICES && id >= 0 && id < MAX_EVENTS_PER_INDEX && mevent_array[index][id] != NULL)
                 {
-                    mevent_array[index][id]->stop_event();
+                    delete mevent_array[index][id]->my_cv;
+                    delete mevent_array[index][id]->my_mutex;
+                    delete mevent_array[index][id]->my_runner_thread;
+                    mevent_array[index][id]->should_run = false;
+                    mevent_array[index][id]->my_mutex = new std::mutex();
+                    mevent_array[index][id]->my_cv = new std::condition_variable();
+
+
+                    mevent_array[index][id]->my_runner_thread = new std::thread(event_handler::do_calling_back, index, id);
                 }
             }
         }
-    } 
+    }
 
     void pause_all_mevents()
     {
+        if (threads_should_pause == true)
+        {
+            printf("not pausing events - already paused\n");
+            // already paused
+            return;
+        }
         threads_should_pause = true;
         for (int index = 0; index < NUM_INDICES; index++)
         {
@@ -225,64 +238,111 @@ namespace sim::event_handler
             {
                 if (index >= 0 && index < NUM_INDICES && id >= 0 && id < MAX_EVENTS_PER_INDEX && mevent_array[index][id] != NULL)
                 {
-                    mevent_array[index][id]->pause_event();
+                    mevent_array[index][id]->pause_event_thread();
                 }
             }
         }
     }
     void resume_all_mevents()
     {
+        end_callbacks = false;
         threads_should_pause = false;
     }
 
-    void end_mevent(int index, int id)
-    {
-        if (index >= 0 && index < NUM_INDICES && id >= 0 && id < MAX_EVENTS_PER_INDEX && mevent_array[index][id] != NULL)
-        {
-            delete mevent_array[index][id];
-        }
-    }
-
-    void pause_thread(int signo, siginfo_t *info, void *extra)
+    /// @brief signal handler for pausing
+    /// @param signo signal number - should always be SIG_PAUSE_EVENT
+    /// @param info unused - needed for pthread implementation
+    /// @param extra unused - needed for pthread implementation
+    void pause_thread_sig_handler(int signo, siginfo_t *info, void *extra)
     {
 
         printf("signal %d handled on thread %lu\n", signo, std::this_thread::get_id());
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
+
+        // go for a spin
         while (threads_should_pause)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            printf("thread pausing\n");
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            if (end_callbacks)
+            {
+                pthread_exit(0);
+                return;
+            }
         }
+        printf("exitted event handler\n");
     }
-    void set_signal_handler()
+#if 0
+    /// @brief signal handler for pausing
+    /// @param signo signal number - should always be SIG_PAUSE_EVENT
+    /// @param info unused - needed for pthread implementation
+    /// @param extra unused - needed for pthread implementation
+    void stop_thread_sig_handler(int signo, siginfo_t *info, void *extra)
     {
-        printf("pause handler installed\n");
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
+        printf("stop signal %d handled on thread %lu\n", signo, std::this_thread::get_id());
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+
+        pthread_exit(NULL);
+    }
+#endif
+    void set_signal_handlers()
+    {
         struct sigaction action;
 
         action.sa_flags = SA_SIGINFO;
-        action.sa_sigaction = pause_thread;
+        action.sa_sigaction = pause_thread_sig_handler;
 
-        if (sigaction(SIGUSR1, &action, NULL) == -1)
+        int res = sigaction(SIG_PAUSE_THREAD, &action, NULL);
+
+        if (res == -1)
         {
-            perror("sigusr: sigaction");
+            perror("sigusr: sigaction : setting pause handler");
             _exit(1);
         }
+        /*
+        struct sigaction action2;
+        action2.sa_flags = SA_SIGINFO;
+        action2.sa_sigaction = stop_thread_sig_handler;
+
+        int res2 = sigaction(SIG_STOP_THREAD, &action2, NULL);
+
+        if (res2 == -1)
+        {
+            perror("sigusr: sigaction : setting stop handler");
+            _exit(1);
+        }
+        */
     }
 
-    void enable_all_mevents()
+    void setup()
     {
-        resume_all_mevents();
-        set_signal_handler();
+        set_signal_handlers();
+    }
+    void drawUI()
+    {
+        ImGui::Begin("Events");
+        ImGui::Text("Should pause: %s", (threads_should_pause ? "yes" : "no"));
+        ImGui::Text("Should End: %s", (end_callbacks ? "yes" : "no"));
         for (int index = 0; index < NUM_INDICES; index++)
         {
-            for (int id = 0; id < NUM_INDICES; id++)
+            ImGui::Text("Device: %d", index);
+            for (int id = 0; id < MAX_EVENTS_PER_INDEX; id++)
             {
-                if (index >= 0 && index < NUM_INDICES && id >= 0 && id < MAX_EVENTS_PER_INDEX && mevent_array[index][id] != NULL)
+                if (mevent_array[index][id] == NULL)
                 {
-                    mevent_array[index][id]->setup_event();
+                    continue;
                 }
+                auto me = mevent_array[index][id];
+                ImGui::Separator();
+                ImGui::Text("Event %d:%d", index, id);
+                ImGui::Text("Callback: %s", (me->callback != NULL) ? "yes" : "no");
+                ImGui::Text("should run: %s", (me->should_run) ? "yes" : "no");
+                ImGui::Text("id: 0x%x", me->my_runner_thread->get_id());
             }
         }
-    }
 
+        ImGui::End();
+    }
 }

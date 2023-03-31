@@ -127,6 +127,8 @@ namespace sim
         if (ImGui::CollapsingHeader("Vex Control", ImGuiTreeNodeFlags_DefaultOpen))
         {
 
+            ImGui::BeginDisabled(sim::is_paused()); // don't allow vex control if we're paused
+
             ImGui::BeginDisabled(((is_driver_control() || is_auto_control()))); // disable if we've already selected
             if (ImGui::Button("driver"))
             {
@@ -147,6 +149,7 @@ namespace sim
             }
             ImGui::EndDisabled();
 
+            ImGui::EndDisabled();
             ImGui::SameLine();
             ImGui::TextDisabled("%s", vex_state_text());
         }
@@ -202,6 +205,7 @@ namespace sim
 
             ImGui::End();
         }
+        sim::event_handler::drawUI();
     }
 
     void setRedStyle()

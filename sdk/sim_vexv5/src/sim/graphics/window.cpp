@@ -1,13 +1,12 @@
 #include "sim/graphics/window.h"
 
-
 namespace sim
 {
 
     bool show_gl_notis = false; // opengl notifications arent really needed and often clog up output
     std::thread render_thread;
     GLFWwindow *window;
-    ImFont* main_font;
+    ImFont *main_font;
     const float font_size = 18;
 
     static void glfwError(int id, const char *description)
@@ -105,7 +104,8 @@ namespace sim
 
         case GL_DEBUG_SEVERITY_NOTIFICATION:
             _severity = "NOTIFICATION";
-            if (!show_gl_notis){
+            if (!show_gl_notis)
+            {
                 return;
             }
             break;
@@ -117,7 +117,6 @@ namespace sim
         std::cerr << "\033[1;32mOPENGL:\033[0m\t";
         std::cerr << id << ": " << _type << " of " << _severity << " severity, raised from " << _source << ": " << msg << std::endl;
     }
-
 
     static void resize_callback(GLFWwindow *window, int width, int height)
     {
@@ -153,8 +152,8 @@ namespace sim
 
         ImGuiIO &io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-        
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+
         (void)io;
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -162,7 +161,7 @@ namespace sim
         main_font = io.Fonts->AddFontFromMemoryCompressedTTF(embedded_font_compressed_data, embedded_font_compressed_size, font_size);
 
         ImGui::StyleColorsDark();
-        //setRedStyle();
+        // setRedStyle();
         return true;
     }
 
@@ -173,7 +172,7 @@ namespace sim
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
-    
+
     // Destruct Imgui
     void imguiCleanup()
     {
@@ -184,16 +183,17 @@ namespace sim
     // Destruct Main Window
     void cleanUpWindow()
     {
+        // stop any background threads
+        // We're really done
+        sim::event_handler::end_all_mevents();
+        sim::time_end();
+
         printf("Destroying Window\n");
         imguiCleanup();
         glfwDestroyWindow(window);
 
         glfwTerminate();
 
-        // stop any background threads
-        // We're really done
-        sim::event_handler::stop_all_mevents();
-        sim::time_end();
         printf("exitting 0\n");
         exit(0);
     }
@@ -237,13 +237,13 @@ namespace sim
             return false;
         }
 
-
         // print stats
-        printf("GLFW Version: %d.%d\n",GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR);
+        printf("GLFW Version: %d.%d\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR);
         GLint gl_major;
         GLint gl_minor;
-        glGetIntegerv(GL_MAJOR_VERSION, &gl_major); glGetIntegerv(GL_MINOR_VERSION, &gl_minor);
-        printf("OpenGL Version: %d.%d\n",gl_major, gl_minor);
+        glGetIntegerv(GL_MAJOR_VERSION, &gl_major);
+        glGetIntegerv(GL_MINOR_VERSION, &gl_minor);
+        printf("OpenGL Version: %d.%d\n", gl_major, gl_minor);
         printf("Dear ImGui Version: %s\n", ImGui::GetVersion());
         printf("SimVex Version: %s, %s\n", __DATE__, __TIME__);
 
@@ -259,6 +259,7 @@ namespace sim
         glfwMakeContextCurrent(window);
         brain_screen::setup();
         controller::setup();
+        event_handler::setup();
 
         sim::time_start();
         while (!glfwWindowShouldClose(window))

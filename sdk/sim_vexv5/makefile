@@ -48,12 +48,12 @@ MKDIR = mkdir -p "$(@D)" 2> /dev/null || :
 ARCH = ar
 ARCH_FLAGS = rcs
 
-CXX = clang
+CXX = clang-15
 
 #-lopengl32 -lglfw3 -lglew32
 
 
-CXX_FLAGS = -O2 -Wall -Werror=return-type --std=gnu++20 
+CXX_FLAGS = -O2 -Wall -Werror=return-type --std=gnu++20 -ggdb
 INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends
 all: $(BUILD)/$(PROJECTLIB).a
 

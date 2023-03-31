@@ -13,7 +13,6 @@ namespace sim
             sim_state = SimState::Playing;
             sim::event_handler::resume_all_mevents();
             sim::time_start();
-
         }
     }
 
@@ -50,7 +49,7 @@ namespace sim
             return;
         }
         vex_state = Driver;
-        sim::event_handler::enable_all_mevents();
+        sim::event_handler::resume_all_mevents();
         sim::event_handler::send_mevent(comp_index, driver_ctl_eid);
     }
 
@@ -66,7 +65,7 @@ namespace sim
             return;
         }
         vex_state = Autonomous;
-        sim::event_handler::enable_all_mevents();
+        sim::event_handler::resume_all_mevents();
         sim::event_handler::send_mevent(comp_index, auto_eid);
     }
 
@@ -74,7 +73,7 @@ namespace sim
     /// stops tasks and executes competition disable (TODO)
     void disable_robot()
     {
-        sim::event_handler::stop_all_mevents();
+        sim::event_handler::end_all_mevents();
         vex_state = VexState::Disabled;
     }
 
