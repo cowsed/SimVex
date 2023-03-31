@@ -752,7 +752,7 @@ namespace sim
                 last_touch_status.releaseCount++;
             }
 
-            const int brain_index = 0;
+            const int brain_index = 31;
             const int pressed_eid = 0;
             const int released_eid = 1;
             if (just_pressed)

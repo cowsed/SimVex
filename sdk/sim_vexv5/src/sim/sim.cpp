@@ -41,7 +41,7 @@ namespace sim
     /// if the robot is not disabled when this function is called, it does nothing
     void start_driver_control()
     {
-        const int comp_index = 0;
+        const int comp_index = 31;
         const int driver_ctl_eid = 10;
         if (vex_state != Disabled)
         {
@@ -57,7 +57,7 @@ namespace sim
     /// if the robot is not disabled when this function is called, it does nothing
     void start_auto_control()
     {
-        const int comp_index = 0;
+        const int comp_index = 31;
         const int auto_eid = 9;
         if (vex_state != Disabled)
         {
