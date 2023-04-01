@@ -20,12 +20,6 @@ namespace sim
 {
     namespace construction
     {
-        struct Location
-        {
-            glm::dvec3 p;
-            glm::quat o;
-        };
-
         struct Structure
         {
             int id;

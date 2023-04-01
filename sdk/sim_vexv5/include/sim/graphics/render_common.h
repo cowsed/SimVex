@@ -5,10 +5,21 @@
 #include <GLFW/glfw3.h>
 #include <GL/glcorearb.h>
 
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/gtc/quaternion.hpp>
+
+
 namespace sim
 {
+    struct Location
+    {
+        glm::dvec3 p;
+        glm::quat o;
+    };
     namespace renderer
     {
+
         struct RenderTarget
         {
             /// @brief handles to opengl buffers
@@ -25,6 +36,11 @@ namespace sim
             void deactivate();
 
             void cleanup();
+        };
+        struct Camera
+        {
+            glm::vec3 eye;
+            glm::vec3 lookat;
         };
     }
 }

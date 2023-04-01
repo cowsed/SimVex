@@ -52,6 +52,7 @@ namespace sim
         void RenderTarget::activate()
         {
             glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+            glViewport(0, 0, width, height);
         }
         /// @brief deactivate this target such that all render calls go to their defualt source
         void RenderTarget::deactivate()
