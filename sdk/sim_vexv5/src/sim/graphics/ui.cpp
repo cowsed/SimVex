@@ -28,7 +28,7 @@ namespace sim
         ImGui::PopStyleVar(3);
     }
 
-    void drawUI(GLFWwindow *window)
+    void drawMainMenuBar(GLFWwindow *window)
     {
         // Menu Bar
         ImGui::BeginMainMenuBar();
@@ -70,45 +70,35 @@ namespace sim
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
+    }
 
-        // Dockspace
-        setupDockspace();
+    void drawImGuiStuff()
+    {
+        // Demo
         if (show_imgui_demo)
         {
             ImGui::ShowDemoWindow(&show_imgui_demo);
         }
 
+        // Stats
         if (show_imgui_stats)
         {
             ImGui::ShowMetricsWindow(&show_imgui_stats);
         }
+    }
 
-        ImGui::Begin("Viewport");
-        ImGui::Text("COMING SOON");
-        if (ImGui::IsWindowFocused())
-        {
-            if (ImGui::IsKeyReleased(ImGuiKey_A))
-            {
-                printf("released A");
-            }
-        }
-        ImGui::End();
-
-        //  Brain screen to tap on
-        sim::brain_screen::build_brain_ui();
-
-        // Vex Controller
-        sim::controller::build_controller_ui();
-
-        // Simulation Control
+    void drawSimControl()
+    {
         ImGui::Begin("Control");
         if (ImGui::CollapsingHeader("Simulation Control", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            if (ImGui::Button("Play")){
+            if (ImGui::Button("Play"))
+            {
                 sim::start_sim();
             }
             ImGui::SameLine();
-            if (ImGui::Button("Pause")){
+            if (ImGui::Button("Pause"))
+            {
                 sim::pause_sim();
             }
             ImGui::SameLine();
@@ -121,9 +111,7 @@ namespace sim
             ImGui::Combo("Type", sim::get_time_type(), sim::time_labels_separated_by_zeroes());
             // ImGui::SetTooltip("Time Type\n Steady: description of steady time\n Accurate: description of accurate");
         }
-
         // Vex Control
-        // Auto/usercontrol
         if (ImGui::CollapsingHeader("Vex Control", ImGuiTreeNodeFlags_DefaultOpen))
         {
 
@@ -143,9 +131,9 @@ namespace sim
 
             ImGui::SameLine();
             ImGui::BeginDisabled((!(is_driver_control() || is_auto_control()))); // enable if we've already selected
-            if (ImGui::Button("disable")){
+            if (ImGui::Button("disable"))
+            {
                 sim::disable_robot();
-
             }
             ImGui::EndDisabled();
 
@@ -156,23 +144,10 @@ namespace sim
 
         ImGui::TextColored(ImVec4(0.1, 1.0, 0.1, 1.0), "Controller Connected");
         ImGui::End();
+    }
 
-        ImGui::Begin("Devices");
-        if (ImGui::CollapsingHeader("Motor : Port1"))
-        {
-            static bool test_plugged_in_bool = false;
-            ImGui::Checkbox("Plugged in", &test_plugged_in_bool);       
-            ImGui::Text("59 *C");
-            ImGui::SameLine();
-            ImGui::TextDisabled("(throttled)");
-            ImGui::Text("36:1 ratio");
-            ImGui::Text("current: 2.34 amps");
-            ImGui::Text("Effeciency");
-            
-        }
-        ImGui::End();
-
-        // serial terminal from robot
+    void drawTerminal()
+    {
         ImGui::Begin("Terminal", NULL, ImGuiWindowFlags_HorizontalScrollbar);
         static bool auto_scroll_terminal = true;
 
@@ -185,12 +160,14 @@ namespace sim
             ImGui::SetScrollHereY(.99);
         }
         ImGui::End();
+    }
 
-        // Event Sender
+    void drawEventSender(bool &should_show)
+    {
         // Sends arbitrary mevent
-        if (show_event_sender)
+        if (should_show)
         {
-            ImGui::Begin("Event Sender", &show_event_sender);
+            ImGui::Begin("Event Sender", &should_show);
             ImGui::TextWrapped("Send arbitrary mevent 'interrupts' to the system. Consult docs for names and numbers of these");
             ImGui::TextColored(ImVec4(1, .1, .1, 1.0), "BE CAREFUL");
             ImGui::TextWrapped("if you use this wrong you can do weird things like start usercontrol and auto at the sametime; what scholars call 'not good'");
@@ -205,7 +182,61 @@ namespace sim
 
             ImGui::End();
         }
+    }
+    void drawFieldViewport()
+    {
+        ImGui::Begin("Viewport");
+        ImGui::Text("COMING SOON");
+        if (ImGui::IsWindowFocused())
+        {
+            if (ImGui::IsKeyReleased(ImGuiKey_A))
+            {
+                printf("released A");
+            }
+        }
+        ImGui::Image((void *)(intptr_t)(renderer::get_rendered_tex()), ImVec2((float)renderer::get_rendered_tex_width(), (float)renderer::get_rendered_tex_height()));
+        ImGui::End();
+    }
+
+    void drawUI(GLFWwindow *window)
+    {
+        setRedStyle();
+        drawMainMenuBar(window);
+        setupDockspace();
+        drawImGuiStuff();
+
+        drawEventSender(show_event_sender);
         sim::event_handler::drawUI();
+
+        drawFieldViewport();
+
+        //  Brain screen to tap on
+        sim::brain_screen::build_brain_ui();
+
+        // Vex Controller
+        sim::controller::build_controller_ui();
+
+        // Simulation Control
+        drawSimControl();
+
+        // ImGui::Begin("Devices");
+        // if (ImGui::CollapsingHeader("Motor : Port1"))
+        // {
+        // static bool test_plugged_in_bool = false;
+        // ImGui::Checkbox("Plugged in", &test_plugged_in_bool);
+        // ImGui::Text("59 *C");
+        // ImGui::SameLine();
+        // ImGui::TextDisabled("(throttled)");
+        // ImGui::Text("36:1 ratio");
+        // ImGui::Text("current: 2.34 amps");
+        // ImGui::Text("Effeciency");
+        // }
+        // ImGui::End();
+
+        // serial terminal from robot
+        drawTerminal();
+
+        sim::construction::drawUI();
     }
 
     void setRedStyle()

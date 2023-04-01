@@ -12,14 +12,28 @@
 
 #include <nlohmann/json.hpp>
 
-#include "render_common.h"
+#include "imgui.h"
+
+#include "sim/graphics/render_common.h"
 
 namespace sim
 {
     namespace construction
     {
+        struct Location
+        {
+            glm::dvec3 p;
+            glm::quat o;
+        };
 
-        typedef int Structure;
+        struct Structure
+        {
+            int id;
+            std::string name;
+            Location origin_loc;
+        };
+        
+        
         typedef int Joint;
         typedef int Effector;
 
@@ -29,19 +43,13 @@ namespace sim
         typedef uint32_t joint_id;
         typedef uint32_t effector_id;
 
-        struct Location
-        {
-            glm::dvec3 p;
-            glm::quat o;
-        };
-
         /// @brief pure geometry and texture data
         /// mounted at the origin
         /// will be moved around by robot model
         class Shape
         {
         public:
-            virtual void render(glm::mat4 mat, RenderTarget rt);
+            virtual void render(glm::mat4 mat, renderer::RenderTarget rt);
         };
 
         /// @brief shape from obj file
@@ -51,7 +59,7 @@ namespace sim
             obj_shape(compiled_obj *file);
             obj_shape(std::string path);
             ~obj_shape();
-            void render(glm::mat4 mat, RenderTarget rt) override;
+            void render(glm::mat4 mat, renderer::RenderTarget rt) override;
         };
 
         /// @brief shape from obj file
@@ -60,7 +68,7 @@ namespace sim
         public:
             disk_shape(double radius, double height);
             ~disk_shape();
-            void render(glm::mat4 mat, RenderTarget rt) override;
+            void render(glm::mat4 mat, renderer::RenderTarget rt) override;
         };
 
         /// @brief Info loaded from robot description file
@@ -87,5 +95,6 @@ namespace sim
         };
         bool setup();
         void cleanup();
+        void drawUI();
     }
 }

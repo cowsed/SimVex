@@ -12,6 +12,9 @@
 #include "../controller.h"
 #include "../sim.h"
 #include "../events.h"
+#include "../robot_model.h"
+#include "renderer.h"
+
 namespace sim
 {
     void drawUI(GLFWwindow *window);

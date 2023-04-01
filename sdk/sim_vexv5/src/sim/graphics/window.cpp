@@ -125,16 +125,6 @@ namespace sim
         // Resize imgui window to os window
     }
 
-    bool test_render()
-    {
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        glViewport(0, 0, width, height);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-        return true;
-    }
-
     void imguiNewFrame()
     {
         ImGui_ImplOpenGL3_NewFrame();
@@ -265,11 +255,12 @@ namespace sim
         }
         glfwMakeContextCurrent(window);
         construction::setup();
+        renderer::setup();
         brain_screen::setup();
         controller::setup();
         event_handler::setup();
         sim::time_start();
-        
+
         while (!glfwWindowShouldClose(window))
         {
             imguiNewFrame();
@@ -277,8 +268,7 @@ namespace sim
             drawUI(window);
 
             brain_screen::render_to_tex();
-
-            test_render();
+            renderer::render();
 
             // Where ImGui data is drawn to the screen - actual creation of UI should happen before this
             imguiRender();
