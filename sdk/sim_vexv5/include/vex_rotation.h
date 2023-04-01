@@ -13,7 +13,8 @@
 
 #ifndef   VEX_ROTATION_CLASS_H
 #define   VEX_ROTATION_CLASS_H
-
+#include <stdint.h>
+#include "vex_device.h"
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_rotation.h
   * @brief   rotation sensor device class header

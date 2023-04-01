@@ -342,7 +342,8 @@ namespace sim
                 {
                     gi = (*this_font.font_glyph_info)[str[i]];
                 }
-                blitGlyph(buf, fg_color, bg_color, opaque, gi.width, this_font.font_tex_height, gi.x, this_font.font_tex_width, this_font.font_tex, curx, y);
+                int h = this_font.font_tex_height;
+                blitGlyph(buf, fg_color, bg_color, opaque, gi.width, this_font.font_tex_height, gi.x, this_font.font_tex_width, this_font.font_tex, curx, y - h + 3);
                 curx += gi.width;
 
                 i++;
@@ -578,6 +579,22 @@ namespace sim
             }
 
             draw_all_octants(x1, y1, x2, y2);
+            mark_dirty();
+        }
+        void draw_circle_internal(int x, int y, int radius)
+        {
+            for (int yi = y - radius; yi < y + radius; yi++)
+            {
+                // x^2 + y^2  = radius
+                //  radius - y^2 = x^2
+                int xmin = x - sqrt((int)(radius * radius - (yi - y) * (yi - y)));
+                int xmax = x + sqrt((int)(radius * radius - (yi - y) * (yi - y)));
+                for (int xi = xmin; xi < xmax; xi++)
+                {
+                    setPixelAccordingly(&working_screen_buffer[0][0], xi, yi, get_bg_col_internal());
+                }
+            }
+            mark_dirty();
         }
 
         ///@brief clears the current clip space with defualt color
@@ -760,14 +777,14 @@ namespace sim
                 last_touch_status.lastEvent = V5_TouchEvent::kTouchEventPress;
                 last_touch_status.pressCount = 1;
 
-                sim::event_handler::send_mevent(brain_index, pressed_eid);
+                sim::event_handler::send_mevent(brain_index, pressed_eid, true);
             }
             if (just_released)
             {
                 last_touch_status.lastEvent = V5_TouchEvent::kTouchEventPress;
                 last_touch_status.releaseCount = 1;
 
-                sim::event_handler::send_mevent(brain_index, released_eid);
+                sim::event_handler::send_mevent(brain_index, released_eid, true);
             }
 
             was_pressed = pressed;

@@ -25,7 +25,7 @@ namespace sim
         // tell mevent that it exists and we will use it
         void register_mevent(int index, int event_id);
         void set_event_callback(int index, int event_id, mevent_func callback);
-        bool send_mevent(int index, int event_id);
+        bool send_mevent(int index, int event_id, bool allowed_pre_auton = false);
 
         //  pause while running
         void pause_all_mevents();

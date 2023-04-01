@@ -29,4 +29,7 @@ namespace vex
     }
       bool    device::installed(){print_unimplimented(); return false;}
       int32_t device::value(){print_unimplimented(); return -1;}
+
+
+      
 }

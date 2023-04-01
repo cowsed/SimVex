@@ -13,7 +13,9 @@
 
 #ifndef   VEX_IMU_CLASS_H
 #define   VEX_IMU_CLASS_H
-
+#include "vex_device.h"
+#include "vex_units.h"
+#include <stdint.h>
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_imu.h
   * @brief   inertial sensor device class header
@@ -174,28 +176,28 @@ namespace vex {
        * @return Returns a double that represents the unit value specified by the parameter of the inertial sensor.
        * @param units The measurement unit for the inertial device.
        */
-      double          angle( rotationUnits units = rotationUnits::deg );
+      double          angle( rotationUnits units);
 
       /**
        * @brief Gets the roll angle of the inertial sensor.
        * @return Returns a double that represents the unit value specified by the parameter of the inertial sensor.
        * @param units The measurement unit for the inertial sensor.
        */
-      double          roll( rotationUnits units = rotationUnits::deg );
+      double          roll( rotationUnits units);
 
       /**
        * @brief Gets the pitch angle of the inertial sensor.
        * @return Returns a double that represents the unit value specified by the parameter of the inertial sensor.
        * @param units The measurement unit for the inertial device.
        */
-      double          pitch( rotationUnits units = rotationUnits::deg );
+      double          pitch( rotationUnits units);
 
       /**
        * @brief Gets the yaw angle of the inertial sensor.
        * @return Returns a double that represents the unit value specified by the parameter of the inertial sensor.
        * @param units The measurement unit for the inertial sensor.
        */
-      double          yaw( rotationUnits units = rotationUnits::deg );
+      double          yaw( rotationUnits units);
 
       /**
        * @brief Gets an orientation angle of the inertial sensor.

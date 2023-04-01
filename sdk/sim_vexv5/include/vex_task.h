@@ -13,7 +13,7 @@
 
 #ifndef   VEX_TASK_CLASS_H
 #define   VEX_TASK_CLASS_H
-
+#include <stdint.h>
 // In case we have ROBOTC definitions
 #ifdef task
 #undef task

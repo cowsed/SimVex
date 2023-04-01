@@ -15,6 +15,7 @@
 #define   VEX_VISION_CLASS_H
 #include "v5_apitypes.h"
 #include "vex_device.h"
+#include <stdint.h>
 
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_vision.h

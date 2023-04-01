@@ -150,10 +150,11 @@ namespace sim::event_handler
     /// @param index
     /// @param event_id
     /// @return false if thread is being difficult and we could not send an event. true if sent to a thread or that thread doesn't exist
-    bool send_mevent(int index, int event_id)
+    bool send_mevent(int index, int event_id, bool allowed_pre_auton)
     {
-        if (!(sim::is_auto_control() || sim::is_driver_control()))
+        if (!allowed_pre_auton && !(sim::is_auto_control() || sim::is_driver_control()) )
         {
+
             std::cerr << text::red_color << "Trying to send mevent while the robot isn't running. we'll just not send it" << text::reset_color << std::endl;
             return true;
         }

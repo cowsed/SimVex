@@ -48,7 +48,9 @@ namespace vex
      * @brief Sets the pen's width.
      * @param width This represents the width of the pen when drawing. A larger width equals a wider pen stroke.
      */
-    void brain::lcd::setPenWidth(uint32_t width) { print_unimplimented(); }
+    void brain::lcd::setPenWidth(uint32_t width) {
+        sim::brain_screen::set_pen_width(width);
+    }
 
     /**
      * @brief Sets the origin of the screen to the parameters defined in the function.
@@ -348,7 +350,7 @@ namespace vex
      */
     void brain::lcd::drawCircle(int x, int y, int radius)
     {
-        print_unimplimented();
+        sim::brain_screen::draw_circle_internal(x, y, radius);
         // https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
         // that for borders.
         // each iteration, get minX and maxX and iterate between the two to fill with fill color

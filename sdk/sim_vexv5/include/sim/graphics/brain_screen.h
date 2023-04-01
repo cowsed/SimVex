@@ -39,6 +39,7 @@ namespace sim
         void draw_rect_border_internal(int x, int y, int width, int height, uint32_t fill_argb, uint32_t border_argb, int border_width);
 
         void draw_line_internal(int x1, int y1, int x2, int y2);
+        void draw_circle_internal(int x, int y, int radius);
 
         void print_at_internal(int x, int y, bool opaque, char *str);
         int calc_string_width(const char *str);
