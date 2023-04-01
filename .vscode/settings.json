@@ -40,6 +40,24 @@
         "tuple": "cpp",
         "typeinfo": "cpp",
         "cstddef": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "any": "cpp",
+        "array": "cpp",
+        "codecvt": "cpp",
+        "cstring": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "fstream": "cpp",
+        "functional": "cpp",
+        "iomanip": "cpp",
+        "memory": "cpp",
+        "numeric": "cpp",
+        "optional": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "utility": "cpp",
+        "valarray": "cpp"
     }
 }

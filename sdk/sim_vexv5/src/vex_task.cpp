@@ -2,6 +2,8 @@
 #include "vex_task.h"
 #include "sim/util.h"
 #include <thread>
+#include "v5_api.h"
+
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_task.h
  * @brief   Header for task control class
@@ -28,7 +30,9 @@ namespace vex
      * @brief Constructs a task with a function callback.
      * @param callback A reference to a function.
      */
-    task::task(int (*callback)(void)) { print_unimplimented(); 
+    task::task(int (*callback)(void))
+    {
+        print_unimplimented();
         m = std::thread(callback);
     }
 
@@ -99,17 +103,17 @@ namespace vex
     /**
      * @brief Stops the task.
      */
-    void task::stop() { print_unimplimented(); }
+    void task::stop() { stop(*this); }
 
     /**
      * @brief Suspends the task until the task is told to resume.
      */
-    void task::suspend() { print_unimplimented(); }
+    void task::suspend() { suspend(*this); }
 
     /**
      * @brief Resumes the previously suspended task.
      */
-    void task::resume() { print_unimplimented(); }
+    void task::resume() { resume(*this); }
 
     /**
      * @brief Gets the priority of the task.
@@ -117,15 +121,14 @@ namespace vex
      */
     int32_t task::priority()
     {
-        print_unimplimented();
-        return -1;
+        return priority(*this);
     }
 
     /**
      * @brief Sets the priority of the task.
      * @param priority The priority level of the task.
      */
-    void task::setPriority(int32_t priority) { print_unimplimented(); }
+    void task::setPriority(int32_t priority) { setPriority(*this, priority); }
 
     /**
      * @brief Gets the task's index.
@@ -133,20 +136,19 @@ namespace vex
      */
     int32_t task::index(void)
     {
-        print_unimplimented();
-        return -1;
+        return _index((int(*)())this->_callback);
     }
 
     /**
      * @brief Sets the task to sleep for the specified amount of time (in milliseconds).
      * @param time The number of milliseconds for the task to sleep.
      */
-    void task::sleep(uint32_t time) { print_unimplimented(); }
+    void task::sleep(uint32_t time) { vexDelay(time); }
 
     /**
      * @brief return control to the scheduler and allow other tasks to run.
      */
-    void task::yield() { print_unimplimented(); }
+    void task::yield() { std::this_thread::yield(); }
 
     /**
      * @brief Stops the task of the passed in function.

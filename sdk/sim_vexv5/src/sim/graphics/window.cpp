@@ -183,10 +183,6 @@ namespace sim
     // Destruct Main Window
     void cleanUpWindow()
     {
-        // stop any background threads
-        // We're really done
-        sim::event_handler::end_all_mevents();
-        sim::time_end();
 
         printf("Destroying Window\n");
         imguiCleanup();
@@ -249,19 +245,31 @@ namespace sim
 
         return true;
     }
+    void cleanupAll()
+    {
+        // stop any background threads
+        // We're really done
+        sim::event_handler::end_all_mevents();
+        sim::time_end();
+        sim::construction::cleanup();
+
+        cleanUpWindow();
+    }
     bool mainLoop()
     {
         bool didSetup = setupWindow();
         if (!didSetup)
         {
             cleanUpWindow();
+            return true;
         }
         glfwMakeContextCurrent(window);
+        construction::setup();
         brain_screen::setup();
         controller::setup();
         event_handler::setup();
-
         sim::time_start();
+        
         while (!glfwWindowShouldClose(window))
         {
             imguiNewFrame();
@@ -279,7 +287,7 @@ namespace sim
             glfwPollEvents();
         }
         printf("out of main loop\n");
-        cleanUpWindow();
+        cleanupAll();
         return true;
     }
 

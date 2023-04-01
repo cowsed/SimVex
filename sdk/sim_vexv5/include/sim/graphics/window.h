@@ -12,6 +12,8 @@
 #include "../events.h"
 #include "ui.h"
 #include "embedded_font.h"
+#include "../robot_model.h"
+#include "renderer.h"
 
 #include "../../../vendor/imgui/imgui.h"
 #include "../../../vendor/imgui/backends/imgui_impl_glfw.h"
