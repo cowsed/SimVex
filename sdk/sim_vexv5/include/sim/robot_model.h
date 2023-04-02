@@ -20,14 +20,7 @@ namespace sim
 {
     namespace construction
     {
-        struct Structure
-        {
-            int id;
-            std::string name;
-            Location origin_loc;
-        };
-        
-        
+
         typedef int Joint;
         typedef int Effector;
 
@@ -43,26 +36,46 @@ namespace sim
         class Shape
         {
         public:
-            virtual void render(glm::mat4 mat, renderer::RenderTarget rt);
+            //Shape(){}
+            //virtual Shape(sim::construction::Shape const&) = defualt;
+            
+            //virtual ~Shape(){}
+            //virtual void render(glm::mat4 mat, renderer::RenderTarget rt);
         };
 
-        /// @brief shape from obj file
-        class obj_shape : public Shape
-        {
-        public:
-            obj_shape(compiled_obj *file);
-            obj_shape(std::string path);
-            ~obj_shape();
-            void render(glm::mat4 mat, renderer::RenderTarget rt) override;
-        };
+        // /// @brief shape from obj file
+        // class obj_shape : public Shape
+        // {
+        // public:
+        //     obj_shape(compiled_obj *file);
+        //     obj_shape(std::string path);
+        //     ~obj_shape();
+        //     void render(glm::mat4 mat, renderer::RenderTarget rt) override;
+        // };
 
         /// @brief shape from obj file
-        class disk_shape : public Shape
+        class cylinder_shape : public Shape
         {
+        private:
+            std::vector<glm::vec3> points;
+            std::vector<glm::vec3> normals;
+
+            unsigned int points_vbo;
+            unsigned int normal_vbo;
+            unsigned int vao = 0;
+
         public:
-            disk_shape(double radius, double height);
-            ~disk_shape();
-            void render(glm::mat4 mat, renderer::RenderTarget rt) override;
+            cylinder_shape(double radius, double height, int segments);
+            ~cylinder_shape();
+            void render(glm::mat4 mat, renderer::RenderTarget rt);// override;
+        };
+
+        struct Structure
+        {
+            int id;
+            std::string name;
+            Location origin_loc;
+            Shape shape;
         };
 
         /// @brief Info loaded from robot description file

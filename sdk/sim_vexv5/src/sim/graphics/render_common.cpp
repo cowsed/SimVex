@@ -67,5 +67,24 @@ namespace sim
             glDeleteTextures(1, &color_handle);
             glDeleteTextures(1, &depth_handle);
         }
+        unsigned int make_program(const char * vertex_shader, const char * fragment_shader)
+        {
+            GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+            glShaderSource(vs, 1, &vertex_shader, NULL);
+            glCompileShader(vs);
+            GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+            glShaderSource(fs, 1, &fragment_shader, NULL);
+            glCompileShader(fs);
+
+            GLuint shader_program = glCreateProgram();
+            glAttachShader(shader_program, fs);
+            glAttachShader(shader_program, vs);
+            glLinkProgram(shader_program);
+
+            glDeleteShader(vs);
+            glDeleteShader(fs);
+            return shader_program;
+        }
+
     }
 }

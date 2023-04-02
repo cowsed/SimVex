@@ -9,7 +9,6 @@
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/gtc/quaternion.hpp>
 
-
 namespace sim
 {
     struct Location
@@ -17,6 +16,16 @@ namespace sim
         glm::dvec3 p;
         glm::quat o;
     };
+    struct Tri{
+        int v1;
+        int v2;
+        int v3;
+        int uv1;
+        int uv2;
+        int uv3;
+        int normal;
+    };
+    
     namespace renderer
     {
 
@@ -42,5 +51,6 @@ namespace sim
             glm::vec3 eye;
             glm::vec3 lookat;
         };
+        unsigned int make_program(const char *vertex_shader, const char *fragment_shader);
     }
 }

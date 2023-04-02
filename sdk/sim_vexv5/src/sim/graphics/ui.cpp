@@ -194,7 +194,7 @@ namespace sim
                 printf("released A");
             }
         }
-        ImGui::Image((void *)(intptr_t)(renderer::get_rendered_tex()), ImVec2((float)renderer::get_rendered_tex_width(), (float)renderer::get_rendered_tex_height()));
+        ImGui::Image((void *)(intptr_t)(renderer::get_rendered_tex()), ImVec2((float)renderer::get_rendered_tex_width(), (float)renderer::get_rendered_tex_height()), ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
     }
 

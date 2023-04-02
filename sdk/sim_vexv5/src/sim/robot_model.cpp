@@ -3,6 +3,53 @@ namespace sim
 {
     namespace construction
     {
+
+        cylinder_shape::cylinder_shape(double radius, double height, int segments)
+        {
+            points = std::vector<glm::vec3>(2 * (segments + 1));
+            points[0] = glm::vec3(0, 0, 0);
+            points[segments + 1] = glm::vec3(0, height, 0);
+
+            normals = std::vector<glm::vec3>(segments + 2);
+            normals[0] = glm::vec3(0, -1, 0);
+            normals[1] = glm::vec3(0, 1, 0);
+
+            for (int i = 0; i < segments; i++)
+            {
+                double ang = 2 * M_PI * (double)i / (double)segments;
+                double x = radius * cos(ang);
+                double z = radius * sin(ang);
+
+                points[i + 1] = glm::vec3(x, 0, z);
+                points[(segments + 2) + i] = glm::vec3(x, height, z);
+
+                normals[2 + i] = glm::vec3(cos(ang), 0, sin(ang));
+            }
+            // assemble faces with normal
+            // assemble faces with normal
+            const int indices_per_tri = 3 + 3; // vec3 pos, vec3 norm
+            // segments top, segments bottom. 2 * segments for side faces - each face has 2 tris
+            const int num_tris = (segments * 2) + (segments * 2);
+            std::vector<unsigned int> indices(num_tris * indices_per_tri);
+
+            glGenBuffers(1, &points_vbo);
+            glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
+            glBufferData(GL_ARRAY_BUFFER, points.size() * 3 * sizeof(float), &points[0], GL_STATIC_DRAW);
+
+            glGenBuffers(1, &normal_vbo);
+            glBindBuffer(GL_ARRAY_BUFFER, normal_vbo);
+            glBufferData(GL_ARRAY_BUFFER, points.size() * 3 * sizeof(float), &normals[0], GL_STATIC_DRAW);
+
+            glGenVertexArrays(1, &vao);
+            glBindVertexArray(vao);
+            glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL); 
+            glBindBuffer(GL_ARRAY_BUFFER, normal_vbo);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+        }
+        cylinder_shape::~cylinder_shape() {}
+        void cylinder_shape::render(glm::mat4 mat, renderer::RenderTarget rt) {} 
+ 
         using json = nlohmann::json;
         static const std::string robot_filename = "robot_construction.json";
         static const robot_model *this_robot;
@@ -33,6 +80,28 @@ namespace sim
                 .p = vec3_from_json(data["position"]),
                 .o = quat_from_json(data["orientation"])};
         }
+        Shape cylinder_from_json(json &data, bool &error_occured)
+        {
+            double radius = data["radius"];
+            double height = data["height"];
+            double segments = data["segments"];
+            return cylinder_shape(radius, height, segments);
+        }
+        Shape shape_from_json(json &data, bool &error_occured)
+        {
+            std::string st = data["shape_type"];
+            if (st == "cylinder")
+            {
+                Shape s = cylinder_from_json(data, error_occured);
+                return s;
+            }
+            else
+            {
+                std::cout << red_color << "unknown shape type in " << robot_filename << reset_color << std::endl;
+                error_occured = true;
+            }
+            return Shape{};
+        }
 
         std::map<structure_id, Structure> structures_from_json(json &data, int num_expected, bool &error_occured)
         {
@@ -52,6 +121,7 @@ namespace sim
                 s.id = d["id"];
                 s.name = d["name"];
                 s.origin_loc = location_from_json(d["origin_location"]);
+                s.shape = shape_from_json(d["shape"], error_occured);
                 if (structures.count(s.id) > 0)
                 {
                     std::cout << red_color << "Two structures with the same id: " << s.id << reset_color << std::endl;

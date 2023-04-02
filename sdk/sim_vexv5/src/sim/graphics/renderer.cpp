@@ -9,41 +9,60 @@ namespace sim
         static const glm::vec3 up_vec = glm::vec3(0.0, 1.0, 0.0);
 
         float points[] = {
-            0.0f, 0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f};
+            -0.5f,
+            -0.5f,
+            0.0f,
+            1.f,
+            0.f,
+            0.f,
+            
+            -0.5f,
+            0.5f,
+            0.0f,
+            0.f,
+            1.f,
+            0.f,
+            
+            0.5f,
+            0.5f,
+            0.0f,
+            1.f,
+            1.f,
+            0.f,
+            
+            0.5f,
+            -0.5f,
+            0.0f,
+            0.f,
+            0.f,
+            1.0f,
+        };
+
+        unsigned int indices[] = {
+            0, 1, 2,
+            0, 2, 3};
 
         // This will identify our vertex buffer
         GLuint vbo = 0;
         GLuint vao = 0;
+        GLuint ibo = 0;
         const char *fragment_shader =
             "#version 400\n"
+            "in vec3 col;"
             "out vec4 frag_colour;"
             "void main() {"
-            "  frag_colour = vec4(0.5, 0.0, 0.5, 1.0);"
+            "  frag_colour = vec4(col.x, col.y, col.z, 1.0);"
             "}";
         const char *vertex_shader =
             "#version 400\n"
             "in vec3 vp;"
+            "in vec3 c;"
+            "out vec3 col;"
             "void main() {"
+            "  col = c;"
             "  gl_Position = vec4(vp, 1.0);"
             "}";
 
-        unsigned int makeProgram()
-        {
-            GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vs, 1, &vertex_shader, NULL);
-            glCompileShader(vs);
-            GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fs, 1, &fragment_shader, NULL);
-            glCompileShader(fs);
-
-            GLuint shader_programme = glCreateProgram();
-            glAttachShader(shader_programme, fs);
-            glAttachShader(shader_programme, vs);
-            glLinkProgram(shader_programme);
-            return shader_programme;
-        }
         unsigned int prog;
         void setup()
         {
@@ -56,27 +75,34 @@ namespace sim
             vbo = 0;
             glGenBuffers(1, &vbo);
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, 4 * 6 * sizeof(float), points, GL_STATIC_DRAW);
 
             glGenVertexArrays(1, &vao);
             glBindVertexArray(vao);
-            glEnableVertexAttribArray(0);
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-        
-            prog = makeProgram();
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 2 * 3 * sizeof(float), NULL);
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 2 * 3 * sizeof(float), (void *)(3 * sizeof(float)));
+
+            glGenBuffers(1, &ibo);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+            prog = make_program(vertex_shader, fragment_shader);
         }
 
         void render()
         {
             field_viewport.activate();
-            glClearColor(1.f, 0.1f, 0.1f, 1.0f);
+            glClearColor(1.f, 1.f, 1.f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // we're not using the stencil buffer now
 
             glUseProgram(prog);
             glBindVertexArray(vao);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
             // draw points 0-3 from the currently bound VAO with current in-use shader
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+            // glDrawArrays(GL_TRIANGLES, 0, 3);
 
             field_viewport.deactivate();
         }
