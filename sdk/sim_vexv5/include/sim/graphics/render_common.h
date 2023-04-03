@@ -16,19 +16,18 @@ namespace sim
         glm::dvec3 p;
         glm::quat o;
     };
-    struct Tri{
-        int v1;
-        int v2;
-        int v3;
-        int uv1;
-        int uv2;
-        int uv3;
-        int normal;
-    };
     
     namespace renderer
     {
-
+        void setup_common();
+        struct ShaderProgram
+        {
+            unsigned int program ;
+            ShaderProgram();
+            ShaderProgram(const char *vertex_shader, const char *fragment_shader);
+            void activate();
+            static void activate_default();
+        };
         struct RenderTarget
         {
             /// @brief handles to opengl buffers
@@ -50,7 +49,12 @@ namespace sim
         {
             glm::vec3 eye;
             glm::vec3 lookat;
+            RenderTarget &rt;
+
+            Camera(glm::vec3 eye, glm::vec3 lookat, RenderTarget &r);
+
+            glm::mat4 view_matrix();
+            glm::mat4 persp_matrix();
         };
-        unsigned int make_program(const char *vertex_shader, const char *fragment_shader);
     }
 }

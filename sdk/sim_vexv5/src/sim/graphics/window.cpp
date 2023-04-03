@@ -3,7 +3,7 @@
 namespace sim
 {
 
-    bool show_gl_notis = false; // opengl notifications arent really needed and often clog up output
+    bool show_gl_notis = true; // opengl *notifications* arent really needed and often clog up output
     std::thread render_thread;
     GLFWwindow *window;
     ImFont *main_font;

@@ -26,9 +26,10 @@ namespace sim
 
         typedef int compiled_obj;
 
-        typedef uint32_t structure_id;
-        typedef uint32_t joint_id;
-        typedef uint32_t effector_id;
+        typedef unsigned long structure_id;
+        typedef unsigned long joint_id;
+        typedef unsigned long effector_id;
+        typedef unsigned long shape_id;
 
         /// @brief pure geometry and texture data
         /// mounted at the origin
@@ -36,11 +37,11 @@ namespace sim
         class Shape
         {
         public:
-            //Shape(){}
-            //virtual Shape(sim::construction::Shape const&) = defualt;
-            
-            //virtual ~Shape(){}
-            //virtual void render(glm::mat4 mat, renderer::RenderTarget rt);
+            // Shape(){}
+            // virtual Shape(sim::construction::Shape const&) = defualt;
+
+            // virtual ~Shape(){}
+            // virtual void render(glm::mat4 mat, renderer::RenderTarget rt);
         };
 
         // /// @brief shape from obj file
@@ -56,18 +57,19 @@ namespace sim
         /// @brief shape from obj file
         class cylinder_shape : public Shape
         {
+
         private:
             std::vector<glm::vec3> points;
             std::vector<glm::vec3> normals;
 
             unsigned int points_vbo;
-            unsigned int normal_vbo;
-            unsigned int vao = 0;
+            unsigned int vao;
+            unsigned int ibo;
 
         public:
             cylinder_shape(double radius, double height, int segments);
             ~cylinder_shape();
-            void render(glm::mat4 mat, renderer::RenderTarget rt);// override;
+            void render(glm::mat4 mat, renderer::RenderTarget rt); // override;
         };
 
         struct Structure
@@ -75,7 +77,7 @@ namespace sim
             int id;
             std::string name;
             Location origin_loc;
-            Shape shape;
+            shape_id shape;
         };
 
         /// @brief Info loaded from robot description file
@@ -91,14 +93,17 @@ namespace sim
             std::string robot_name;
             std::string date_modified;
 
-            int num_structures;
-            int num_joints;
-            int num_effectors;
+            unsigned long num_structures;
+            unsigned long num_joints;
+            unsigned long num_effectors;
+            unsigned long num_shapes;
 
             // Actual Robot
             std::map<structure_id, Structure> structures;
             std::map<joint_id, Joint> joints;
             std::map<effector_id, Effector> effectors;
+
+            std::map<shape_id, Shape> shapes;
         };
         bool setup();
         void cleanup();

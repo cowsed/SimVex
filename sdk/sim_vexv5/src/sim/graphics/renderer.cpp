@@ -5,8 +5,7 @@ namespace sim
     namespace renderer
     {
         static RenderTarget field_viewport;
-        static Camera field_camera;
-        static const glm::vec3 up_vec = glm::vec3(0.0, 1.0, 0.0);
+        static Camera field_camera(glm::vec3(0, 0, 10.0), glm::vec3(0, 0, 0.0), field_viewport);
 
         float points[] = {
             -0.5f,
@@ -15,21 +14,21 @@ namespace sim
             1.f,
             0.f,
             0.f,
-            
+
             -0.5f,
             0.5f,
             0.0f,
             0.f,
             1.f,
             0.f,
-            
+
             0.5f,
             0.5f,
             0.0f,
             1.f,
             1.f,
             0.f,
-            
+
             0.5f,
             -0.5f,
             0.0f,
@@ -46,31 +45,12 @@ namespace sim
         GLuint vbo = 0;
         GLuint vao = 0;
         GLuint ibo = 0;
-        const char *fragment_shader =
-            "#version 400\n"
-            "in vec3 col;"
-            "out vec4 frag_colour;"
-            "void main() {"
-            "  frag_colour = vec4(col.x, col.y, col.z, 1.0);"
-            "}";
-        const char *vertex_shader =
-            "#version 400\n"
-            "in vec3 vp;"
-            "in vec3 c;"
-            "out vec3 col;"
-            "void main() {"
-            "  col = c;"
-            "  gl_Position = vec4(vp, 1.0);"
-            "}";
-
-        unsigned int prog;
         void setup()
         {
-            // printf("renderer initting\n");
+            printf("renderer initting\n");
+            setup_common();
+        
             field_viewport.init(800, 600);
-            field_camera = Camera{};
-            field_camera.eye = glm::vec3(0, 0, -10.0);
-            field_camera.lookat = glm::vec3(0, 0, 0.0);
 
             vbo = 0;
             glGenBuffers(1, &vbo);
@@ -89,20 +69,23 @@ namespace sim
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-            prog = make_program(vertex_shader, fragment_shader);
         }
 
         void render()
         {
             field_viewport.activate();
             glClearColor(1.f, 1.f, 1.f, 1.0f);
+            glEnable(GL_DEPTH_TEST);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // we're not using the stencil buffer now
+            // glDisable(GL_CULL_FACE);
+            ShaderProgram::activate_default();
+            glm::mat4 view = field_camera.view_matrix();
+            glm::mat4 persp = field_camera.persp_matrix();
 
-            glUseProgram(prog);
+            glUniformMatrix4fv(0, 1, false, (float *)(&view));
+            glUniformMatrix4fv(1, 1, false, (float *)(&persp));
             glBindVertexArray(vao);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-            // draw points 0-3 from the currently bound VAO with current in-use shader
-            // glDrawArrays(GL_TRIANGLES, 0, 3);
 
             field_viewport.deactivate();
         }

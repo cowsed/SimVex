@@ -4,6 +4,33 @@ namespace sim
 {
     namespace renderer
     {
+        static const glm::vec3 up_vec = glm::vec3(0.0, 1.0, 0.0);
+
+        static const char *def_fragment_shader =
+            "#version 400\n"
+            "in vec3 col;"
+            "out vec4 frag_colour;"
+            "void main() {"
+            "  frag_colour = vec4(col.x, col.y, col.z, 1.0);"
+            "}";
+        static const char *def_vertex_shader =
+            "#version 400\n"
+            "uniform mat4 view;"
+            "uniform mat4 perspective;"
+            "in vec3 vp;"
+            "in vec3 c;"
+            "out vec3 col;"
+            "void main() {"
+            "  col = c;"
+            "  gl_Position = perspective * view  * vec4(vp, 1.0);"
+            "}";
+
+        ShaderProgram default_prog;
+        void setup_common()
+        {
+            default_prog = ShaderProgram(def_vertex_shader, def_fragment_shader);
+        }
+
         /// @brief allocate and create all buffers and textures needed to draw to
         /// @param width width of output
         /// @param height height of output
@@ -67,24 +94,42 @@ namespace sim
             glDeleteTextures(1, &color_handle);
             glDeleteTextures(1, &depth_handle);
         }
-        unsigned int make_program(const char * vertex_shader, const char * fragment_shader)
+        ShaderProgram::ShaderProgram(const char *vertex_shader, const char *fragment_shader)
         {
+            printf("Making VTX %s\n", vertex_shader);
             GLuint vs = glCreateShader(GL_VERTEX_SHADER);
             glShaderSource(vs, 1, &vertex_shader, NULL);
             glCompileShader(vs);
             GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
             glShaderSource(fs, 1, &fragment_shader, NULL);
             glCompileShader(fs);
-
-            GLuint shader_program = glCreateProgram();
-            glAttachShader(shader_program, fs);
-            glAttachShader(shader_program, vs);
-            glLinkProgram(shader_program);
+            printf("V: %lu, F: %lu\n", vs, fs);
+            program = glCreateProgram();
+            glAttachShader(program, fs);
+            glAttachShader(program, vs);
+            glLinkProgram(program);
 
             glDeleteShader(vs);
             glDeleteShader(fs);
-            return shader_program;
         }
+        ShaderProgram::ShaderProgram(){}
+        void ShaderProgram::activate()
+        {
+            glUseProgram(program);
+        }
+        void ShaderProgram::activate_default()
+        {
+            default_prog.activate();
+        }
+        Camera::Camera(glm::vec3 eye, glm::vec3 lookat, RenderTarget &r) : eye(eye), lookat(lookat), rt(r) {}
 
+        glm::mat4 Camera::view_matrix()
+        {
+            return glm::lookAt(eye, lookat, up_vec);
+        }
+        glm::mat4 Camera::persp_matrix()
+        {
+            return glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
+        }
     }
 }
