@@ -51,9 +51,9 @@ ARCH_FLAGS = rcs
 CXX = clang-15
 
 #-lopengl32 -lglfw3 -lglew32
+#-fsanitize=address
 
-
-CXX_FLAGS = -O2 -Wall -Werror=return-type -Wextra --std=gnu++20 -ggdb
+CXX_FLAGS = -O2 -Wall -Werror=return-type -Wextra --std=gnu++20 -ggdb 
 INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends
 all: $(BUILD)/$(PROJECTLIB).a
 

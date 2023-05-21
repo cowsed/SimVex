@@ -17,7 +17,6 @@ Dependencies
 - OpenGL 4.something
 - GLFW 3.3
 - glm https://github.com/g-truc/glm
-- json reader https://github.com/nlohmann/json
 - Bullet3D (eventually)
 
 ## Building your robot code

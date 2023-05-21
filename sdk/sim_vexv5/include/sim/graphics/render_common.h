@@ -1,6 +1,9 @@
 #pragma once
 #include <stdint.h>
 
+#include <iostream>
+#include <vector>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GL/glcorearb.h>
@@ -16,13 +19,13 @@ namespace sim
         glm::dvec3 p;
         glm::quat o;
     };
-    
+
     namespace renderer
     {
         void setup_common();
         struct ShaderProgram
         {
-            unsigned int program ;
+            unsigned int program;
             ShaderProgram();
             ShaderProgram(const char *vertex_shader, const char *fragment_shader);
             void activate();
@@ -56,5 +59,39 @@ namespace sim
             glm::mat4 view_matrix();
             glm::mat4 persp_matrix();
         };
-    }
-}
+    }//renderer
+
+        class Shape
+        {
+        public:
+            Shape(){}
+            virtual ~Shape();
+            virtual void render(glm::mat4 mat, renderer::RenderTarget rt) = 0;
+        };
+
+        class DummyShape : public Shape{
+            public:
+            DummyShape();
+            ~DummyShape() override;
+            void render(glm::mat4 mat, renderer::RenderTarget rt) override;
+        };
+
+
+        /// @brief shape from cylinder definition
+        class square_shape : public Shape
+        {
+        private:
+            std::vector<glm::vec3> points;
+            unsigned int num_indices;
+
+            unsigned int points_vbo;
+            unsigned int vao;
+            unsigned int ibo;
+
+        public:
+            square_shape(double radius, double height, int segments);
+            ~square_shape() override;
+            void render(glm::mat4 mat, renderer::RenderTarget rt) override; // override;
+        };
+
+}//sim

@@ -186,7 +186,6 @@ namespace sim
     void drawFieldViewport()
     {
         ImGui::Begin("Viewport");
-        ImGui::Text("COMING SOON");
         if (ImGui::IsWindowFocused())
         {
             if (ImGui::IsKeyReleased(ImGuiKey_A))
@@ -236,7 +235,7 @@ namespace sim
         // serial terminal from robot
         drawTerminal();
 
-        sim::construction::drawUI();
+        //sim::construction::drawUI();
     }
 
     void setRedStyle()

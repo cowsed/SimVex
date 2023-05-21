@@ -3,7 +3,7 @@
 namespace sim
 {
 
-    bool show_gl_notis = true; // opengl *notifications* arent really needed and often clog up output
+    bool show_gl_notis = false; // opengl *notifications* arent really needed and often clog up output
     std::thread render_thread;
     GLFWwindow *window;
     ImFont *main_font;
@@ -241,7 +241,7 @@ namespace sim
         // We're really done
         sim::event_handler::end_all_mevents();
         sim::time_end();
-        sim::construction::cleanup();
+        //sim::construction::cleanup();
 
         cleanUpWindow();
     }
@@ -254,7 +254,7 @@ namespace sim
             return true;
         }
         glfwMakeContextCurrent(window);
-        construction::setup();
+        //construction::setup();
         renderer::setup();
         brain_screen::setup();
         controller::setup();
@@ -272,7 +272,6 @@ namespace sim
 
             // Where ImGui data is drawn to the screen - actual creation of UI should happen before this
             imguiRender();
-
             glfwSwapBuffers(window);
             glfwPollEvents();
         }

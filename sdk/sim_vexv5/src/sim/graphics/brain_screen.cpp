@@ -15,7 +15,7 @@ namespace sim
         brain_screen_buffer *working_screen_buffer = &screen_buffer1;
         brain_screen_buffer *drawing_screen_buffer = &screen_buffer2;
 
-        static std::mutex switching_mutex;
+        static std::mutex buffer_switch_mutex;
         static GLuint brain_screen_texture_handle1;
 
         static bool texture_dirty = true;
@@ -365,32 +365,8 @@ namespace sim
         /// @param buf the buffer on which to draw
         void draw_start_screen(brain_screen_buffer buf)
         {
-            for (int y = 0; y < brain_screen_height; y++)
-            {
-                for (int x = 0; x < brain_screen_width; x++)
-                {
-                    int tiley = y / 24;
-                    int tilex = x / 24;
-                    int fill = (tiley + tilex) % 2;
-                    if (fill)
-                    {
-                        buf[y][x] = 0xFFFF00FF;
-                    }
-                    else
-                    {
-                        buf[y][x] = 0xFF000000;
-                    }
-                }
-            }
-            for (int y = 0; y < 60; y++)
-            {
-                for (int x = 0; x < 300; x++)
-                {
-                    uint8_t val = font::noto_sans_mono_60_tex[y * font::noto_sans_mono_60_tex_width + x];
-                    buf[y + 40][x + 40] = 0xFF000000 + (val << 16) + (val << 8) + val;
-                }
-            }
-            char *my_str = (char *)"hello world";
+            clear_clip_space_internal(0xFF202020);
+            char *my_str = (char *)"Default Screen";
             blitString(my_str, buf, 0xFFFF0000, 0xFF000000, vex::mono20, true, 100, 100);
         }
 
@@ -400,15 +376,17 @@ namespace sim
         {
             if (texture_dirty)
             {
-                switching_mutex.lock();
+                buffer_switch_mutex.lock();
                 brain_screen_buffer *to_draw = drawing_screen_buffer;
                 if (!brain_stats::doingVSYNC)
                 {
                     to_draw = working_screen_buffer;
                 }
+                // std::cout << *to_draw << '\n';
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, brain_screen_width, brain_screen_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, *to_draw);
+                // std::cout << "finished" << '\n';
                 texture_dirty = false;
-                switching_mutex.unlock();
+                buffer_switch_mutex.unlock();
             }
         }
 
@@ -716,11 +694,11 @@ namespace sim
 
         void render_internal()
         {
-            switching_mutex.lock();
+            buffer_switch_mutex.lock();
             auto tmp = drawing_screen_buffer;
             drawing_screen_buffer = working_screen_buffer;
             working_screen_buffer = tmp;
-            switching_mutex.unlock();
+            buffer_switch_mutex.unlock();
         }
 
         /// @brief ImGui build function. also responsible for touch and release events

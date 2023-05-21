@@ -4,8 +4,6 @@ namespace sim::event_handler
 {
     volatile bool threads_should_pause = false;
 
-    /// @brief  true while callback threads should end. Should always be false except when we are stopping things to end the program or between modes
-    static bool end_callbacks = false;
     // array of all mevents on all devices
     static struct event_handler *mevent_array[NUM_INDICES][MAX_EVENTS_PER_INDEX];
 
@@ -71,7 +69,7 @@ namespace sim::event_handler
         static void do_calling_back(int index, int id)
         {
             auto me = mevent_array[index][id];
-            while (!end_callbacks)
+            while (1)
             {
                 // aquire unique lock on my_mutex
 
@@ -83,14 +81,6 @@ namespace sim::event_handler
                 me->my_cv->wait(lk, [&]
                                 { return me->should_run == true; });
                 me->waiting_for_should_run = false;
-
-                // check if we should just end
-                if (end_callbacks)
-                {
-                    lk.unlock();
-                    printf("breaking %d:%d\n", index, id);
-                    break;
-                }
 
                 // else run the callback, if non null
                 if (me->callback != NULL)
@@ -152,7 +142,7 @@ namespace sim::event_handler
     /// @return false if thread is being difficult and we could not send an event. true if sent to a thread or that thread doesn't exist
     bool send_mevent(int index, int event_id, bool allowed_pre_auton)
     {
-        if (!allowed_pre_auton && !(sim::is_auto_control() || sim::is_driver_control()) )
+        if (!allowed_pre_auton && !(sim::is_auto_control() || sim::is_driver_control()))
         {
 
             std::cerr << text::red_color << "Trying to send mevent while the robot isn't running. we'll just not send it" << text::reset_color << std::endl;
@@ -195,13 +185,15 @@ namespace sim::event_handler
         return true;
     }
 
+    bool endall = false;
     void end_all_mevents()
     {
-        end_callbacks = true;
+        endall = true;
         pause_all_mevents();
 
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
         std::this_thread::yield();
-        end_callbacks = false;
 
         // resume_all_mevents(); // make sure our signal handlers aren't interfering withthemselves. kinda heavy handed but seems to work
         for (int index = 0; index < NUM_INDICES; index++)
@@ -216,7 +208,6 @@ namespace sim::event_handler
                     mevent_array[index][id]->should_run = false;
                     mevent_array[index][id]->my_mutex = new std::mutex();
                     mevent_array[index][id]->my_cv = new std::condition_variable();
-
 
                     mevent_array[index][id]->my_runner_thread = new std::thread(event_handler::do_calling_back, index, id);
                 }
@@ -246,7 +237,6 @@ namespace sim::event_handler
     }
     void resume_all_mevents()
     {
-        end_callbacks = false;
         threads_should_pause = false;
     }
 
@@ -254,7 +244,7 @@ namespace sim::event_handler
     /// @param signo signal number - should always be SIG_PAUSE_EVENT
     /// @param info unused - needed for pthread implementation
     /// @param extra unused - needed for pthread implementation
-    void pause_thread_sig_handler(int signo, siginfo_t *info, void *extra)
+    void interrupt_thread_sig_handler(int signo, siginfo_t *info, void *extra)
     {
 
         printf("signal %d handled on thread %lu\n", signo, std::this_thread::get_id());
@@ -265,35 +255,22 @@ namespace sim::event_handler
         {
             printf("thread pausing\n");
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
-            if (end_callbacks)
+            if (endall)
             {
-                pthread_exit(0);
+                printf("Pthread exitting");
+                _exit(0); // for some reason, pthread_exit doesnt work here
                 return;
             }
         }
         printf("exitted event handler\n");
     }
-#if 0
-    /// @brief signal handler for pausing
-    /// @param signo signal number - should always be SIG_PAUSE_EVENT
-    /// @param info unused - needed for pthread implementation
-    /// @param extra unused - needed for pthread implementation
-    void stop_thread_sig_handler(int signo, siginfo_t *info, void *extra)
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-        printf("stop signal %d handled on thread %lu\n", signo, std::this_thread::get_id());
-        std::this_thread::sleep_for(std::chrono::milliseconds(2));
-
-        pthread_exit(NULL);
-    }
-#endif
     void set_signal_handlers()
     {
         struct sigaction action;
 
         action.sa_flags = SA_SIGINFO;
-        action.sa_sigaction = pause_thread_sig_handler;
+        action.sa_sigaction = interrupt_thread_sig_handler;
 
         int res = sigaction(SIG_PAUSE_THREAD, &action, NULL);
 
@@ -302,19 +279,6 @@ namespace sim::event_handler
             perror("sigusr: sigaction : setting pause handler");
             _exit(1);
         }
-        /*
-        struct sigaction action2;
-        action2.sa_flags = SA_SIGINFO;
-        action2.sa_sigaction = stop_thread_sig_handler;
-
-        int res2 = sigaction(SIG_STOP_THREAD, &action2, NULL);
-
-        if (res2 == -1)
-        {
-            perror("sigusr: sigaction : setting stop handler");
-            _exit(1);
-        }
-        */
     }
 
     void setup()
@@ -325,7 +289,6 @@ namespace sim::event_handler
     {
         ImGui::Begin("Events");
         ImGui::Text("Should pause: %s", (threads_should_pause ? "yes" : "no"));
-        ImGui::Text("Should End: %s", (end_callbacks ? "yes" : "no"));
         for (int index = 0; index < NUM_INDICES; index++)
         {
             ImGui::Text("Device: %d", index);
