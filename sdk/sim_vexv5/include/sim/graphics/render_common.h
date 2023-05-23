@@ -57,7 +57,7 @@ namespace sim
             Camera(glm::vec3 eye, glm::vec3 lookat, RenderTarget &r);
 
             glm::mat4 view_matrix();
-            glm::mat4 persp_matrix();
+            glm::mat4 persp_matrix(RenderTarget &rt);
         };
     }//renderer
 

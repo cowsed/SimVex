@@ -4,8 +4,8 @@ namespace sim
 {
     namespace renderer
     {
-        static RenderTarget field_viewport;
-        static Camera field_camera(glm::vec3(0, 0, 10.0), glm::vec3(0, 0, 0.0), field_viewport);
+        RenderTarget field_viewport;
+        Camera field_camera(glm::vec3(0, 0, 10.0), glm::vec3(0, 0, 0.0), field_viewport);
 
         square_shape *cyl;
 
@@ -22,14 +22,15 @@ namespace sim
 
         void render()
         {
+
             field_viewport.activate();
             glClearColor(1.f, 1.f, 1.f, 1.0f);
             glEnable(GL_DEPTH_TEST);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // we're not using the stencil buffer now
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
             glDisable(GL_CULL_FACE);
             ShaderProgram::activate_default();
             glm::mat4 view = field_camera.view_matrix();
-            glm::mat4 persp = field_camera.persp_matrix();
+            glm::mat4 persp = field_camera.persp_matrix(field_viewport);
 
             glUniformMatrix4fv(0, 1, false, (float *)(&view));
             glUniformMatrix4fv(1, 1, false, (float *)(&persp));

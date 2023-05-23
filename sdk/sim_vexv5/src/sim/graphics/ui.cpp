@@ -5,6 +5,7 @@ namespace sim
     bool show_imgui_demo = false;
     bool show_imgui_stats = false;
     bool show_event_sender = false;
+
     void setupDockspace()
     {
         ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -72,7 +73,7 @@ namespace sim
         ImGui::EndMainMenuBar();
     }
 
-    void drawImGuiStuff()
+    void drawDemoAndMetrics()
     {
         // Demo
         if (show_imgui_demo)
@@ -183,31 +184,132 @@ namespace sim
             ImGui::End();
         }
     }
-    void drawFieldViewport()
+
+    auto left_key = ImGuiKey_A;
+    auto right_key = ImGuiKey_D;
+
+    auto forward_key = ImGuiKey_W;
+    auto back_key = ImGuiKey_S;
+
+    auto up_key = ImGuiKey_Z;
+    auto down_key = ImGuiKey_X;
+
+    void moveViewportCamera(sim::renderer::Camera *cam)
+    {
+        double move_speed = 0.1;
+        double turn_speed = 0.03;
+
+
+        glm::vec3 dir = glm::normalize(cam->lookat - cam->eye);
+        auto toVec3 = [](auto v) -> glm::vec3
+        {
+            return {v.x, v.y, v.z};
+        };
+
+        float heading = atan2(dir.z, dir.x);
+
+        if (ImGui::IsKeyDown(ImGuiKey_Q))
+        {
+            heading -= turn_speed;
+        }
+        else if (ImGui::IsKeyDown(ImGuiKey_E))
+        {
+            heading += turn_speed;
+        }
+
+        float altitude = atan(dir.y);
+
+        auto rotate2D = [](glm::vec2 v, float ang) -> glm::vec2
+        {
+            float c = cos(ang);
+            float s = sin(ang);
+            float x = c * v.x - s * v.y;
+            float y = s * v.x + c * v.y;
+            return {x, y};
+        };
+
+        float elevation = sin(altitude);
+        glm::vec2 dirxz = rotate2D(glm::vec2(1, 0), heading);
+        glm::vec3 new_dir = glm::normalize(glm::vec3(dirxz.x, 0, dirxz.y));
+
+        cam->lookat = cam->eye + new_dir;
+
+        dir = new_dir;
+
+        glm::vec2 local_vel = {0, 0};
+        //
+        // X
+        if (ImGui::IsKeyDown(left_key))
+        {
+            local_vel.y--;
+        }
+        else if (ImGui::IsKeyDown(right_key))
+        {
+            local_vel.y++;
+        }
+        // Y
+        if (ImGui::IsKeyDown(forward_key))
+        {
+            local_vel.x++;
+        }
+        else if (ImGui::IsKeyDown(back_key))
+        {
+            local_vel.x--;
+        }
+        //
+        float uppy_downy = 0.0;
+        // Z
+        if (ImGui::IsKeyDown(up_key))
+        {
+        uppy_downy--;
+        }
+        else if (ImGui::IsKeyDown(down_key))
+        {
+        uppy_downy++;
+        }
+        //
+        local_vel *= move_speed;
+        uppy_downy *= move_speed;
+        //
+        glm::vec2 global_xy = rotate2D(local_vel, heading);
+        glm::vec3 global_vel = {global_xy.x, uppy_downy, global_xy.y};
+
+        cam->eye += global_vel;
+        cam->lookat += global_vel;
+    }
+
+    void drawViewport()
     {
         ImGui::Begin("Viewport");
+        ImGui::Image((void *)(intptr_t)(renderer::get_rendered_tex()), ImVec2((float)renderer::get_rendered_tex_width(), (float)renderer::get_rendered_tex_height()), ImVec2(0, 1), ImVec2(1, 0));
+
         if (ImGui::IsWindowFocused())
         {
-            if (ImGui::IsKeyReleased(ImGuiKey_A))
-            {
-                printf("released A");
-            }
+            moveViewportCamera(&sim::renderer::field_camera);
         }
-        ImGui::Image((void *)(intptr_t)(renderer::get_rendered_tex()), ImVec2((float)renderer::get_rendered_tex_width(), (float)renderer::get_rendered_tex_height()), ImVec2(0, 1), ImVec2(1, 0));
+
+        ImGui::InputFloat3("Eye", &sim::renderer::field_camera.eye[0]);
+        ImGui::InputFloat3("Target", &sim::renderer::field_camera.lookat[0]);
+
         ImGui::End();
     }
 
     void drawUI(GLFWwindow *window)
     {
+        // Setup
         setRedStyle();
         drawMainMenuBar(window);
         setupDockspace();
-        drawImGuiStuff();
+
+        // Draw all the uis
+        // demo and metrics windo
+        drawDemoAndMetrics();
 
         drawEventSender(show_event_sender);
         sim::event_handler::drawUI();
 
-        drawFieldViewport();
+        // View of simulation
+        drawViewport();
 
         //  Brain screen to tap on
         sim::brain_screen::build_brain_ui();
@@ -235,7 +337,7 @@ namespace sim
         // serial terminal from robot
         drawTerminal();
 
-        //sim::construction::drawUI();
+        // sim::construction::drawUI();
     }
 
     void setRedStyle()

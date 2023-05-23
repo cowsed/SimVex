@@ -149,9 +149,9 @@ namespace sim
         {
             return glm::lookAt(eye, lookat, up_vec);
         }
-        glm::mat4 Camera::persp_matrix()
+        glm::mat4 Camera::persp_matrix(RenderTarget &rt)
         {
-            return glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
+            return glm::perspective(glm::radians(45.0f), (float)rt.width / (float)rt.height, 0.1f, 100.0f);
         }
 
     } // renderer
