@@ -194,11 +194,15 @@ namespace sim
     auto up_key = ImGuiKey_Z;
     auto down_key = ImGuiKey_X;
 
+
+    /// Move Viewport camera in a minecrafty style
+    /// up down move global Y
+    /// fore/back and left/right move relative to where youre looking
+    /// @param cam the camera to move 
     void moveViewportCamera(sim::renderer::Camera *cam)
     {
         double move_speed = 0.1;
         double turn_speed = 0.03;
-
 
         glm::vec3 dir = glm::normalize(cam->lookat - cam->eye);
         auto toVec3 = [](auto v) -> glm::vec3
@@ -237,6 +241,7 @@ namespace sim
         dir = new_dir;
 
         glm::vec2 local_vel = {0, 0};
+        float uppy_downy = 0.0;
         //
         // X
         if (ImGui::IsKeyDown(left_key))
@@ -256,16 +261,14 @@ namespace sim
         {
             local_vel.x--;
         }
-        //
-        float uppy_downy = 0.0;
         // Z
         if (ImGui::IsKeyDown(up_key))
         {
-        uppy_downy--;
+            uppy_downy--;
         }
         else if (ImGui::IsKeyDown(down_key))
         {
-        uppy_downy++;
+            uppy_downy++;
         }
         //
         local_vel *= move_speed;
