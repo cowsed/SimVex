@@ -30,12 +30,16 @@ func main() {
 
 
 	var make_header bool = true
-	image_type:="const sim::Image"
-	header_header:="#pragma once\n#include \"sim/graphics/images/image.h\"\n\n"
-	src_header:="#include \"\"\n"
 
 	input_file := args[0]
 	name := strings.TrimSuffix(filepath.Base(input_file), filepath.Ext(input_file))
+
+
+	image_type:="const sim::Image"
+	header_header:="#pragma once\n#include \"sim/graphics/images/image.h\"\n\n"
+	src_header:=fmt.Sprintf("#include \"sim/graphics/images/default_skybox/%s.h\"\n", name)
+
+
 
 	output_file := name + ".cpp"
 	output_header := name + ".h"
@@ -65,16 +69,20 @@ func main() {
 	fmt.Fprintf(outf, "uint32_t %s_image_data[%d] = {", name, img.Bounds().Dx()*img.Bounds().Dy())
 
 
+	sb:=strings.Builder{}
+
+
 	for y := 0; y < img.Bounds().Dy(); y++ {
 		for x := 0; x < img.Bounds().Dx(); x++ {
 			col := img.RGBAAt(x, y)
 
-			fmt.Fprintf(outf, "0x%02x%02x%02x%02x", uint8(col.R), uint8(col.G), uint8(col.B), uint8(col.A))
+			sb.WriteString(fmt.Sprintf("0x%02x%02x%02x%02x", uint8(col.R), uint8(col.G), uint8(col.B), uint8(col.A)))
 			if !(x == img.Bounds().Dx()-1 && y == img.Bounds().Dy()-1) {
-				fmt.Fprintf(outf, ", ")
+				sb.WriteString(", ")
 			}
 		}
 	}
+	fmt.Fprint(outf, sb.String())
 	fmt.Fprint(outf, "};\n")
 
 	fmt.Fprintf(outf, "%s %s = {.width = %s_width, .height = %s_height, .image_data = %s_image_data};\n", image_type, name, name, name, name)
