@@ -1,6 +1,9 @@
 #include "sim/graphics/render_common.h"
 #include <stdio.h>
 #include <array>
+#include <thread>
+#include <chrono>
+
 namespace sim
 {
     namespace renderer
@@ -37,8 +40,10 @@ namespace sim
         /// @param height height of output
         void RenderTarget::init(int width, int height)
         {
+
             this->width = width;
             this->height = height;
+
             glGenFramebuffers(1, &fbo);
             glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
@@ -57,23 +62,41 @@ namespace sim
             // Depth Attachment
             glGenTextures(1, &depth_handle);
             glBindTexture(GL_TEXTURE_2D, depth_handle);
-            glBindTexture(GL_TEXTURE_2D, depth_handle);
 
             glTexImage2D(
                 GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0,
                 GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
 
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depth_handle, 0);
+
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
-        /// @brief resizes output
-        /// just destructs and restructs with no params
+        /// @brief resizes render target
         /// @param width new width of output
         /// @param height new height of output
         void RenderTarget::resize(int width, int height)
         {
-            cleanup();
-            init(width, height);
+            // Minimum sizes
+            if (width <= 0)
+            {
+                width = 10;
+            }
+            if (height <= 0)
+            {
+                height = 10;
+            }
+
+            this->width = width;
+            this->height = height;
+
+            glBindTexture(GL_TEXTURE_2D, color_handle);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+
+
+            glBindTexture(GL_TEXTURE_2D, depth_handle);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+
         }
 
         /// @brief activate this target such that all render calls will go here
@@ -133,7 +156,6 @@ namespace sim
             return glm::perspective(glm::radians(45.0f), (float)rt.width / (float)rt.height, 0.1f, 100.0f);
         }
 
-
     } // renderer
 
     Shape::~Shape() {}
@@ -141,7 +163,7 @@ namespace sim
     // Dummy for space filling
     DummyShape::DummyShape() {}
     DummyShape::~DummyShape() {}
-    void DummyShape::render(glm::mat4 mat, renderer::RenderTarget rt) {}
+    void DummyShape::render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) {}
 
     square_shape::square_shape()
     {
@@ -183,10 +205,13 @@ namespace sim
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(el), (void *)&(indices[0]), GL_STATIC_DRAW);
     }
     square_shape::~square_shape() {}
-    void square_shape::render(glm::mat4 mat, renderer::RenderTarget rt)
+    void square_shape::render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt)
     {
         rt.activate();
         renderer::ShaderProgram::activate_default();
+
+        glUniformMatrix4fv(0, 1, false, (float *)(&view));
+        glUniformMatrix4fv(1, 1, false, (float *)(&persp));
 
         // Index buffer
         glBindVertexArray(vao);

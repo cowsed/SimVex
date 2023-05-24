@@ -39,10 +39,8 @@ namespace sim
             glm::mat4 view = field_camera.view_matrix();
             glm::mat4 persp = field_camera.persp_matrix(field_viewport);
 
-            glUniformMatrix4fv(0, 1, false, (float *)(&view));
-            glUniformMatrix4fv(1, 1, false, (float *)(&persp));
 
-            test_square->render(persp * view, field_viewport);
+            test_square->render(persp,view, field_viewport);
 
             // construction::get_this_robot()->render(persp * view, field_viewport);
 

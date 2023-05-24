@@ -194,11 +194,10 @@ namespace sim
     auto up_key = ImGuiKey_Z;
     auto down_key = ImGuiKey_X;
 
-
     /// Move Viewport camera in a minecrafty style
     /// up down move global Y
     /// fore/back and left/right move relative to where youre looking
-    /// @param cam the camera to move 
+    /// @param cam the camera to move
     void moveViewportCamera(sim::renderer::Camera *cam)
     {
         double move_speed = 0.1;
@@ -283,7 +282,23 @@ namespace sim
 
     void drawViewport()
     {
+        static int width = 1;
+        static int height = 1;
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{8, 8});
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{0, 0});
         ImGui::Begin("Viewport");
+
+        
+        ImVec2 size = ImGui::GetWindowSize();
+        size.y-=35;
+        size.x-=20;
+        if (width != size.x || height != size.y)
+        {
+            width = size.x;
+            height = size.y;
+            renderer::field_viewport.resize(width, height);
+        }
+
         ImGui::Image((void *)(intptr_t)(renderer::get_rendered_tex()), ImVec2((float)renderer::get_rendered_tex_width(), (float)renderer::get_rendered_tex_height()), ImVec2(0, 1), ImVec2(1, 0));
 
         if (ImGui::IsWindowFocused())
@@ -291,10 +306,11 @@ namespace sim
             moveViewportCamera(&sim::renderer::field_camera);
         }
 
-        ImGui::DragFloat3("Eye", &sim::renderer::field_camera.eye[0]);
-        ImGui::DragFloat3("Target", &sim::renderer::field_camera.lookat[0]);
+        // ImGui::DragFloat3("Eye", &sim::renderer::field_camera.eye[0]);
+        // ImGui::DragFloat3("Target", &sim::renderer::field_camera.lookat[0]);
 
         ImGui::End();
+        ImGui::PopStyleVar(2);
     }
 
     void drawUI(GLFWwindow *window)

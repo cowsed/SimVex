@@ -382,7 +382,8 @@ namespace sim
                 {
                     to_draw = working_screen_buffer;
                 }
-                // std::cout << *to_draw << '\n';
+
+                glBindTexture(GL_TEXTURE_2D, brain_screen_texture_handle1);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, brain_screen_width, brain_screen_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, *to_draw);
                 // std::cout << "finished" << '\n';
                 texture_dirty = false;

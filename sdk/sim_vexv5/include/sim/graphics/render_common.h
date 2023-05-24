@@ -70,7 +70,7 @@ namespace sim
     public:
         Shape() {}
         virtual ~Shape();
-        virtual void render(glm::mat4 mat, renderer::RenderTarget rt) = 0;
+        virtual void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) = 0;
     };
 
     class DummyShape : public Shape
@@ -78,7 +78,7 @@ namespace sim
     public:
         DummyShape();
         ~DummyShape() override;
-        void render(glm::mat4 mat, renderer::RenderTarget rt) override;
+        void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) override;
     };
 
     /// @brief shape from cube definition
@@ -95,7 +95,7 @@ namespace sim
     public:
         square_shape();
         ~square_shape() override;
-        void render(glm::mat4 mat, renderer::RenderTarget rt) override; // override;
+        void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) override; // override;
     };
 
 } // sim
