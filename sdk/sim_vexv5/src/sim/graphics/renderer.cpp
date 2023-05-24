@@ -1,4 +1,7 @@
 #include "sim/graphics/renderer.h"
+#include "sim/graphics/render_common.h"
+#include "sim/graphics/images/default_skybox/skybox.h"
+
 
 namespace sim
 {
@@ -6,17 +9,18 @@ namespace sim
     {
         RenderTarget field_viewport;
         Camera field_camera(glm::vec3(0, 0, 10.0), glm::vec3(0, 0, 0.0), field_viewport);
+        Skybox field_skybox = default_skybox;
 
-        square_shape *cyl;
+        square_shape *test_square;
 
         void setup()
         {
-            printf("renderer initting\n");
+            puts("renderer initting\n");
             setup_common();
 
             field_viewport.init(800, 600);
-
-            cyl = new square_shape(1, 2, 12);
+            field_skybox.init();
+            test_square = new square_shape();
 
         }
 
@@ -27,7 +31,10 @@ namespace sim
             glClearColor(1.f, 1.f, 1.f, 1.0f);
             glEnable(GL_DEPTH_TEST);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-            glDisable(GL_CULL_FACE);
+            glEnable(GL_CULL_FACE);
+            
+            field_skybox.render(field_camera, field_viewport);
+
             ShaderProgram::activate_default();
             glm::mat4 view = field_camera.view_matrix();
             glm::mat4 persp = field_camera.persp_matrix(field_viewport);
@@ -35,8 +42,7 @@ namespace sim
             glUniformMatrix4fv(0, 1, false, (float *)(&view));
             glUniformMatrix4fv(1, 1, false, (float *)(&persp));
 
-            std::cout << "render cyl\n";
-            cyl->render(persp * view, field_viewport);
+            test_square->render(persp * view, field_viewport);
 
             // construction::get_this_robot()->render(persp * view, field_viewport);
 

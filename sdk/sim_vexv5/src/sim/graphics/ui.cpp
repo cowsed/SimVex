@@ -291,8 +291,8 @@ namespace sim
             moveViewportCamera(&sim::renderer::field_camera);
         }
 
-        ImGui::InputFloat3("Eye", &sim::renderer::field_camera.eye[0]);
-        ImGui::InputFloat3("Target", &sim::renderer::field_camera.lookat[0]);
+        ImGui::DragFloat3("Eye", &sim::renderer::field_camera.eye[0]);
+        ImGui::DragFloat3("Target", &sim::renderer::field_camera.lookat[0]);
 
         ImGui::End();
     }

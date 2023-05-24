@@ -22,7 +22,9 @@ namespace sim
 
     namespace renderer
     {
+        /// @brief initalize static and global stuff
         void setup_common();
+
         struct ShaderProgram
         {
             unsigned int program;
@@ -59,39 +61,41 @@ namespace sim
             glm::mat4 view_matrix();
             glm::mat4 persp_matrix(RenderTarget &rt);
         };
-    }//renderer
-
-        class Shape
-        {
-        public:
-            Shape(){}
-            virtual ~Shape();
-            virtual void render(glm::mat4 mat, renderer::RenderTarget rt) = 0;
-        };
-
-        class DummyShape : public Shape{
-            public:
-            DummyShape();
-            ~DummyShape() override;
-            void render(glm::mat4 mat, renderer::RenderTarget rt) override;
-        };
 
 
-        /// @brief shape from cylinder definition
-        class square_shape : public Shape
-        {
-        private:
-            std::vector<glm::vec3> points;
-            unsigned int num_indices;
+    } // renderer
 
-            unsigned int points_vbo;
-            unsigned int vao;
-            unsigned int ibo;
+    class Shape
+    {
+    public:
+        Shape() {}
+        virtual ~Shape();
+        virtual void render(glm::mat4 mat, renderer::RenderTarget rt) = 0;
+    };
 
-        public:
-            square_shape(double radius, double height, int segments);
-            ~square_shape() override;
-            void render(glm::mat4 mat, renderer::RenderTarget rt) override; // override;
-        };
+    class DummyShape : public Shape
+    {
+    public:
+        DummyShape();
+        ~DummyShape() override;
+        void render(glm::mat4 mat, renderer::RenderTarget rt) override;
+    };
 
-}//sim
+    /// @brief shape from cube definition
+    class square_shape : public Shape
+    {
+    private:
+        std::vector<glm::vec3> points;
+        unsigned int num_indices;
+
+        unsigned int points_vbo;
+        unsigned int vao;
+        unsigned int ibo;
+
+    public:
+        square_shape();
+        ~square_shape() override;
+        void render(glm::mat4 mat, renderer::RenderTarget rt) override; // override;
+    };
+
+} // sim

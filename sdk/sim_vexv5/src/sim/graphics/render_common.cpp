@@ -7,27 +7,6 @@ namespace sim
     {
         static const glm::vec3 up_vec = glm::vec3(0.0, 1.0, 0.0);
 
-        //         static const char *def_fragment_shader =
-        //             "#version 400\n"
-        //             "in vec3 normal;"
-        //             "out vec4 frag_colour;"
-        //             "void main() {"
-        //             "  frag_colour = vec4(normal.x, normal.y, normal.z, 1.0);"
-        //             "}";
-
-        //         static const char *def_vertex_shader = R"GLSL()
-        //     #version 400\n
-        //     uniform mat4 view;
-        //     uniform mat4 perspective;
-        //     in vec3 position;
-        //     in vec3 normal_in;
-        //     out vec3 normal;
-        //     void main() {
-        //         normal = normal_in;
-        //         gl_Position = perspective * view  * vec4(position, 1.0);
-        //     }
-        // )GLSL";
-
         static const char *def_fragment_shader =
             "#version 400\n"
             "in vec3 col;"
@@ -154,15 +133,17 @@ namespace sim
             return glm::perspective(glm::radians(45.0f), (float)rt.width / (float)rt.height, 0.1f, 100.0f);
         }
 
+
     } // renderer
 
     Shape::~Shape() {}
 
+    // Dummy for space filling
     DummyShape::DummyShape() {}
     DummyShape::~DummyShape() {}
     void DummyShape::render(glm::mat4 mat, renderer::RenderTarget rt) {}
 
-    square_shape::square_shape(double radius, double height, int segments)
+    square_shape::square_shape()
     {
         struct el
         {
@@ -200,92 +181,21 @@ namespace sim
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         num_indices = indices.size() * sizeof(el) / (sizeof(unsigned int));
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(el), (void *)&(indices[0]), GL_STATIC_DRAW);
-
-        return;
-        // point, normal - for top and bottom ring sides and caps
-        const int vertex_size = 2; // units of vec3
-        const int top_cap_num_verts = 1 + segments;
-        const int bot_cap_num_verts = 1 + segments;
-        const int side_num_verts = segments * 2;
-        points = std::vector<glm::vec3>(top_cap_num_verts + bot_cap_num_verts + side_num_verts);
-
-        points[0] = glm::vec3(0, 0, 0);
-        points[1] = glm::vec3(0, -1, 0); // normal
-
-        points[bot_cap_num_verts] = glm::vec3(0, height, 0);
-        points[bot_cap_num_verts + 1] = glm::vec3(0, 1, 0); // normal
-
-        const int num_cap_tris = segments;
-        const int num_label_tris = 2 * segments;
-        const int num_tris = num_cap_tris * 2 + num_label_tris;
-        std::vector<unsigned int> elements = std::vector<unsigned int>(3 * num_tris);
-
-        std::cout << "Making Top and Bottom caps\n";
-        // Top and Bottom Caps
-        for (int i = 0; i < segments; i++)
-        {
-            double ang = 2 * M_PI * (double)i / (double)segments;
-            double x = radius * cos(ang);
-            double z = radius * sin(ang);
-
-            points[(1 + i) * vertex_size] = glm::vec3(x, 0, z);
-            points[(1 + i) * vertex_size + 1] = glm::vec3(0, -1, 0);
-
-            points[(1 + i + bot_cap_num_verts) * vertex_size] = glm::vec3(x, 0, z);
-            points[(1 + i + bot_cap_num_verts) * vertex_size + 1] = glm::vec3(0, 1, 0);
-
-            // bottom tri
-            elements[i * 3] = 0;
-            elements[i * 3] = 1 + i;
-            elements[i * 3] = (i + 2) % segments;
-            // top tri
-            elements[num_cap_tris + i * 3] = bot_cap_num_verts;
-            elements[num_cap_tris + i * 3] = (bot_cap_num_verts + 1) + i;
-            elements[num_cap_tris + i * 3] = (bot_cap_num_verts + 1) + (i + 1) % segments;
-        }
-
-        for (auto &ind : elements)
-        {
-            std::cout << ind << " : " << elements.size() << '\n';
-        }
-
-        std::cout << "GL Stuff\n";
-        std::cout << "GL vbo " << points[0].x << '\n';
-        glGenBuffers(1, &points_vbo);
-        std::cout << "GL vbo\n";
-        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        std::cout << "GL vbo\n";
-        glBufferData(GL_ARRAY_BUFFER, points.size() * 3 * sizeof(float), &points[0], GL_STATIC_DRAW);
-
-        std::cout << "GL vao\n";
-
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        glEnableVertexAttribArray(0); // vert pos
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 2 * 3 * sizeof(float), NULL);
-        glEnableVertexAttribArray(1); // vert normal
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 2 * 3 * sizeof(float), (void *)(3 * sizeof(float)));
-
-        std::cout << "GL ibo\n";
-
-        glGenBuffers(1, &ibo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), &elements[0], GL_STATIC_DRAW);
     }
     square_shape::~square_shape() {}
     void square_shape::render(glm::mat4 mat, renderer::RenderTarget rt)
     {
-        printf("Rendering cylinder\n");
+        rt.activate();
         renderer::ShaderProgram::activate_default();
 
         // Index buffer
+        glBindVertexArray(vao);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
         // Draw the triangles !
         glDrawElements(
             GL_TRIANGLES,    // mode
-            num_indices,  // count
+            num_indices,     // count
             GL_UNSIGNED_INT, // type
             (void *)0        // element array buffer offset
         );
