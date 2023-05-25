@@ -10,23 +10,35 @@ namespace sim
     {
         static const glm::vec3 up_vec = glm::vec3(0.0, 1.0, 0.0);
 
-        static const char *def_fragment_shader =
-            "#version 400\n"
-            "in vec3 col;"
-            "out vec4 frag_colour;"
-            "void main() {"
-            "  frag_colour = vec4(col.x, col.y, col.z, 1.0);"
-            "}";
         static const char *def_vertex_shader =
             "#version 400\n"
             "uniform mat4 view;"
             "uniform mat4 perspective;"
+            "uniform sampler2D tex;"
+            ""
             "in vec3 vp;"
-            "in vec3 c;"
-            "out vec3 col;"
+            "in vec3 norm_v;"
+            "in vec2 UV_v;"
+            ""
+            "out vec3 norm;"
+            "out vec2 UV;"
+            ""
             "void main() {"
-            "  col = c;"
+            "   UV = UV_v;"
+            "   norm = norm_v;"
             "  gl_Position = perspective * view  * vec4(vp, 1.0);"
+            "}";
+
+        static const char *def_fragment_shader =
+            "#version 400\n"
+            "uniform sampler2D tex;"
+            "in vec3 norm;"
+            "in vec2 UV;"
+            ""
+            "out vec4 frag_colour;"
+            "void main() {"
+            "   vec4 col = texture(tex, UV);"
+            "   frag_colour = vec4(col.x, col.y, col.z, 1.0);"
             "}";
 
         ShaderProgram default_prog;
@@ -36,6 +48,7 @@ namespace sim
         }
 
         /// @brief allocate and create all buffers and textures needed to draw to
+        /// @pre OpenGL context is created
         /// @param width width of output
         /// @param height height of output
         void RenderTarget::init(int width, int height)
@@ -93,10 +106,8 @@ namespace sim
             glBindTexture(GL_TEXTURE_2D, color_handle);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
 
-
             glBindTexture(GL_TEXTURE_2D, depth_handle);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
-
         }
 
         /// @brief activate this target such that all render calls will go here
@@ -173,31 +184,38 @@ namespace sim
             unsigned int b;
             unsigned int c;
         };
-        std::array<glm::vec3, 8> verts;
-        verts[0 * 2] = {-1, -1, 0};
-        verts[0 * 2 + 1] = {0, 0, 1};
+        struct vert
+        {
+            glm::vec3 pos;
+            glm::vec3 normal;
+            glm::vec2 UV;
+        };
+        std::array<vert, 4> verts;
+        verts[0] = {{-2, -1, 0}, {0, 0, 1}, {0, 1}};
+        verts[1] = {{2, -1, 0}, {0, 0, 1}, {1, 1}};
+        verts[2] = {{2, 1, 0}, {0, 0, 1}, {1, 0}};
+        verts[3] = {{-2, 1, 0}, {0, 0, 1}, {0, 0}};
 
-        verts[1 * 2] = {1, -1, 0};
-        verts[1 * 2 + 1] = {0, 0, 1};
-
-        verts[2 * 2] = {1, 1, 0};
-        verts[2 * 2 + 1] = {0, 0, 1};
-
-        verts[3 * 2] = {-1, 1, 0};
-        verts[3 * 2 + 1] = {0, 0, 1};
         std::array<el, 2> indices = {el{0, 1, 2}, el{0, 2, 3}};
 
         glGenBuffers(1, &points_vbo);
         glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        glBufferData(GL_ARRAY_BUFFER, verts.size() * 3 * sizeof(float), &(verts[0]), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(vert), &(verts[0]), GL_STATIC_DRAW);
+
+        unsigned int vert_ind = 0;
+        unsigned int norm_ind = 1;
+        unsigned int uv_ind =   2;
+        std::cout << "vert ind: " << vert_ind << ", norm_ind: " << norm_ind<< ", uv ind " << uv_ind << '\n';
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        glEnableVertexAttribArray(0); // vert pos
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 2 * 3 * sizeof(float), NULL);
-        glEnableVertexAttribArray(1); // vert normal
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 2 * 3 * sizeof(float), (void *)(3 * sizeof(float)));
+        glEnableVertexAttribArray(vert_ind); // vert pos
+        glVertexAttribPointer(vert_ind, 3, GL_FLOAT, GL_FALSE, sizeof(vert), NULL);
+        glEnableVertexAttribArray(norm_ind); // vert normal
+        glVertexAttribPointer(norm_ind, 3, GL_FLOAT, GL_FALSE, sizeof(vert), (void *)(3 * sizeof(float)));
+        glEnableVertexAttribArray(uv_ind); //vert UV
+        glVertexAttribPointer(uv_ind, 2, GL_FLOAT, GL_FALSE, sizeof(vert), (void *)(6 * sizeof(float)));
 
         glGenBuffers(1, &ibo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -212,6 +230,7 @@ namespace sim
 
         glUniformMatrix4fv(0, 1, false, (float *)(&view));
         glUniformMatrix4fv(1, 1, false, (float *)(&persp));
+        glBindTexture(GL_TEXTURE_2D, sim::brain_screen::get_gltex_handle());
 
         // Index buffer
         glBindVertexArray(vao);

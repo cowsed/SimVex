@@ -5,6 +5,10 @@
 #include <GL/glcorearb.h>
 
 #include "imgui.h"
+#include "../../../vendor/imgui/backends/imgui_impl_opengl3.h" 
+#include "../../../vendor/imgui/backends/imgui_impl_glfw.h"
+
+
 #include "../util.h"
 #include "../time.h"
 #include "../terminal.h"
