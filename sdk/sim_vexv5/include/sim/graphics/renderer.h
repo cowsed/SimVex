@@ -11,9 +11,6 @@ namespace sim
 
         void setup();
         void render();
-        unsigned int get_rendered_tex();
-        unsigned int get_rendered_tex_width();
-        unsigned int get_rendered_tex_height();
 
     }
 }

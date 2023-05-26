@@ -200,8 +200,25 @@ namespace sim
     /// @param cam the camera to move
     void moveViewportCamera(sim::renderer::Camera *cam)
     {
+
+        float dx = 0;
+        float dy = 0;
+        static ImVec2 last_mouse_pos = ImVec2{0, 0};
+        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+        {
+            last_mouse_pos = ImGui::GetMousePos();
+        }
+        if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsWindowFocused())
+        {
+            ImVec2 mouse_pos = ImGui::GetMousePos();
+
+            dx = (mouse_pos.x - last_mouse_pos.x);
+            dy = (mouse_pos.y - last_mouse_pos.y);
+            last_mouse_pos = mouse_pos;
+        }
+
         double move_speed = 0.1;
-        double turn_speed = 0.03;
+        double turn_speed = 0.004;
 
         glm::vec3 dir = glm::normalize(cam->lookat - cam->eye);
         auto toVec3 = [](auto v) -> glm::vec3
@@ -209,18 +226,12 @@ namespace sim
             return {v.x, v.y, v.z};
         };
 
-        float heading = atan2(dir.z, dir.x);
+        glm::vec2 normed2d = {dir.x, dir.z};
+        float heading = atan2(normed2d.y, normed2d.x);
+        heading += dx * turn_speed;
 
-        if (ImGui::IsKeyDown(ImGuiKey_Q))
-        {
-            heading -= turn_speed;
-        }
-        else if (ImGui::IsKeyDown(ImGuiKey_E))
-        {
-            heading += turn_speed;
-        }
-
-        float altitude = atan(dir.y);
+        float altitude = asin(dir.y);
+        altitude -= dy * turn_speed;
 
         auto rotate2D = [](glm::vec2 v, float ang) -> glm::vec2
         {
@@ -233,7 +244,7 @@ namespace sim
 
         float elevation = sin(altitude);
         glm::vec2 dirxz = rotate2D(glm::vec2(1, 0), heading);
-        glm::vec3 new_dir = glm::normalize(glm::vec3(dirxz.x, 0, dirxz.y));
+        glm::vec3 new_dir = glm::normalize(glm::vec3(dirxz.x, elevation, dirxz.y));
 
         cam->lookat = cam->eye + new_dir;
 
@@ -241,33 +252,36 @@ namespace sim
 
         glm::vec2 local_vel = {0, 0};
         float uppy_downy = 0.0;
-        //
-        // X
-        if (ImGui::IsKeyDown(left_key))
+        if (ImGui::IsWindowFocused())
         {
-            local_vel.y--;
-        }
-        else if (ImGui::IsKeyDown(right_key))
-        {
-            local_vel.y++;
-        }
-        // Y
-        if (ImGui::IsKeyDown(forward_key))
-        {
-            local_vel.x++;
-        }
-        else if (ImGui::IsKeyDown(back_key))
-        {
-            local_vel.x--;
-        }
-        // Z
-        if (ImGui::IsKeyDown(up_key))
-        {
-            uppy_downy--;
-        }
-        else if (ImGui::IsKeyDown(down_key))
-        {
-            uppy_downy++;
+            //
+            // X
+            if (ImGui::IsKeyDown(left_key))
+            {
+                local_vel.y--;
+            }
+            else if (ImGui::IsKeyDown(right_key))
+            {
+                local_vel.y++;
+            }
+            // Y
+            if (ImGui::IsKeyDown(forward_key))
+            {
+                local_vel.x++;
+            }
+            else if (ImGui::IsKeyDown(back_key))
+            {
+                local_vel.x--;
+            }
+            // Z
+            if (ImGui::IsKeyDown(up_key))
+            {
+                uppy_downy++;
+            }
+            else if (ImGui::IsKeyDown(down_key))
+            {
+                uppy_downy--;
+            }
         }
         //
         local_vel *= move_speed;
@@ -284,14 +298,15 @@ namespace sim
     {
         static int width = 1;
         static int height = 1;
+        static bool want_capture_mouse = false;
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{8, 8});
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{0, 0});
         ImGui::Begin("Viewport");
 
-        
         ImVec2 size = ImGui::GetWindowSize();
-        size.y-=35;
-        size.x-=20;
+        size.y -= 35;
+        size.x -= 20;
         if (width != size.x || height != size.y)
         {
             width = size.x;
@@ -299,15 +314,9 @@ namespace sim
             renderer::field_viewport.resize(width, height);
         }
 
-        ImGui::Image((void *)(intptr_t)(renderer::get_rendered_tex()), ImVec2((float)renderer::get_rendered_tex_width(), (float)renderer::get_rendered_tex_height()), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void *)(intptr_t)(renderer::field_viewport.color_handle), ImVec2((float)renderer::field_viewport.width, (float)renderer::field_viewport.height), ImVec2(0, 1), ImVec2(1, 0));
 
-        if (ImGui::IsWindowFocused())
-        {
-            moveViewportCamera(&sim::renderer::field_camera);
-        }
-
-        // ImGui::DragFloat3("Eye", &sim::renderer::field_camera.eye[0]);
-        // ImGui::DragFloat3("Target", &sim::renderer::field_camera.lookat[0]);
+        moveViewportCamera(&sim::renderer::field_camera);
 
         ImGui::End();
         ImGui::PopStyleVar(2);

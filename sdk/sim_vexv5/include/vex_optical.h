@@ -1,3 +1,4 @@
+#pragma once
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Copyright (c) Innovation First 2019, All rights reserved.               */
@@ -13,7 +14,7 @@
 
 #ifndef   VEX_OPTICAL_CLASS_H
 #define   VEX_OPTICAL_CLASS_H
-
+#include "vex_device.h"
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_optical.h
   * @brief   Optical (color) sensor device class header

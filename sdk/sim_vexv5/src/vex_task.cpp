@@ -79,14 +79,14 @@ namespace vex
      * @brief Resumes a specified task that has been suspended.
      * @param t The task to be resumed.
      */
-    void resume(const task &t) { print_unimplimented(); }
+    void task::resume(const task &t) { print_unimplimented(); }
 
     /**
      * @brief Gets the priority of a task.
      * @return Returns an integer that represents the current priority of the specified task.
      * @param t The task to get priority of.
      */
-    int32_t priority(const task &t)
+    int32_t task::priority(const task &t)
     {
         print_unimplimented();
         return -1;

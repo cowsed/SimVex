@@ -2,6 +2,12 @@
 #include "sim/graphics/render_common.h"
 #include "sim/graphics/images/default_skybox/skybox.h"
 
+#include "sim/graphics/images/default_skybox/nx.h"
+#include "sim/graphics/images/default_skybox/ny.h"
+#include "sim/graphics/images/default_skybox/nz.h"
+#include "sim/graphics/images/default_skybox/px.h"
+#include "sim/graphics/images/default_skybox/py.h"
+#include "sim/graphics/images/default_skybox/pz.h"
 
 namespace sim
 {
@@ -9,7 +15,7 @@ namespace sim
     {
         RenderTarget field_viewport;
         Camera field_camera(glm::vec3(0, 0, 10.0), glm::vec3(0, 0, 0.0), field_viewport);
-        Skybox field_skybox = default_skybox;
+        Skybox field_skybox = {.nx = nx, .ny = ny, .nz = nz, .px = px, .py = py, .pz = pz};
 
         square_shape *test_square;
 
@@ -19,6 +25,7 @@ namespace sim
             setup_common();
 
             field_viewport.init(800, 600);
+            std::cout << "field skybox px = " << field_skybox.nx.width << '\n';
             field_skybox.init();
             test_square = new square_shape();
 
@@ -47,18 +54,6 @@ namespace sim
             field_viewport.deactivate();
         }
 
-        unsigned int get_rendered_tex()
-        {
-            return field_viewport.color_handle;
-        }
-        unsigned int get_rendered_tex_width()
-        {
-            return field_viewport.width;
-        }
-        unsigned int get_rendered_tex_height()
-        {
-            return field_viewport.height;
-        }
 
     }
 }

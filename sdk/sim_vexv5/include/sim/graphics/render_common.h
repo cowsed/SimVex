@@ -12,6 +12,8 @@
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/gtc/quaternion.hpp>
 
+#include "sim/graphics/brain_screen.h"
+
 namespace sim
 {
     struct Location
