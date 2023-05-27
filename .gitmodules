@@ -1,0 +1,3 @@
+[submodule "sdk/sim_vexv5/vendor/assimp"]
+	path = sdk/sim_vexv5/vendor/assimp
+	url = https://github.com/assimp/assimp
