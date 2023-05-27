@@ -93,15 +93,22 @@ namespace sim
         ImGui::Begin("Control");
         if (ImGui::CollapsingHeader("Simulation Control", ImGuiTreeNodeFlags_DefaultOpen))
         {
+            ImGui::BeginDisabled(sim::is_running());
             if (ImGui::Button("Play"))
             {
                 sim::start_sim();
             }
+            ImGui::EndDisabled();
+
             ImGui::SameLine();
+
+            ImGui::BeginDisabled(sim::is_paused());
             if (ImGui::Button("Pause"))
             {
                 sim::pause_sim();
             }
+            ImGui::EndDisabled();
+            
             ImGui::SameLine();
             ImGui::TextDisabled("%s", sim_state_text());
 
