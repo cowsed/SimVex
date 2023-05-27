@@ -5,3 +5,6 @@
 	path = sdk/sim_vexv5/vendor/imgui
 	url = git@github.com:ocornut/imgui.git
 	branch = docking
+[submodule "sdk/sim_vexv5/vendor/stb"]
+	path = sdk/sim_vexv5/vendor/stb
+	url = git@github.com:nothings/stb.git
