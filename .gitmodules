@@ -1,3 +1,7 @@
 [submodule "sdk/sim_vexv5/vendor/assimp"]
 	path = sdk/sim_vexv5/vendor/assimp
 	url = https://github.com/assimp/assimp
+[submodule "sdk/sim_vexv5/vendor/imgui"]
+	path = sdk/sim_vexv5/vendor/imgui
+	url = git@github.com:ocornut/imgui.git
+	branch = docking
