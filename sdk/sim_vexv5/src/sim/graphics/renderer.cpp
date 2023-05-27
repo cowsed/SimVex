@@ -14,10 +14,10 @@ namespace sim
     namespace renderer
     {
         RenderTarget field_viewport;
-        Camera field_camera(glm::vec3(0, 0, 10.0), glm::vec3(0, 0, 0.0), field_viewport);
+        Camera field_camera(glm::vec3(0, 0, 0.2), glm::vec3(0, 0, 0.0), field_viewport);
         Skybox field_skybox = {.nx = nx, .ny = ny, .nz = nz, .px = px, .py = py, .pz = pz};
 
-        square_shape *test_square;
+        brain_screen_shape *test_square;
 
         void setup()
         {
@@ -27,7 +27,7 @@ namespace sim
             field_viewport.init(800, 600);
             std::cout << "field skybox px = " << field_skybox.nx.width << '\n';
             field_skybox.init();
-            test_square = new square_shape();
+            test_square = new brain_screen_shape();
 
         }
 

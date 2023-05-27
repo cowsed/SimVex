@@ -84,7 +84,7 @@ namespace sim
     };
 
     /// @brief shape from cube definition
-    class square_shape : public Shape
+    class brain_screen_shape : public Shape
     {
     private:
         std::vector<glm::vec3> points;
@@ -93,10 +93,11 @@ namespace sim
         unsigned int points_vbo;
         unsigned int vao;
         unsigned int ibo;
+        renderer::ShaderProgram brain_shader;
 
     public:
-        square_shape();
-        ~square_shape() override;
+        brain_screen_shape();
+        ~brain_screen_shape() override;
         void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) override; // override;
     };
 

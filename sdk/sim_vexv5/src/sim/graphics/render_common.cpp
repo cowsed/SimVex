@@ -10,7 +10,7 @@ namespace sim
     {
         static const glm::vec3 up_vec = glm::vec3(0.0, 1.0, 0.0);
 
-        static const char *def_vertex_shader =
+        static const char *brain_screen_vertex_shader =
             "#version 400\n"
             "uniform mat4 view;"
             "uniform mat4 perspective;"
@@ -29,7 +29,38 @@ namespace sim
             "  gl_Position = perspective * view  * vec4(vp, 1.0);"
             "}";
 
-        static const char *def_fragment_shader =
+        static const char *brain_screen_fragment_shader =
+            "#version 400\n"
+            "uniform sampler2D tex;"
+            "in vec3 norm;"
+            "in vec2 UV;"
+            ""
+            "out vec4 frag_colour;"
+            "void main() {"
+            "   vec4 col = texture(tex, UV);"
+            "   frag_colour = vec4(col.x, col.y, col.z, 1.0);"
+            "}";
+
+        static const char *model_vertex_shader =
+            "#version 400\n"
+            "uniform mat4 view;"
+            "uniform mat4 perspective;"
+            "uniform sampler2D tex;"
+            ""
+            "in vec3 vp;"
+            "in vec3 norm_v;"
+            "in vec2 UV_v;"
+            ""
+            "out vec3 norm;"
+            "out vec2 UV;"
+            ""
+            "void main() {"
+            "   UV = UV_v;"
+            "   norm = norm_v;"
+            "  gl_Position = perspective * view  * vec4(vp, 1.0);"
+            "}";
+
+        static const char *model_fragment_shader =
             "#version 400\n"
             "uniform sampler2D tex;"
             "in vec3 norm;"
@@ -44,7 +75,7 @@ namespace sim
         ShaderProgram default_prog;
         void setup_common()
         {
-            default_prog = ShaderProgram(def_vertex_shader, def_fragment_shader);
+            default_prog = ShaderProgram(model_vertex_shader, model_fragment_shader);
         }
 
         /// @brief allocate and create all buffers and textures needed to draw to
@@ -129,6 +160,9 @@ namespace sim
             glDeleteTextures(1, &color_handle);
             glDeleteTextures(1, &depth_handle);
         }
+        /// @brief Create shader with vert and frag shaders
+        /// @param vertex_shader   source strings
+        /// @param fragment_shader source strings
         ShaderProgram::ShaderProgram(const char *vertex_shader, const char *fragment_shader)
         {
             GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -147,7 +181,11 @@ namespace sim
             glDeleteShader(vs);
             glDeleteShader(fs);
         }
+        /// @brief create bad shader program
+
         ShaderProgram::ShaderProgram() {}
+
+        /// @brief Acrtivate shader such that this program is used for subsequent draw calls
         void ShaderProgram::activate()
         {
             glUseProgram(program);
@@ -164,7 +202,7 @@ namespace sim
         }
         glm::mat4 Camera::persp_matrix(RenderTarget &rt)
         {
-            return glm::perspective(glm::radians(45.0f), (float)rt.width / (float)rt.height, 0.1f, 100.0f);
+            return glm::perspective(glm::radians(35.0f), (float)rt.width / (float)rt.height, 0.01f, 100.0f);
         }
 
     } // renderer
@@ -176,7 +214,7 @@ namespace sim
     DummyShape::~DummyShape() {}
     void DummyShape::render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) {}
 
-    square_shape::square_shape()
+    brain_screen_shape::brain_screen_shape()
     {
         struct el
         {
@@ -190,11 +228,16 @@ namespace sim
             glm::vec3 normal;
             glm::vec2 UV;
         };
+        const float screen_width_meters = 4.25 * (0.0254);
+        const float screen_height_meters = screen_width_meters / 2.0;
+        const float w = screen_width_meters / 2.0;  // half width
+        const float h = screen_height_meters / 2.0; // half width
+
         std::array<vert, 4> verts;
-        verts[0] = {{-2, -1, 0}, {0, 0, 1}, {0, 1}};
-        verts[1] = {{2, -1, 0}, {0, 0, 1}, {1, 1}};
-        verts[2] = {{2, 1, 0}, {0, 0, 1}, {1, 0}};
-        verts[3] = {{-2, 1, 0}, {0, 0, 1}, {0, 0}};
+        verts[0] = {{-w, -h, 0}, {0, 0, 1}, {0, 1}};
+        verts[1] = {{w, -h, 0}, {0, 0, 1}, {1, 1}};
+        verts[2] = {{w, h, 0}, {0, 0, 1}, {1, 0}};
+        verts[3] = {{-w, h, 0}, {0, 0, 1}, {0, 0}};
 
         std::array<el, 2> indices = {el{0, 1, 2}, el{0, 2, 3}};
 
@@ -204,8 +247,8 @@ namespace sim
 
         unsigned int vert_ind = 0;
         unsigned int norm_ind = 1;
-        unsigned int uv_ind =   2;
-        std::cout << "vert ind: " << vert_ind << ", norm_ind: " << norm_ind<< ", uv ind " << uv_ind << '\n';
+        unsigned int uv_ind = 2;
+        std::cout << "vert ind: " << vert_ind << ", norm_ind: " << norm_ind << ", uv ind " << uv_ind << '\n';
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -214,19 +257,22 @@ namespace sim
         glVertexAttribPointer(vert_ind, 3, GL_FLOAT, GL_FALSE, sizeof(vert), NULL);
         glEnableVertexAttribArray(norm_ind); // vert normal
         glVertexAttribPointer(norm_ind, 3, GL_FLOAT, GL_FALSE, sizeof(vert), (void *)(3 * sizeof(float)));
-        glEnableVertexAttribArray(uv_ind); //vert UV
+        glEnableVertexAttribArray(uv_ind); // vert UV
         glVertexAttribPointer(uv_ind, 2, GL_FLOAT, GL_FALSE, sizeof(vert), (void *)(6 * sizeof(float)));
 
         glGenBuffers(1, &ibo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         num_indices = indices.size() * sizeof(el) / (sizeof(unsigned int));
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(el), (void *)&(indices[0]), GL_STATIC_DRAW);
+
+        // Create Shader
+        brain_shader = renderer::ShaderProgram(renderer::brain_screen_vertex_shader, renderer::brain_screen_fragment_shader);
     }
-    square_shape::~square_shape() {}
-    void square_shape::render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt)
+    brain_screen_shape::~brain_screen_shape() {}
+    void brain_screen_shape::render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt)
     {
         rt.activate();
-        renderer::ShaderProgram::activate_default();
+        brain_shader.activate();
 
         glUniformMatrix4fv(0, 1, false, (float *)(&view));
         glUniformMatrix4fv(1, 1, false, (float *)(&persp));

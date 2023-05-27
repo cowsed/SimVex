@@ -217,7 +217,7 @@ namespace sim
             last_mouse_pos = mouse_pos;
         }
 
-        double move_speed = 0.1;
+        double move_speed = 0.02;
         double turn_speed = 0.004;
 
         glm::vec3 dir = glm::normalize(cam->lookat - cam->eye);
