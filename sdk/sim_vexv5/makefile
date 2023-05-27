@@ -1,4 +1,4 @@
-VERBOSE = 0
+VERBOSE = 1
 
 PROJECT = simv5rt
 
@@ -14,6 +14,9 @@ SRC_C += $(wildcard src/*/*/*/*/*.cpp)
 SRC_C += $(wildcard vendor/imgui/*.cpp) 
 SRC_C += vendor/imgui/backends/imgui_impl_glfw.cpp
 SRC_C += vendor/imgui/backends/imgui_impl_opengl3.cpp
+
+SRC_C += $(wildcard vendor/assimp/*.cpp) 
+
 
 SRC_H = $(wildcard include/*.h)
 SRC_H = $(wildcard include/*/*.h)
@@ -54,7 +57,7 @@ CXX = clang-15
 #-fsanitize=address
 
 CXX_FLAGS = -O2 -Wall -Werror=return-type -Wextra --std=gnu++20 -ggdb -DASSIMP_BUILD_BOOST_WORKAROUND
-INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends
+INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends -isystem /home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/include
 all: $(BUILD)/$(PROJECTLIB).a
 
 
