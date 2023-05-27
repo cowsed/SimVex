@@ -248,7 +248,6 @@ namespace sim
         unsigned int vert_ind = 0;
         unsigned int norm_ind = 1;
         unsigned int uv_ind = 2;
-        std::cout << "vert ind: " << vert_ind << ", norm_ind: " << norm_ind << ", uv ind " << uv_ind << '\n';
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);

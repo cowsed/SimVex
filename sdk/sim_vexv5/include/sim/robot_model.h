@@ -17,6 +17,8 @@ namespace sim
     namespace construction
     {
 
+        unsigned int load_texture(std::string filename);
+
         class MeshShape : Shape
         {
         public:
@@ -27,11 +29,23 @@ namespace sim
                 glm::vec3 texture_coords;
             };
             MeshShape(std::vector<Vertex> vertices, std::vector<unsigned int> indices, unsigned int tex_handle_tbd);
+            void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) override;
 
-            private:
+        private:
             unsigned int vao, vbo, ibo;
             void initGL();
         };
 
+        class Model : Shape
+        {
+        public:
+            /// @brief Load a mesh through assimp
+            /// @param path path of mesh
+            Model(std::string path);
+            void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) override;
+
+        private:
+            std::vector<MeshShape> meshes;
+        };
     }
 }

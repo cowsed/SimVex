@@ -17,6 +17,8 @@ Dependencies
 - OpenGL 4.something
 - GLFW 3.3
 - glm https://github.com/g-truc/glm
+- Dear ImGui
+- Assimp
 - Bullet3D (eventually)
 
 ## Building your robot code

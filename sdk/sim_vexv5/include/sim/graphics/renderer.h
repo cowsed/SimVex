@@ -3,7 +3,7 @@
 
 namespace sim
 {
-    namespace renderer
+    namespace renderer 
     {
 
         extern RenderTarget field_viewport;
