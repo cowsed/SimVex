@@ -1,4 +1,4 @@
-VERBOSE = 1
+VERBOSE = 0
 
 PROJECT = simv5rt
 
@@ -15,7 +15,13 @@ SRC_C += $(wildcard vendor/imgui/*.cpp)
 SRC_C += vendor/imgui/backends/imgui_impl_glfw.cpp
 SRC_C += vendor/imgui/backends/imgui_impl_opengl3.cpp
 
-SRC_C += $(wildcard vendor/assimp/*.cpp) 
+SRC_C += $(wildcard vendor/assimp/code/*/*.cpp) 
+SRC_C += $(wildcard vendor/assimp/code/*/*/*.cpp) 
+SRC_C += $(wildcard vendor/assimp/code/*/*/*/*.cpp) 
+SRC_C += $(wildcard vendor/assimp/contrib/pugixml/src/*.cpp) 
+SRC_C += $(wildcard vendor/assimp/contrib/unzip/*.c) 
+SRC_C += $(wildcard vendor/assimp/contrib/zip/src/*.c) 
+SRC_C += $(wildcard vendor/assimp/contrib/zlib/*.c) 
 
 
 SRC_H = $(wildcard include/*.h)
@@ -53,11 +59,27 @@ ARCH_FLAGS = rcs
 
 CXX = clang-15
 
-#-lopengl32 -lglfw3 -lglew32
-#-fsanitize=address
+BOTH_FLAGS = -O2 -Wall -Werror=return-type -Wextra  -ggdb
+BOTH_FLAGS += -DASSIMP_BUILD_BOOST_WORKAROUND -DASSIMP_BUILD_NO_C4D_IMPORTER -DASSIMP_BUILD_NO_GLTF_IMPORTER -DASSIMP_BUILD_NO_GLTF2_IMPORTER
+BOTH_FLAGS += -DASSIMP_BUILD_NO_EXPORT -DASSIMP_BUILD_NO_IFC_IMPORTER -DASSIMP_BUILD_NO_OPENGEX_IMPORTER -DASSIMP_BUILD_NO_X3D_IMPORTER
 
-CXX_FLAGS = -O2 -Wall -Werror=return-type -Wextra --std=gnu++20 -ggdb -DASSIMP_BUILD_BOOST_WORKAROUND
-INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends -isystem /home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/include
+
+C_FLAGS = $(BOTH_FLAGS)
+CXX_FLAGS = $(BOTH_FLAGS) -O2 -Wall -Werror=return-type -Wextra --std=gnu++20 
+
+# sim stuff
+INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5/include 
+
+# ImGui
+INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends 
+# Assimp
+INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp
+INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/code  -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/unzip/
+
+# STB (#include "stb/thing")
+INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/
+
+
 all: $(BUILD)/$(PROJECTLIB).a
 
 
@@ -66,6 +88,13 @@ $(BUILD)/%.o: %.cpp $(SRC_H) $(SRC_A)
 	$(Q)$(MKDIR)
 	$(ECHO) "CXX $<"
 	$(Q)$(CXX) $(CXX_FLAGS) $(INC) -c -o $@ $<
+
+# compile C files
+$(BUILD)/%.o: %.c $(SRC_H) $(SRC_A)
+	$(Q)$(MKDIR)
+	$(ECHO) "CXX $<"
+	$(Q)$(CXX) $(C_FLAGS) $(INC) -c -o $@ $<
+
 
 # create archive
 $(BUILD)/$(PROJECTLIB).a: $(OBJ)

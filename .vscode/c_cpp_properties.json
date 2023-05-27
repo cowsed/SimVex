@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/sdk/sim_vexv5/vendor/imgui"
+                "${workspaceFolder}/sdk/sim_vexv5/vendor/imgui",
+                "${workspaceFolder}/sdk/sim_vexv5/vendor/assimp/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

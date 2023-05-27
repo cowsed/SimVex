@@ -241,7 +241,7 @@ namespace sim
         // We're really done
         sim::event_handler::end_all_mevents();
         sim::time_end();
-        //sim::construction::cleanup();
+        // sim::construction::cleanup();
 
         cleanUpWindow();
     }
@@ -254,8 +254,9 @@ namespace sim
             return true;
         }
         glfwMakeContextCurrent(window);
-        //construction::setup();
         renderer::setup();
+        construction::setup();
+        
         brain_screen::setup();
         controller::setup();
         event_handler::setup();

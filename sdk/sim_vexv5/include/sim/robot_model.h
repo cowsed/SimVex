@@ -20,6 +20,7 @@ namespace sim
 {
     namespace construction
     {
+        void setup();
 
         unsigned int load_texture(std::string filename);
 
