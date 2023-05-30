@@ -69,7 +69,7 @@ namespace sim
             "out vec4 frag_colour;"
             "void main() {"
             "   vec4 col = texture(tex, UV);"
-            "   frag_colour = vec4(col.x, col.y, col.z, 1.0);"
+            "   frag_colour = vec4(norm.x, norm.y, norm.z, 1.0);"
             "}";
 
         ShaderProgram default_prog;
@@ -228,16 +228,16 @@ namespace sim
             glm::vec3 normal;
             glm::vec2 UV;
         };
-        const float screen_width_meters = 4.25 * (0.0254);
+        const float screen_width_meters = 3.6 * (0.0254);
         const float screen_height_meters = screen_width_meters / 2.0;
         const float w = screen_width_meters / 2.0;  // half width
         const float h = screen_height_meters / 2.0; // half width
-
+        const float z = 0.034;
         std::array<vert, 4> verts;
-        verts[0] = {{-w, -h, 0}, {0, 0, 1}, {0, 1}};
-        verts[1] = {{w, -h, 0}, {0, 0, 1}, {1, 1}};
-        verts[2] = {{w, h, 0}, {0, 0, 1}, {1, 0}};
-        verts[3] = {{-w, h, 0}, {0, 0, 1}, {0, 0}};
+        verts[0] = {{-w, -h, z}, {0, 0, 1}, {0, 1}};
+        verts[1] = {{w, -h, z}, {0, 0, 1}, {1, 1}};
+        verts[2] = {{w, h, z}, {0, 0, 1}, {1, 0}};
+        verts[3] = {{-w, h, z}, {0, 0, 1}, {0, 0}};
 
         std::array<el, 2> indices = {el{0, 1, 2}, el{0, 2, 3}};
 

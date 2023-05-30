@@ -24,24 +24,35 @@ namespace sim
 
         unsigned int load_texture(std::string filename);
 
-        class MeshShape : Shape
+        class MeshShape : public Shape
         {
         public:
             struct Vertex
             {
                 glm::vec3 position;
                 glm::vec3 normal;
-                glm::vec3 texture_coords;
+                glm::vec2 texture_coords;
             };
-            MeshShape(std::vector<Vertex> vertices, std::vector<unsigned int> indices, unsigned int tex_handle_tbd);
+            struct Tri
+            {
+                unsigned int a;
+                unsigned int b;
+                unsigned int c;
+            };
+            MeshShape(std::vector<Vertex> vertices, std::vector<Tri> indices, unsigned int tex_handle_tbd);
+            ~MeshShape(){}
             void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) override;
 
+            const std::vector<Vertex> &get_verts();
+            const std::vector<Tri> &get_tris();
+
         private:
+            std::vector<Vertex> verts;
+            std::vector<Tri> tris;
             unsigned int vao, vbo, ibo;
-            void initGL();
         };
 
-        class Model : Shape
+        class Model : public Shape
         {
         public:
             /// @brief Load a mesh through assimp

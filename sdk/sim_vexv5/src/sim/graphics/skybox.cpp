@@ -87,11 +87,7 @@ namespace sim
         {
             // Initialize texture
             glGenTextures(1, &this->cubemap_handle);
-            std::cout << "cubemap_handle" << cubemap_handle << '\n';
             glBindTexture(GL_TEXTURE_CUBE_MAP, this->cubemap_handle);
-            auto *px_p = &px;
-            auto px_d = px.width;
-            std::cout << " faces " << px_p << '\n';//<< nx.image_data << py.image_data << ny.image_data << pz.image_data << nz.image_data << '\n';
             std::array faces = {px, nx, py, ny, pz, nz};
 
             unsigned int i = 0;
