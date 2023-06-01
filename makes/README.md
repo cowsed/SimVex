@@ -1,5 +1,10 @@
 # makes
 
+6/1/23
+now it does use to replace vex/mkrules.mk and vex/mkenv.mk 
+
+3/3/23
+
 This directory contains the make files that will build robot code for a simulation rather than a robot
 
 Sike no it doesnt ~/VEX/SmallRobot/ is the test project that has the most up to date ones 

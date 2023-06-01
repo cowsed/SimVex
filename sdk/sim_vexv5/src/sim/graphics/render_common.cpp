@@ -297,7 +297,8 @@ namespace sim
     {
         brain_shader.activate();
 
-        glUniformMatrix4fv(glGetUniformLocation(brain_shader.program, "view"), 1, false, (float *)(&view));
+        auto mv = view*model;
+        glUniformMatrix4fv(glGetUniformLocation(brain_shader.program, "view"), 1, false, (float *)(&mv));
         glUniformMatrix4fv(glGetUniformLocation(brain_shader.program, "perspective"), 1, false, (float *)(&persp));
         glBindTexture(GL_TEXTURE_2D, sim::brain_screen::get_gltex_handle());
 

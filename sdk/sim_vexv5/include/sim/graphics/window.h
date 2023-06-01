@@ -14,6 +14,7 @@
 #include "embedded_font.h"
 #include "../robot_model.h"
 #include "renderer.h"
+#include "sim/physics.h"
 
 #include "../../../vendor/imgui/imgui.h"
 #include "../../../vendor/imgui/backends/imgui_impl_glfw.h"

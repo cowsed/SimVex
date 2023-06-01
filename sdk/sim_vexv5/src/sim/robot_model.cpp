@@ -134,7 +134,6 @@ namespace sim
         {
             int width, height, nrChannels;
             unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-            std::cout << "width: " << width << ", height: " << height << "chan: " << nrChannels << '\n';
 
             unsigned int texture;
             glGenTextures(1, &texture);
@@ -153,7 +152,6 @@ namespace sim
             std::string path = "Construction/";
 
             std::string tex_path = path.append(filename);
-            std::cout << "Loading Tex: " << tex_path << '\n';
 
             if (texture_cache.contains(tex_path))
             {
@@ -175,8 +173,6 @@ namespace sim
         static MeshShape processAiMesh(aiMesh *mesh, const aiScene *scene)
         {
             auto dims = mesh->mAABB.mMax - mesh->mAABB.mMin;
-
-            std::cout << "dims: " << dims.x << ", " << dims.y << ", " << dims.z << '\n';
             // Local Helpers
             auto toGlm3 = [](aiVector3D v)
             { return glm::vec3{v.x, v.y, v.z}; };
@@ -239,7 +235,6 @@ namespace sim
                     diff_col.x = col.r;
                     diff_col.y = col.g;
                     diff_col.z = col.b;
-                    std::cout << "col: " << diff_col.r << ", " << diff_col.g << ", " << diff_col.b << '\n';
                 }
             }
 
@@ -271,16 +266,11 @@ namespace sim
                 exit(EXIT_FAILURE);
                 return;
             }
-            else
-            {
-                std::cout << "Success ASSIMP\n";
-            }
 
             std::string directory = path.substr(0, path.find_last_of('/'));
 
             std::vector<MeshShape> shapes;
             processAiNode(scene->mRootNode, scene, shapes);
-            std::cout << shapes.size() << " shapes, faces = " << shapes[0].get_tris().size() << '\n';
             this->meshes = shapes;
         }
 

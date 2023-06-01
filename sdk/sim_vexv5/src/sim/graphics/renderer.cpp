@@ -20,7 +20,7 @@ namespace sim
         brain_screen_shape *brain_screen;
         Shape *brain_shape;
         Shape *nut_shape;
-
+        Shape *field_shape;
         void setup()
         {
             puts("renderer initting\n");
@@ -32,6 +32,7 @@ namespace sim
             brain_screen = new brain_screen_shape();
             brain_shape = new construction::Model("Construction/V5_Brain.dae");
             nut_shape = new construction::Model("Construction/nut.dae");
+            field_shape = new construction::Model("Construction/field.dae");
         }
 
         void render()
@@ -50,11 +51,13 @@ namespace sim
             glm::mat4 persp = field_camera.persp_matrix(field_viewport);
             glm::mat4 ident = glm::mat4{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
 
-            brain_screen->render(persp, view, ident);
-            brain_shape->render(persp, view, ident);
+            auto brain_trans = glm::vec3(0,.05,0);
+            brain_screen->render(persp, view, glm::translate(ident, brain_trans));
+            brain_shape->render(persp, view, glm::translate(ident, brain_trans));
             glm::mat4 rot = glm::rotate_slow(ident, glm::radians(-90.f), glm::vec3(1, 0, 0));
-            nut_shape->render(persp, view, glm::translate(rot, glm::vec3(-.2, 0, 0)));
-            nut_shape->render(persp, view, glm::translate(rot, glm::vec3(.2, 0, 0)));
+            nut_shape->render(persp, view, glm::translate(rot, glm::vec3(-.2, 0, .05)));
+            nut_shape->render(persp, view, glm::translate(rot, glm::vec3(.2, 0, .05)));
+            field_shape->render(persp, view, ident);
 
             // construction::get_this_robot()->render(persp * view, field_viewport);
 

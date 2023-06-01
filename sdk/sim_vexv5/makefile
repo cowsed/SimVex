@@ -26,17 +26,19 @@ SRC_C += $(wildcard vendor/assimp/contrib/zlib/*.c)
 SRC_C += $(wildcard vendor/*.) 
 
 
-SRC_H = $(wildcard include/*.h)
-SRC_H = $(wildcard include/*/*.h)
-SRC_H = $(wildcard include/*/*/*.h)
-SRC_H = $(wildcard include/*/*/*/*.h)
-SRC_H = $(wildcard include/*/*/*/*/*.h)
-SRC_H = $(wildcard vendor/imgui/*.h)
-SRC_H = $(wildcard vendor/assimp/contrib/pugixml/src/*.hpp)
+SRC_H += $(wildcard include/*.h)
+SRC_H += $(wildcard include/*/*.h)
+SRC_H += $(wildcard include/*/*/*.h)
+SRC_H += $(wildcard include/*/*/*/*.h)
+SRC_H += $(wildcard include/*/*/*/*/*.h)
+SRC_H += $(wildcard vendor/imgui/*.h)
+SRC_H += $(wildcard vendor/assimp/contrib/pugixml/src/*.hpp)
 
-SRC_H = $(wildcard vendor/bullet3/src/*.h)
-SRC_H = $(wildcard vendor/bullet3/src/*/*.h)
+SRC_H += $(wildcard vendor/bullet3/src/*.h)
+SRC_H += $(wildcard vendor/bullet3/src/*/*.h)
+SRC_H += $(wildcard vendor/bullet3/src/*/*/*.h)
 
+SRC_A = $(wildcard vendor/bullet3/build/src/*/*.a)
 
 
 OBJ = $(addprefix $(BUILD)/, $(addsuffix .o, $(basename $(SRC_C))) )
@@ -76,18 +78,19 @@ C_FLAGS = $(BOTH_FLAGS)
 CXX_FLAGS = $(BOTH_FLAGS) -O2 -Wall -Werror=return-type -Wextra --std=gnu++20 
 
 # sim stuff
-INC = -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/include 
+INC = -I$(VEX_SIM_INSTALL_PATH)/sdk/sim_vexv5/include 
 
 # ImGui
 INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends 
 # Assimp
-INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/assimp/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp
-INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/assimp/code  -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/unzip/
-INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/assimp/contrib/rapidjson/include
-INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/assimp/contrib/pugixml/src
+INC += -I$(VEX_SIM_INSTALL_PATH)/sdk/sim_vexv5/vendor/assimp/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp
+INC += -I$(VEX_SIM_INSTALL_PATH)/sdk/sim_vexv5/vendor/assimp/code  -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/unzip/
+INC += -I$(VEX_SIM_INSTALL_PATH)/sdk/sim_vexv5/vendor/assimp/contrib/rapidjson/include
+INC += -I$(VEX_SIM_INSTALL_PATH)/sdk/sim_vexv5/vendor/assimp/contrib/pugixml/src
+INC += -I$(VEX_SIM_INSTALL_PATH)/sdk/sim_vexv5/vendor/bullet3/src
 
 # STB (#include "stb/thing")
-INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/
+INC += -I$(VEX_SIM_INSTALL_PATH)/sdk/sim_vexv5/vendor/
 
 
 all: $(BUILD)/$(PROJECTLIB).a
