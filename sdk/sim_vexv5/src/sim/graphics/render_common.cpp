@@ -35,9 +35,14 @@ namespace sim
             "in vec3 norm;"
             "in vec2 UV;"
             ""
+            "const float saturation = .75;"
+            "const float brightness = .5;"
+            ""
             "out vec4 frag_colour;"
             "void main() {"
-            "   vec4 col = texture(tex, UV);"
+            "   vec3 tex_col = texture(tex, UV).xyz;"
+            "   vec3 col = mix(vec3(1), tex_col, saturation);"
+            "   col *= brightness;"
             "   frag_colour = vec4(col.x, col.y, col.z, 1.0);"
             "}";
 
@@ -228,16 +233,18 @@ namespace sim
             glm::vec3 normal;
             glm::vec2 UV;
         };
-        const float screen_width_meters = 3.6 * (0.0254);
+        const float screen_width_meters = 3.55 * (0.0254);
         const float screen_height_meters = screen_width_meters / 2.0;
         const float w = screen_width_meters / 2.0;  // half width
         const float h = screen_height_meters / 2.0; // half width
-        const float z = 0.034;
+        const float z = 0.015;
+        const float x = -0.0075;
+        const float y = -0.0026;
         std::array<vert, 4> verts;
-        verts[0] = {{-w, -h, z}, {0, 0, 1}, {0, 1}};
-        verts[1] = {{w, -h, z}, {0, 0, 1}, {1, 1}};
-        verts[2] = {{w, h, z}, {0, 0, 1}, {1, 0}};
-        verts[3] = {{-w, h, z}, {0, 0, 1}, {0, 0}};
+        verts[0] = {{-w+x, -h+y, z}, {0, 0, 1}, {0, 1}};
+        verts[1] = {{w+x, -h+y, z}, {0, 0, 1}, {1, 1}};
+        verts[2] = {{w+x, h+y, z}, {0, 0, 1}, {1, 0}};
+        verts[3] = {{-w+x, h+y, z}, {0, 0, 1}, {0, 0}};
 
         std::array<el, 2> indices = {el{0, 1, 2}, el{0, 2, 3}};
 

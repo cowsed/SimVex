@@ -9,7 +9,7 @@ SRC_C = $(wildcard src/*.cpp)
 SRC_C += $(wildcard src/*/*.cpp) 
 SRC_C += $(wildcard src/*/*/*.cpp) 
 SRC_C += $(wildcard src/*/*/*/*.cpp) 
-SRC_C += $(wildcard src/*/*/*/*/*.cpp) 
+SRC_C += $(wildcard src/*/*/*/*/*.cpp)
 
 SRC_C += $(wildcard vendor/imgui/*.cpp) 
 SRC_C += vendor/imgui/backends/imgui_impl_glfw.cpp
@@ -22,6 +22,7 @@ SRC_C += $(wildcard vendor/assimp/contrib/pugixml/src/*.cpp)
 SRC_C += $(wildcard vendor/assimp/contrib/unzip/*.c) 
 SRC_C += $(wildcard vendor/assimp/contrib/zip/src/*.c) 
 SRC_C += $(wildcard vendor/assimp/contrib/zlib/*.c) 
+SRC_C += $(wildcard vendor/*.) 
 
 
 SRC_H = $(wildcard include/*.h)
@@ -30,6 +31,7 @@ SRC_H = $(wildcard include/*/*/*.h)
 SRC_H = $(wildcard include/*/*/*/*.h)
 SRC_H = $(wildcard include/*/*/*/*/*.h)
 SRC_H = $(wildcard vendor/imgui/*.h)
+SRC_H = $(wildcard vendor/assimp/contrib/pugixml/src/*.hpp)
 
 
 
@@ -63,7 +65,8 @@ CXX = clang-15
 BOTH_FLAGS = -O2 -Wall -Werror=return-type -Wextra  -ggdb
 BOTH_FLAGS += -DASSIMP_BUILD_BOOST_WORKAROUND -DASSIMP_BUILD_NO_C4D_IMPORTER 
 BOTH_FLAGS += -DASSIMP_BUILD_NO_EXPORT -DASSIMP_BUILD_NO_IFC_IMPORTER -DASSIMP_BUILD_NO_OPENGEX_IMPORTER -DASSIMP_BUILD_NO_X3D_IMPORTER
-BOTH_FLAGS += -U PUGIXML_HEADER_ONLY
+BOTH_FLAGS += -DASSIMP_BUILD_NO_M3D_IMPORTER
+BOTH_FLAGS += -DPUGIXML_HEADER_ONLY
 
 C_FLAGS = $(BOTH_FLAGS)
 CXX_FLAGS = $(BOTH_FLAGS) -O2 -Wall -Werror=return-type -Wextra --std=gnu++20 
@@ -76,6 +79,8 @@ INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/
 # Assimp
 INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp
 INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/code  -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/unzip/
+INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/rapidjson/include
+INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/pugixml/src
 
 # STB (#include "stb/thing")
 INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/

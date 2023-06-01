@@ -303,6 +303,7 @@ namespace sim
 
     void drawViewport()
     {
+        const int viewport_samples = 2;
         static int width = 1;
         static int height = 1;
         static bool want_capture_mouse = false;
@@ -318,10 +319,10 @@ namespace sim
         {
             width = size.x;
             height = size.y;
-            renderer::field_viewport.resize(width, height);
+            renderer::field_viewport.resize(width*viewport_samples, height*viewport_samples);
         }
 
-        ImGui::Image((void *)(intptr_t)(renderer::field_viewport.color_handle), ImVec2((float)renderer::field_viewport.width, (float)renderer::field_viewport.height), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void *)(intptr_t)(renderer::field_viewport.color_handle), ImVec2((float)renderer::field_viewport.width/viewport_samples, (float)renderer::field_viewport.height/viewport_samples), ImVec2(0, 1), ImVec2(1, 0));
 
         moveViewportCamera(&sim::renderer::field_camera);
 

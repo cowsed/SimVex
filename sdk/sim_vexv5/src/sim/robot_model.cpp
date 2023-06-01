@@ -1,4 +1,12 @@
 #include "sim/robot_model.h"
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
+
 namespace sim
 {
     namespace construction
@@ -33,15 +41,15 @@ namespace sim
             "float ambient = .5;"
             "vec3 light_dir = normalize(vec3(1, 1, 1));"
             "void main() {"
-            "   vec3 norm2 = abs(norm);"
+            "   vec3 tex_col = texture(tex, UV).xyz;"
             "   float amt = ambient + clamp(dot(light_dir, norm), 0, 1)* (1-ambient);"
-            "   vec3 col = vec3(.4,.4,.4) * amt;"
+            "   vec3 col = tex_col * amt;"
             "   frag_colour = vec4(col.x, col.y, col.z, 1.0);"
             "}";
 
         renderer::ShaderProgram model_prog;
 
-        MeshShape::MeshShape(std::vector<MeshShape::Vertex> vertices, std::vector<MeshShape::Tri> tris, unsigned int tex_handle_tbd)
+        MeshShape::MeshShape(std::vector<MeshShape::Vertex> vertices, std::vector<MeshShape::Tri> tris, unsigned int diffuse_tex_handle)
         {
             this->verts = vertices;
             this->tris = tris;
@@ -67,6 +75,8 @@ namespace sim
             glGenBuffers(1, &ibo);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, tris.size() * sizeof(Tri), (void *)&(tris[0]), GL_STATIC_DRAW);
+
+            this->diffuse_handle = diffuse_tex_handle;
         }
 
         /// @brief access MeshShape's vertices
@@ -89,6 +99,7 @@ namespace sim
             model_prog.activate();
             glUniformMatrix4fv(0, 1, false, (float *)(&view));
             glUniformMatrix4fv(1, 1, false, (float *)(&persp));
+            glBindTexture(GL_TEXTURE_2D, this->diffuse_handle);
 
             glBindVertexArray(vao);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -103,13 +114,43 @@ namespace sim
         }
 
         // Cache structure for load_texture
-        static std::map<std::string, unsigned int> texture_cache;
+        static std::map<std::string, unsigned int> texture_cache = {};
+
+        unsigned int load_texture_internal(std::string path)
+        {
+            int width, height, nrChannels;
+            unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+            std::cout << "width: " << width << ", height: " << height << "chan: " << nrChannels << '\n';
+
+            unsigned int texture;
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            return texture;
+        }
+
         ///@brief Load an image texture from the filesystem, upload it to openGL and return it's handle
         /// If the texture has been loaded already, return its existing handle (and promise not to modify it)
         /// @pre openGL has been initialized
-        unsigned int load_texture(std::string filepath)
+        unsigned int load_texture(std::string filename)
         {
-            return -1;
+            std::string path = "Construction/";
+
+            std::string tex_path = path.append(filename);
+            std::cout << "Loading Tex: " << tex_path << '\n';
+
+            if (texture_cache.contains(tex_path))
+            {
+                return texture_cache[tex_path];
+            }
+
+            unsigned int handle = load_texture_internal(tex_path);
+
+            texture_cache.insert({tex_path, handle});
+
+            return handle;
         }
 
         /// @brief procceses an Assimp mesh into a MeshShape
@@ -120,7 +161,7 @@ namespace sim
         static MeshShape processAiMesh(aiMesh *mesh, const aiScene *scene)
         {
             auto dims = mesh->mAABB.mMax - mesh->mAABB.mMin;
-            
+
             std::cout << "dims: " << dims.x << ", " << dims.y << ", " << dims.z << '\n';
             // Local Helpers
             auto toGlm3 = [](aiVector3D v)
@@ -158,9 +199,24 @@ namespace sim
                 indices[i] = tri;
             }
 
-            // Textures??//
+            // Textures
+            unsigned int diffuse_tex_handle = -1;
+            if (mesh->mMaterialIndex >= 0)
+            {
+                aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+                unsigned int diffuse_num = 0;
 
-            return MeshShape(verts, indices, -1);
+                if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+                {
+                    // have at least one diffues texture
+                    aiString path;
+                    material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+                    unsigned int handle = load_texture(std::string(path.C_Str()));
+                    diffuse_tex_handle = handle;
+                }
+            }
+
+            return MeshShape(verts, indices, diffuse_tex_handle);
         }
 
         /// @pre openGL has been initialized

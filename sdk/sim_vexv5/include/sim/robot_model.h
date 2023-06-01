@@ -12,9 +12,7 @@
 
 #include "sim/graphics/render_common.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+
 
 namespace sim
 {
@@ -49,7 +47,7 @@ namespace sim
         private:
             std::vector<Vertex> verts;
             std::vector<Tri> tris;
-            unsigned int vao, vbo, ibo;
+            unsigned int vao, vbo, ibo, diffuse_handle;
         };
 
         class Model : public Shape
