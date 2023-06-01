@@ -14,7 +14,7 @@ namespace sim
     namespace renderer
     {
         RenderTarget field_viewport;
-        Camera field_camera(glm::vec3(0, 0, 0.2), glm::vec3(0, 0, 0.0), field_viewport);
+        Camera field_camera(glm::vec3(0, 0, 0.2), 0, 0, field_viewport);
         Skybox field_skybox = {.nx = nx, .ny = ny, .nz = nz, .px = px, .py = py, .pz = pz};
 
         brain_screen_shape *brain_screen;

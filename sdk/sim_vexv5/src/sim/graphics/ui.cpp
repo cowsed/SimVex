@@ -108,7 +108,7 @@ namespace sim
                 sim::pause_sim();
             }
             ImGui::EndDisabled();
-            
+
             ImGui::SameLine();
             ImGui::TextDisabled("%s", sim_state_text());
 
@@ -207,6 +207,14 @@ namespace sim
     /// @param cam the camera to move
     void moveViewportCamera(sim::renderer::Camera *cam)
     {
+        auto rotate2D = [](glm::vec2 v, float ang) -> glm::vec2
+        {
+            float c = cos(ang);
+            float s = sin(ang);
+            float x = c * v.x - s * v.y;
+            float y = s * v.x + c * v.y;
+            return {x, y};
+        };
 
         float dx = 0;
         float dy = 0;
@@ -227,35 +235,9 @@ namespace sim
         double move_speed = 0.02;
         double turn_speed = 0.004;
 
-        glm::vec3 dir = glm::normalize(cam->lookat - cam->eye);
-        auto toVec3 = [](auto v) -> glm::vec3
-        {
-            return {v.x, v.y, v.z};
-        };
+        cam->azimuth += dx * turn_speed;
 
-        glm::vec2 normed2d = {dir.x, dir.z};
-        float heading = atan2(normed2d.y, normed2d.x);
-        heading += dx * turn_speed;
-
-        float altitude = asin(dir.y);
-        altitude -= dy * turn_speed;
-
-        auto rotate2D = [](glm::vec2 v, float ang) -> glm::vec2
-        {
-            float c = cos(ang);
-            float s = sin(ang);
-            float x = c * v.x - s * v.y;
-            float y = s * v.x + c * v.y;
-            return {x, y};
-        };
-
-        float elevation = sin(altitude);
-        glm::vec2 dirxz = rotate2D(glm::vec2(1, 0), heading);
-        glm::vec3 new_dir = glm::normalize(glm::vec3(dirxz.x, elevation, dirxz.y));
-
-        cam->lookat = cam->eye + new_dir;
-
-        dir = new_dir;
+        cam->altitude -= dy * turn_speed;
 
         glm::vec2 local_vel = {0, 0};
         float uppy_downy = 0.0;
@@ -294,11 +276,10 @@ namespace sim
         local_vel *= move_speed;
         uppy_downy *= move_speed;
         //
-        glm::vec2 global_xy = rotate2D(local_vel, heading);
+        glm::vec2 global_xy = rotate2D(local_vel, cam->azimuth);
         glm::vec3 global_vel = {global_xy.x, uppy_downy, global_xy.y};
 
         cam->eye += global_vel;
-        cam->lookat += global_vel;
     }
 
     void drawViewport()
@@ -319,10 +300,10 @@ namespace sim
         {
             width = size.x;
             height = size.y;
-            renderer::field_viewport.resize(width*viewport_samples, height*viewport_samples);
+            renderer::field_viewport.resize(width * viewport_samples, height * viewport_samples);
         }
 
-        ImGui::Image((void *)(intptr_t)(renderer::field_viewport.color_handle), ImVec2((float)renderer::field_viewport.width/viewport_samples, (float)renderer::field_viewport.height/viewport_samples), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void *)(intptr_t)(renderer::field_viewport.color_handle), ImVec2((float)renderer::field_viewport.width / viewport_samples, (float)renderer::field_viewport.height / viewport_samples), ImVec2(0, 1), ImVec2(1, 0));
 
         moveViewportCamera(&sim::renderer::field_camera);
 

@@ -220,7 +220,6 @@ namespace sim
             if (mesh->mMaterialIndex >= 0)
             {
                 aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-                unsigned int diffuse_num = 0;
 
                 if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
                 {

@@ -199,10 +199,28 @@ namespace sim
         {
             default_prog.activate();
         }
-        Camera::Camera(glm::vec3 eye, glm::vec3 lookat, RenderTarget &r) : eye(eye), lookat(lookat), rt(r) {}
+        Camera::Camera(glm::vec3 eye, float azimuth, float altitude, RenderTarget &r) : eye(eye), azimuth(azimuth), altitude(altitude), rt(r) {}
 
         glm::mat4 Camera::view_matrix()
         {
+            auto rotate2D = [](glm::vec2 v, float ang) -> glm::vec2
+            {
+                float c = cos(ang);
+                float s = sin(ang);
+                float x = c * v.x - s * v.y;
+                float y = s * v.x + c * v.y;
+                return {x, y};
+            };
+
+            auto rotateY = [&](glm::vec3 v, float angle)
+            {
+                glm::vec2 base = {v.x, v.z};
+                base = rotate2D(base, angle);
+                return glm::vec3(base.x, v.y, base.y);
+            };
+            glm::vec3 updir = {cos(altitude), sin(altitude), 0};
+            glm::vec3 dir = rotateY(updir, azimuth);
+            glm::vec3 lookat = eye + dir;
             return glm::lookAt(eye, lookat, up_vec);
         }
         glm::mat4 Camera::persp_matrix(RenderTarget &rt)
@@ -241,10 +259,10 @@ namespace sim
         const float x = -0.0075;
         const float y = -0.0026;
         std::array<vert, 4> verts;
-        verts[0] = {{-w+x, -h+y, z}, {0, 0, 1}, {0, 1}};
-        verts[1] = {{w+x, -h+y, z}, {0, 0, 1}, {1, 1}};
-        verts[2] = {{w+x, h+y, z}, {0, 0, 1}, {1, 0}};
-        verts[3] = {{-w+x, h+y, z}, {0, 0, 1}, {0, 0}};
+        verts[0] = {{-w + x, -h + y, z}, {0, 0, 1}, {0, 1}};
+        verts[1] = {{w + x, -h + y, z}, {0, 0, 1}, {1, 1}};
+        verts[2] = {{w + x, h + y, z}, {0, 0, 1}, {1, 0}};
+        verts[3] = {{-w + x, h + y, z}, {0, 0, 1}, {0, 0}};
 
         std::array<el, 2> indices = {el{0, 1, 2}, el{0, 2, 3}};
 
