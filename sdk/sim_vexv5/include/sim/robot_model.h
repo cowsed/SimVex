@@ -36,7 +36,7 @@ namespace sim
                 unsigned int b;
                 unsigned int c;
             };
-            MeshShape(std::vector<Vertex> vertices, std::vector<Tri> indices, unsigned int tex_handle_tbd);
+            MeshShape(std::vector<Vertex> vertices, std::vector<Tri> indices, unsigned int tex_handle_tbd, bool has_texture, glm::vec3 diffuse_col);
             ~MeshShape(){}
             void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) override;
 
@@ -47,6 +47,8 @@ namespace sim
             std::vector<Vertex> verts;
             std::vector<Tri> tris;
             unsigned int vao, vbo, ibo, diffuse_handle;
+            bool has_texture;
+            glm::vec3 diffuse_col;
         };
 
         class Model : public Shape

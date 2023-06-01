@@ -16,6 +16,8 @@ namespace sim
             "uniform mat4 view;"
             "uniform mat4 perspective;"
             "uniform sampler2D tex;"
+            "uniform int has_texture;"
+            "uniform vec3 diff_col;"
             ""
             "in vec3 vp;"
             "in vec3 norm_v;"
@@ -35,6 +37,8 @@ namespace sim
             "uniform sampler2D tex;"
             "in vec3 norm;"
             "in vec2 UV;"
+            "uniform int has_texture;"
+            "uniform vec3 diff_col;"
             ""
             "out vec4 frag_colour;"
             ""
@@ -42,6 +46,9 @@ namespace sim
             "vec3 light_dir = normalize(vec3(1, 1, 1));"
             "void main() {"
             "   vec3 tex_col = texture(tex, UV).xyz;"
+            "   if (has_texture==0){"
+            "       tex_col = diff_col;"
+            "   }"
             "   float amt = ambient + clamp(dot(light_dir, norm), 0, 1)* (1-ambient);"
             "   vec3 col = tex_col * amt;"
             "   frag_colour = vec4(col.x, col.y, col.z, 1.0);"
@@ -49,10 +56,13 @@ namespace sim
 
         renderer::ShaderProgram model_prog;
 
-        MeshShape::MeshShape(std::vector<MeshShape::Vertex> vertices, std::vector<MeshShape::Tri> tris, unsigned int diffuse_tex_handle)
+        MeshShape::MeshShape(std::vector<MeshShape::Vertex> vertices, std::vector<MeshShape::Tri> tris, unsigned int diffuse_tex_handle, bool has_texture, glm::vec3 diffuse_col)
         {
             this->verts = vertices;
             this->tris = tris;
+            this->has_texture = has_texture;
+            this->diffuse_handle = diffuse_tex_handle;
+            this->diffuse_col = diffuse_col;
 
             glGenBuffers(1, &vbo);
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -75,8 +85,6 @@ namespace sim
             glGenBuffers(1, &ibo);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, tris.size() * sizeof(Tri), (void *)&(tris[0]), GL_STATIC_DRAW);
-
-            this->diffuse_handle = diffuse_tex_handle;
         }
 
         /// @brief access MeshShape's vertices
@@ -99,8 +107,12 @@ namespace sim
             model_prog.activate();
             glUniformMatrix4fv(0, 1, false, (float *)(&view));
             glUniformMatrix4fv(1, 1, false, (float *)(&persp));
-            glBindTexture(GL_TEXTURE_2D, this->diffuse_handle);
-
+            if (has_texture)
+            {
+                glBindTexture(GL_TEXTURE_2D, this->diffuse_handle);
+            }
+            glUniform1i(3, has_texture);
+            glUniform3f(4, diffuse_col.x, diffuse_col.y, diffuse_col.z);
             glBindVertexArray(vao);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
@@ -201,6 +213,8 @@ namespace sim
 
             // Textures
             unsigned int diffuse_tex_handle = -1;
+            bool has_texture = false;
+            glm::vec3 diff_col = glm::vec3(0, 0, 0);
             if (mesh->mMaterialIndex >= 0)
             {
                 aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
@@ -213,10 +227,22 @@ namespace sim
                     material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
                     unsigned int handle = load_texture(std::string(path.C_Str()));
                     diffuse_tex_handle = handle;
+                    has_texture = true;
+                }
+                else
+                {
+                    has_texture = false;
+                    aiColor4D col;
+                    aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &col);
+                    // material->mProperties[AI_MATKEY_COLOR_DIFFUSE];
+                    diff_col.x = col.r;
+                    diff_col.y = col.g;
+                    diff_col.z = col.b;
+                    std::cout << "col: " << diff_col.r << ", " << diff_col.g << ", " << diff_col.b << '\n';
                 }
             }
 
-            return MeshShape(verts, indices, diffuse_tex_handle);
+            return MeshShape(verts, indices, diffuse_tex_handle, has_texture, diff_col);
         }
 
         /// @pre openGL has been initialized

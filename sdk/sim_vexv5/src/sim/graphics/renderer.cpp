@@ -19,7 +19,8 @@ namespace sim
         Skybox field_skybox = {.nx = nx, .ny = ny, .nz = nz, .px = px, .py = py, .pz = pz};
 
         brain_screen_shape *brain_screen;
-        Shape *test_shape;
+        Shape *brain_shape;
+        Shape *nut_shape;
 
         void setup()
         {
@@ -30,8 +31,8 @@ namespace sim
             std::cout << "field skybox px = " << field_skybox.nx.width << '\n';
             field_skybox.init();
             brain_screen = new brain_screen_shape();
-            
-            test_shape = new construction::Model("Construction/V5_Brain.dae");
+            brain_shape = new construction::Model("Construction/V5_Brain.dae");
+            nut_shape = new construction::Model("Construction/nut.dae");
 
         }
 
@@ -52,7 +53,8 @@ namespace sim
 
 
             brain_screen->render(persp,view, field_viewport);
-            test_shape->render(persp, view, field_viewport);
+            brain_shape->render(persp, view, field_viewport);
+            nut_shape->render(persp, view, field_viewport);
 
             // construction::get_this_robot()->render(persp * view, field_viewport);
 
