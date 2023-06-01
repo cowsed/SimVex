@@ -35,22 +35,22 @@ namespace sim
                 {_V5_ControllerIndex::Axis4, 0},
             };
         }
-        
-        int _axisIndexToChangedEvent(_V5_ControllerIndex index){
-        switch (index)
-        {
-        case _V5_ControllerIndex::Axis3: // A
-            return 24;
-        case _V5_ControllerIndex::Axis4: // B
-            return 25;
-        case _V5_ControllerIndex::Axis1: // C
-            return 26;
-        case _V5_ControllerIndex::Axis2: // D
-            return 27;
-        default:
-            return -1;
-        }
 
+        int _axisIndexToChangedEvent(_V5_ControllerIndex index)
+        {
+            switch (index)
+            {
+            case _V5_ControllerIndex::Axis3: // A
+                return 24;
+            case _V5_ControllerIndex::Axis4: // B
+                return 25;
+            case _V5_ControllerIndex::Axis1: // C
+                return 26;
+            case _V5_ControllerIndex::Axis2: // D
+                return 27;
+            default:
+                return -1;
+            }
         }
         int _buttonIndexToPressedEvent(_V5_ControllerIndex index)
         {
@@ -139,7 +139,8 @@ namespace sim
                     {
                         controller_state::axes[index] = 0.0;
                     }
-                    if (controller_state::axes[index] != last_val){
+                    if (controller_state::axes[index] != last_val)
+                    {
                         sim::event_handler::send_mevent(controller_state::primary_controller_index, _axisIndexToChangedEvent(index));
                     }
                 };
@@ -195,13 +196,133 @@ namespace sim
             return ImGui::IsWindowFocused();
         }
 
+        void poll_joysticks()
+        {
+            auto map_index_to_vex = [](int i)
+            {
+                switch (i)
+                {
+                case 0:
+                    return _V5_ControllerIndex::Axis2;
+                case 1:
+                    return _V5_ControllerIndex::Axis1;
+                case 2:
+                    return _V5_ControllerIndex::Axis3;
+
+                case 3:
+                    return _V5_ControllerIndex::Axis4;
+                }
+                return _V5_ControllerIndex::Axis1;
+            };
+            auto map_index_to_sign = [](int i)
+            {
+                switch (i)
+                {
+                case 0:
+                    return -1;
+                case 1:
+                    return 1;
+                case 2:
+                    return -1;
+                case 3:
+                    return -1;
+                }
+                return 1;
+            };
+            auto map_button_to_vex = [](int index)
+            {
+                switch (index)
+                {
+                case 0:
+                    return _V5_ControllerIndex::ButtonB;
+                case 1:
+                    return _V5_ControllerIndex::ButtonA;
+                case 2:
+                    return _V5_ControllerIndex::ButtonY;
+                case 3:
+                    return _V5_ControllerIndex::ButtonX;
+                case 4:
+                    return _V5_ControllerIndex::ButtonL1;
+                case 5:
+                    return _V5_ControllerIndex::ButtonR1;
+                case 10:
+                    return _V5_ControllerIndex::ButtonR2;
+                case 11:
+                    return _V5_ControllerIndex::ButtonL2;
+                case 12:
+                    return _V5_ControllerIndex::ButtonUp;
+                case 13:
+                    return _V5_ControllerIndex::ButtonDown;
+                case 14:
+                    return _V5_ControllerIndex::ButtonLeft;
+                case 15:
+                    return _V5_ControllerIndex::ButtonRight;
+                }
+                return (_V5_ControllerIndex)-1;
+            };
+            bool controller_present = glfwJoystickPresent(GLFW_JOYSTICK_1);
+            if (controller_present)
+            {
+                // Axes
+                int axis_count;
+                const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axis_count);
+                static float last_axes[4] = {0, 0, 0, 0};
+                for (int i = 0; i < axis_count; i++)
+                {
+                    V5_ControllerIndex index = map_index_to_vex(i);
+                    float val = axes[i] * map_index_to_sign(i);
+                    if (val != last_axes[i])
+                    {
+                        sim::event_handler::send_mevent(controller_state::primary_controller_index, _axisIndexToChangedEvent(index));
+                    }
+                    controller_state::axes[index] = val;
+                    last_axes[i] = val;
+                }
+
+                // Buttons
+                static unsigned char last_buttons[16] = {GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE, GLFW_RELEASE};
+                int button_count;
+                const unsigned char *buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &button_count);
+                for (int i = 0; i < button_count; i++)
+                {
+                    _V5_ControllerIndex index = map_button_to_vex(i);
+                    if (index == (_V5_ControllerIndex)-1)
+                    {
+                        continue;
+                    }
+                    if (buttons[i] != last_buttons[i])
+                    {
+                        if (buttons[i] == GLFW_PRESS)
+                        {
+                            sim::event_handler::send_mevent(controller_state::primary_controller_index, _buttonIndexToPressedEvent(index));
+                        }
+                        else
+                        {
+                            sim::event_handler::send_mevent(controller_state::primary_controller_index, _buttonIndexToReleasedEvent(index));
+                        }
+                    }
+                    controller_state::buttons[index] = buttons[i] == GLFW_PRESS;
+                }
+            }
+        }
+
         void build_controller_ui()
         {
+            bool controller_present = glfwJoystickPresent(GLFW_JOYSTICK_1);
+
             auto ImVec2Add = [](ImVec2 a, ImVec2 b)
             {
                 return ImVec2{a.x + b.x, a.y + b.y};
             };
             ImGui::Begin("Controller");
+            if (controller_present)
+            {
+                ImGui::Text("Controller Connected");
+            }
+            else
+            {
+                ImGui::Text("Controller Disconnected");
+            }
 
             bool accepting = accept_controller_input();
 

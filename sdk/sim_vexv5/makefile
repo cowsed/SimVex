@@ -1,3 +1,4 @@
+VEX_SIM_INSTALL_PATH = /home/richie/VEX/Sim
 VERBOSE = 0
 
 PROJECT = simv5rt
@@ -75,18 +76,18 @@ C_FLAGS = $(BOTH_FLAGS)
 CXX_FLAGS = $(BOTH_FLAGS) -O2 -Wall -Werror=return-type -Wextra --std=gnu++20 
 
 # sim stuff
-INC = -I/home/richie/VEX/Sim/sdk/sim_vexv5/include 
+INC = -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/include 
 
 # ImGui
 INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/imgui/backends 
 # Assimp
-INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp
-INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/code  -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/unzip/
-INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/rapidjson/include
-INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/pugixml/src
+INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/assimp/include -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp
+INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/assimp/code  -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/assimp/contrib/unzip/
+INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/assimp/contrib/rapidjson/include
+INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/assimp/contrib/pugixml/src
 
 # STB (#include "stb/thing")
-INC += -I/home/richie/VEX/Sim/sdk/sim_vexv5/vendor/
+INC += -I${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/vendor/
 
 
 all: $(BUILD)/$(PROJECTLIB).a

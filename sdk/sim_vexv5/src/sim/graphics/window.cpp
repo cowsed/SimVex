@@ -263,6 +263,7 @@ namespace sim
 
         while (!glfwWindowShouldClose(window))
         {
+            sim::controller::poll_joysticks();
             imguiNewFrame();
 
             drawUI(window);
