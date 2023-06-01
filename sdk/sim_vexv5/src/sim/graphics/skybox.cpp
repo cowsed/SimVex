@@ -131,8 +131,8 @@ namespace sim
             glm::mat4 perspective = cam.persp_matrix(rt);
             glm::mat4 no_translation = glm::mat4(glm::mat3(cam.view_matrix()));
 
-            glUniformMatrix4fv(0, 1, false, (float *)(&perspective));
-            glUniformMatrix4fv(1, 1, false, (float *)(&no_translation));
+            glUniformMatrix4fv(glGetUniformLocation(skybox_prog.program, "projection"), 1, false, (float *)(&perspective));
+            glUniformMatrix4fv(glGetUniformLocation(skybox_prog.program, "view"), 1, false, (float *)(&no_translation));
 
             glBindVertexArray(vao);
             glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap_handle);

@@ -217,7 +217,7 @@ namespace sim
     // Dummy for space filling
     DummyShape::DummyShape() {}
     DummyShape::~DummyShape() {}
-    void DummyShape::render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) {}
+    void DummyShape::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) {}
 
     brain_screen_shape::brain_screen_shape()
     {
@@ -275,13 +275,12 @@ namespace sim
         brain_shader = renderer::ShaderProgram(renderer::brain_screen_vertex_shader, renderer::brain_screen_fragment_shader);
     }
     brain_screen_shape::~brain_screen_shape() {}
-    void brain_screen_shape::render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt)
+    void brain_screen_shape::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model)
     {
-        rt.activate();
         brain_shader.activate();
 
-        glUniformMatrix4fv(0, 1, false, (float *)(&view));
-        glUniformMatrix4fv(1, 1, false, (float *)(&persp));
+        glUniformMatrix4fv(glGetUniformLocation(brain_shader.program, "view"), 1, false, (float *)(&view));
+        glUniformMatrix4fv(glGetUniformLocation(brain_shader.program, "perspective"), 1, false, (float *)(&persp));
         glBindTexture(GL_TEXTURE_2D, sim::brain_screen::get_gltex_handle());
 
         // Index buffer

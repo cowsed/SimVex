@@ -15,6 +15,7 @@ namespace sim
             "#version 400\n"
             "uniform mat4 view;"
             "uniform mat4 perspective;"
+            "uniform mat4 model;"
             "uniform sampler2D tex;"
             "uniform int has_texture;"
             "uniform vec3 diff_col;"
@@ -23,19 +24,19 @@ namespace sim
             "in vec3 norm_v;"
             "in vec2 UV_v;"
             ""
-            "out vec3 norm;"
+            "out vec3 world_normal;"
             "out vec2 UV;"
             ""
             "void main() {"
             "   UV = UV_v;"
-            "   norm = norm_v;"
-            "  gl_Position = perspective * view  * vec4(vp, 1.0);"
+            "   world_normal = (model * vec4(norm_v, 1.0)).xyz;"
+            "  gl_Position = perspective * view * model * vec4(vp, 1.0);"
             "}";
 
         static const char *model_fragment_shader =
             "#version 400\n"
             "uniform sampler2D tex;"
-            "in vec3 norm;"
+            "in vec3 world_normal;"
             "in vec2 UV;"
             "uniform int has_texture;"
             "uniform vec3 diff_col;"
@@ -49,7 +50,7 @@ namespace sim
             "   if (has_texture==0){"
             "       tex_col = diff_col;"
             "   }"
-            "   float amt = ambient + clamp(dot(light_dir, norm), 0, 1)* (1-ambient);"
+            "   float amt = ambient + clamp(dot(light_dir, world_normal), 0, 1)* (1-ambient);"
             "   vec3 col = tex_col * amt;"
             "   frag_colour = vec4(col.x, col.y, col.z, 1.0);"
             "}";
@@ -102,17 +103,18 @@ namespace sim
         /// @param persp persp matrix
         /// @param view view matrix
         /// @param rt active Render Target
-        void MeshShape::render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt)
+        void MeshShape::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model)
         {
             model_prog.activate();
-            glUniformMatrix4fv(0, 1, false, (float *)(&view));
-            glUniformMatrix4fv(1, 1, false, (float *)(&persp));
+            glUniformMatrix4fv(glGetUniformLocation(model_prog.program, "view"), 1, false, (float *)(&view));
+            glUniformMatrix4fv(glGetUniformLocation(model_prog.program, "perspective"), 1, false, (float *)(&persp));
+            glUniformMatrix4fv(glGetUniformLocation(model_prog.program, "model"), 1, false, (float *)(&model));
             if (has_texture)
             {
                 glBindTexture(GL_TEXTURE_2D, this->diffuse_handle);
             }
-            glUniform1i(3, has_texture);
-            glUniform3f(4, diffuse_col.x, diffuse_col.y, diffuse_col.z);
+            glUniform1i(glGetUniformLocation(model_prog.program, "has_texture"), has_texture);
+            glUniform3f(glGetUniformLocation(model_prog.program, "diff_col"), diffuse_col.x, diffuse_col.y, diffuse_col.z);
             glBindVertexArray(vao);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
@@ -287,12 +289,11 @@ namespace sim
         /// @param persp persp matrix
         /// @param view view matrix
         /// @param rt active Render Target
-        void Model::render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt)
+        void Model::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model)
         {
-            rt.activate();
             for (auto &mesh : meshes)
             {
-                mesh.render(persp, view, rt);
+                mesh.render(persp, view, model);
             }
         }
 

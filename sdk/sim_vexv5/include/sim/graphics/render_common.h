@@ -72,7 +72,7 @@ namespace sim
     public:
         Shape() {}
         virtual ~Shape();
-        virtual void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) = 0;
+        virtual void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) = 0;
     };
 
     class DummyShape : public Shape
@@ -80,7 +80,7 @@ namespace sim
     public:
         DummyShape();
         ~DummyShape() override;
-        void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) override;
+        void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) override;
     };
 
     /// @brief shape from cube definition
@@ -98,7 +98,7 @@ namespace sim
     public:
         brain_screen_shape();
         ~brain_screen_shape() override;
-        void render(glm::mat4 persp, glm::mat4 view, renderer::RenderTarget rt) override; // override;
+        void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) override; // override;
     };
 
 } // sim
