@@ -317,11 +317,11 @@ namespace sim
             ImGui::Begin("Controller");
             if (controller_present)
             {
-                ImGui::Text("Controller Connected");
+                ImGui::TextColored(ImVec4(0.1, 1.0, 0.1, 1.0), "Controller Connected");
             }
             else
             {
-                ImGui::Text("Controller Disconnected");
+                ImGui::TextColored(ImVec4(1.0, 0.1, 0.1, 1.0), "Controller Disconnected");
             }
 
             bool accepting = accept_controller_input();
