@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/sdk/sim_vexv5/vendor/imgui",
-                "${workspaceFolder}/sdk/sim_vexv5/vendor/assimp/include"
+                "${workspaceFolder}/sdk/sim_vexv5/vendor/assimp/include",
+                "${workspaceFolder}/sdk/sim_vexv5/vendor/bullet3/src/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

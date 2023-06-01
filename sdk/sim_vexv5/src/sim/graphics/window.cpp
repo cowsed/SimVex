@@ -256,7 +256,6 @@ namespace sim
         glfwMakeContextCurrent(window);
         renderer::setup();
         construction::setup();
-        
         brain_screen::setup();
         controller::setup();
         event_handler::setup();

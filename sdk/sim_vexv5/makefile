@@ -33,6 +33,9 @@ SRC_H = $(wildcard include/*/*/*/*/*.h)
 SRC_H = $(wildcard vendor/imgui/*.h)
 SRC_H = $(wildcard vendor/assimp/contrib/pugixml/src/*.hpp)
 
+SRC_H = $(wildcard vendor/bullet3/src/*.h)
+SRC_H = $(wildcard vendor/bullet3/src/*/*.h)
+
 
 
 OBJ = $(addprefix $(BUILD)/, $(addsuffix .o, $(basename $(SRC_C))) )

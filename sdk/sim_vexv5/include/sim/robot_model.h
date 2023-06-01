@@ -13,7 +13,6 @@
 #include "sim/graphics/render_common.h"
 
 
-
 namespace sim
 {
     namespace construction

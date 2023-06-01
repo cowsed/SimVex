@@ -9,6 +9,7 @@
 #include "sim/graphics/images/default_skybox/py.h"
 #include "sim/graphics/images/default_skybox/pz.h"
 
+
 namespace sim
 {
     namespace renderer
