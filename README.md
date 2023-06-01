@@ -14,12 +14,24 @@ Enter the sdk/sim_vexv5 directory and use `make`
 You will probably have to change some paths in order to build on your computer
 
 Dependencies
-- OpenGL 4.something
-- GLFW 3.3
-- glm https://github.com/g-truc/glm
-- Dear ImGui
-- Assimp
-- Bullet3D (eventually)
+- OpenGL 4.something (install)
+- GLFW 3.3 (install)
+- glm https://github.com/g-truc/glm (install)
+- Dear ImGui (submoduled)
+- Assimp (submoduled)
+- Bullet3D (submoduled*)
+
+## Installing Dependencies
+OpenGL, GLFW, and GLM Needs to be installed on your system
+
+Bullet3D requires the following steps to install (for now)
+```bash
+cd sdk/sim_vexv5/vendor/bullet3/
+mkdir build
+cd build/
+cmake ../
+make
+```
 
 ## Building your robot code
 

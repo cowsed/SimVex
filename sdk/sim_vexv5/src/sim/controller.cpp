@@ -306,6 +306,7 @@ namespace sim
             }
         }
 
+        /// @brief ImGui window for showing status of virtual controllers
         void build_controller_ui()
         {
             bool controller_present = glfwJoystickPresent(GLFW_JOYSTICK_1);
