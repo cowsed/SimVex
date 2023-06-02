@@ -20,15 +20,18 @@ namespace sim
             "uniform sampler2D tex;"
             "uniform int has_texture;"
             "uniform vec3 diff_col;"
+            "uniform vec3 view_pos;"
             ""
             "in vec3 vp;"
             "in vec3 norm_v;"
             "in vec2 UV_v;"
             ""
+            "out vec3 frag_pos;"
             "out vec3 world_normal;"
             "out vec2 UV;"
             ""
             "void main() {"
+            "   frag_pos = (model * vec4(vp, 1.0)).xyz;"
             "   UV = UV_v;"
             "   world_normal = (model * vec4(norm_v, 1.0)).xyz;"
             "  gl_Position = perspective * view * model * vec4(vp, 1.0);"
@@ -37,23 +40,41 @@ namespace sim
         static const char *model_fragment_shader =
             "#version 400\n"
             "uniform sampler2D tex;"
+            "in vec3 frag_pos;"
             "in vec3 world_normal;"
             "in vec2 UV;"
             "uniform int has_texture;"
             "uniform vec3 diff_col;"
+            "uniform vec3 view_pos;"
             ""
             "out vec4 frag_colour;"
             ""
-            "float ambient = .5;"
-            "vec3 light_dir = normalize(vec3(1, 1, 1));"
+            "vec3 light_pos = normalize(vec3(5, 10, 5));"
+            "float shininess = 0.05;"
+            "vec3 light_color = vec3(1,1,1);"
+            ""
+            "float ambient_strength = .3;"
             "void main() {"
-            "   vec3 tex_col = texture(tex, UV).xyz;"
+            "   vec3 ambient = ambient_strength * light_color;"
+            "   vec3 light_dir = normalize(light_pos - frag_pos);"
+            "   float diff = max(dot(world_normal, light_dir), 0.0);"
+            "   vec3 diffuse = diff * light_color;"
+
+            // ""
+            // "   float cosTheta = dot(light_dir, world_normal);"
+            // "   float cosPhi = dot(halfway_dir, world_normal);"
+            // ""
+            "   vec3 col = texture(tex, UV).xyz;"
             "   if (has_texture==0){"
-            "       tex_col = diff_col;"
+            "       col = diff_col;"
             "   }"
-            "   float amt = ambient + clamp(dot(light_dir, world_normal), 0, 1)* (1-ambient);"
-            "   vec3 col = tex_col * amt;"
-            "   frag_colour = vec4(col.x, col.y, col.z, 1.0);"
+            // "   "
+            // "   vec3 diffuse = light_color * col * max(cosTheta, 0.0);"
+            // "   vec3 specular = light_color *  col * pow(max(cosPhi, 0.0), shininess * 3.0);"
+            // "   vec3 out_col = diffuse + specular + (ambient * col);"
+            ""
+            "   vec3 out_col = (ambient + diffuse)  * col;"
+            "   frag_colour = vec4(out_col.x, out_col.y, out_col.z, 1.0);"
             "}";
 
         renderer::ShaderProgram model_prog;
@@ -106,6 +127,7 @@ namespace sim
         /// @param rt active Render Target
         void MeshShape::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model)
         {
+            glm::vec4 view_pos = view[3];
             model_prog.activate();
             glUniformMatrix4fv(glGetUniformLocation(model_prog.program, "view"), 1, false, (float *)(&view));
             glUniformMatrix4fv(glGetUniformLocation(model_prog.program, "perspective"), 1, false, (float *)(&persp));
@@ -116,6 +138,7 @@ namespace sim
             }
             glUniform1i(glGetUniformLocation(model_prog.program, "has_texture"), has_texture);
             glUniform3f(glGetUniformLocation(model_prog.program, "diff_col"), diffuse_col.x, diffuse_col.y, diffuse_col.z);
+            glUniform3f(glGetUniformLocation(model_prog.program, "view_pos"), view_pos.x, view_pos.y, view_pos.z);
             glBindVertexArray(vao);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
@@ -173,7 +196,6 @@ namespace sim
         /// @pre openGL has been initialized
         static MeshShape processAiMesh(aiMesh *mesh, const aiScene *scene)
         {
-            auto dims = mesh->mAABB.mMax - mesh->mAABB.mMin;
             // Local Helpers
             auto toGlm3 = [](aiVector3D v)
             { return glm::vec3{v.x, v.y, v.z}; };

@@ -15,7 +15,7 @@ namespace sim
 {
     namespace renderer
     {
-        bool phys_debug_draw = true;
+        bool phys_debug_draw = false;
         bool main_draw = true;
         bool draw_skybox = true;
 
