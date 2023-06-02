@@ -303,8 +303,8 @@ namespace sim
             }
             std::unique_ptr<btConvexHullShape> collision_mesh = std::make_unique<btConvexHullShape>(verts[0], verts.size());
 
-
             collision_mesh->optimizeConvexHull();
+            collision_mesh->recalcLocalAabb();
             return std::move(collision_mesh);
         }
 

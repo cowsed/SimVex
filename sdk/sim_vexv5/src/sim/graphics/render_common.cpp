@@ -1,5 +1,6 @@
 #include "sim/graphics/render_common.h"
 #include <stdio.h>
+#include <cstdlib>
 #include <array>
 #include <thread>
 #include <chrono>
@@ -174,15 +175,54 @@ namespace sim
             glShaderSource(vs, 1, &vertex_shader, NULL);
             glCompileShader(vs);
 
+            GLint isVertCompiled = 0;
+            glGetShaderiv(vs, GL_COMPILE_STATUS, &isVertCompiled);
+            if (isVertCompiled == GL_FALSE)
+            {
+                GLint maxLength = 0;
+                glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &maxLength);
+
+                // The maxLength includes the NULL character
+                char *str = (char *)std::malloc(sizeof(char) * maxLength);
+                glGetShaderInfoLog(vs, maxLength, &maxLength, &str[0]);
+                std::cout << "Shader Vertex Program Failed size: " << maxLength << " : " << str << '\n';
+                exit(EXIT_FAILURE);
+            }
+
             GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
             glShaderSource(fs, 1, &fragment_shader, NULL);
             glCompileShader(fs);
+            GLint isFragCompiled = 0;
+            glGetShaderiv(fs, GL_COMPILE_STATUS, &isFragCompiled);
+            if (isFragCompiled == GL_FALSE)
+            {
+                GLint maxLength = 0;
+                glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &maxLength);
+
+                // The maxLength includes the NULL character
+                char *str = (char *)std::malloc(sizeof(char) * maxLength);
+                glGetShaderInfoLog(vs, maxLength, &maxLength, &str[0]);
+                std::cout << "Shader Fragment Program Failed size: " << maxLength << " : " << str << '\n';
+                exit(EXIT_FAILURE);
+            }
+
 
             program = glCreateProgram();
             glAttachShader(program, fs);
             glAttachShader(program, vs);
             glLinkProgram(program);
 
+            GLint isLinked = 0;
+            glGetProgramiv(program, GL_LINK_STATUS, &isLinked);
+            if (isLinked == GL_FALSE)
+            {
+                GLint maxLength = 0;
+                glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+                char *str = (char *)std::malloc(sizeof(char) * maxLength);
+                glGetProgramInfoLog(program, maxLength, &maxLength, &str[0]);
+                std::cout << "Shader Link Failed size: " << maxLength << " : " << str << '\n';
+                exit(EXIT_FAILURE);
+            }
             glDeleteShader(vs);
             glDeleteShader(fs);
         }
@@ -199,7 +239,7 @@ namespace sim
         {
             default_prog.activate();
         }
-        Camera::Camera(glm::vec3 eye, float azimuth, float altitude, RenderTarget &r) : eye(eye), azimuth(azimuth), altitude(altitude), rt(r) {}
+        Camera::Camera(glm::vec3 eye, float azimuth, float altitude, RenderTarget &r) : eye(eye), altitude(altitude), azimuth(azimuth), rt(r) {}
 
         glm::mat4 Camera::view_matrix()
         {
@@ -297,7 +337,7 @@ namespace sim
     {
         brain_shader.activate();
 
-        auto mv = view*model;
+        auto mv = view * model;
         glUniformMatrix4fv(glGetUniformLocation(brain_shader.program, "view"), 1, false, (float *)(&mv));
         glUniformMatrix4fv(glGetUniformLocation(brain_shader.program, "perspective"), 1, false, (float *)(&persp));
         glBindTexture(GL_TEXTURE_2D, sim::brain_screen::get_gltex_handle());

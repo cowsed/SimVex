@@ -16,6 +16,9 @@ namespace sim
         glm::mat4 get_transform_matrix(phys_id object);
 
         void build_ui();
+        void setup_gl();
+
+        void draw_db_world(glm::mat4 persp, glm::mat4 view);
 
     } // namespace physics
 } // namespace sim
