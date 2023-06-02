@@ -52,23 +52,25 @@ namespace sim
             std::cout << "field skybox px = " << field_skybox.nx.width << '\n';
             field_skybox.init();
             brain_screen = new brain_screen_shape();
+
+
+
             brain_shape = new construction::Model("Construction/V5_Brain.dae");
             btTransform brain_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(0, .3, 0)));
             std::unique_ptr<btCollisionShape> brain_collision = brain_shape->make_convex_hull();
             float brain_mass = .11; // kg
-            brain_id = physics::add_dynamic_mesh(brain_mass, std::move(brain_collision), brain_transform);
+            brain_id = physics::add_dynamic_mesh(brain_mass, std::move(brain_collision), brain_transform, 0.4);
 
             nut_shape = new construction::Model("Construction/nut.dae");
-
             btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, 0)));
             std::unique_ptr<btCollisionShape> nut_collision = nut_shape->make_convex_hull();
-            float nut_mass = .11; // kg
-            nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform);
+            float nut_mass = .12; // kg
+            nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform, 20.0);
 
             field_shape = new construction::Model("Construction/field.dae");
             btTransform field_transform = btTransFromOrigin(btVector3{0, 0, 0});
             std::unique_ptr<btCollisionShape> field_collision = field_shape->make_convex_hull();
-            field_id = physics::add_static_mesh(std::move(field_collision), field_transform);
+            field_id = physics::add_static_mesh(std::move(field_collision), field_transform, 10000.0);
         }
 
         void build_ui()
@@ -93,7 +95,7 @@ namespace sim
             {
                 field_skybox.render(field_camera, field_viewport);
             }
-            
+
             ShaderProgram::activate_default();
 
             glm::mat4 view = field_camera.view_matrix();
