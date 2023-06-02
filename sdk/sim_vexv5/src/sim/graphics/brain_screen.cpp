@@ -702,7 +702,7 @@ namespace sim
         }
 
         /// @brief ImGui build function. also responsible for touch and release events
-        void build_brain_ui()
+        void build_ui()
         {
             ImGui::Begin("Brain Screen");
 

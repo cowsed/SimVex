@@ -16,6 +16,6 @@ namespace sim
         void poll_joysticks();
 
         /// @brief ImGui window for showing status of virtual controllers
-        void build_controller_ui();
+        void build_ui();
     }
 }

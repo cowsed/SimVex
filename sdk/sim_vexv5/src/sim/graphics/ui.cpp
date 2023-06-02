@@ -331,10 +331,10 @@ namespace sim
         drawViewport();
 
         //  Brain screen to tap on
-        sim::brain_screen::build_brain_ui();
+        sim::brain_screen::build_ui();
 
         // Vex Controller
-        sim::controller::build_controller_ui();
+        sim::controller::build_ui();
 
         // Physics control
         sim::physics::build_ui();

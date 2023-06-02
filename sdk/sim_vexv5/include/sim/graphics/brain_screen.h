@@ -66,6 +66,6 @@ namespace sim
         void setVSYNC(bool doit);
         void render_internal();
 
-        void build_brain_ui();
+        void build_ui();
     }
 }

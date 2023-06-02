@@ -232,15 +232,11 @@ void sim::physics::setup()
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, g, 0));
 
-    std::cout << "starint physics\n";
-}
-
-void sim::physics::setup_gl()
-{
     // Debug Drawer
     line_shader = sim::renderer::ShaderProgram(line_vert_shader, line_frag_shader);
     my_drawer = new BulletDebugDrawer_OpenGL();
     dynamicsWorld->setDebugDrawer(my_drawer);
+    std::cout << "starint physics\n";
 }
 
 void sim::physics::draw_db_world(glm::mat4 persp, glm::mat4 view)
