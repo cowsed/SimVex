@@ -56,7 +56,7 @@ namespace sim
 
             nut_shape = new construction::Model("Construction/nut.dae");
 
-            btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.2, .4, 0)));
+            btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, 0)));
             std::unique_ptr<btCollisionShape> nut_collision = nut_shape->make_convex_hull();
             float nut_mass = .11; // kg
             nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform);
