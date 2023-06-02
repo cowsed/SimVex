@@ -56,7 +56,7 @@ CC      = clang-15
 CXX     = clang-15
 OBJCOPY = objcopy
 SIZE    = size
-LINK    = /usr/bin/ld 
+LINK    = /usr/bin/ld
 ARCH    = ar
 ECHO    = @echo
 DEFINES = -DSimVexV5
@@ -78,10 +78,10 @@ endif
 
 # compiler flags
 CFLAGS_CL =  -ggdb 
-CFLAGS    = $(CFLAGS_CL) --std=gnu++20
+CFLAGS    = ${CFLAGS_CL} --std=gnu++20
 # -Wall -Werror=return-type
 # $(DEFINES)
-CXX_FLAGS = $(CFLAGS_CL) $(DEFINES) -stdlib=libstdc++ -fno-exceptions
+CXX_FLAGS = ${CFLAGS_CL} $(DEFINES) -stdlib=libstdc++ -fno-exceptions
 
 # linker flags
 LNK_FLAGS = -pie --build-id --eh-frame-hdr -m elf_x86_64 
@@ -89,8 +89,7 @@ LNK_FLAGS = -pie --build-id --eh-frame-hdr -m elf_x86_64
 PROJECTLIB = lib$(PROJECT)
 ARCH_FLAGS = rcs
 
-#-L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/BulletDynamics -l:libBulletDynamics.a
-# libraries
+
 BULLET_LIBS =  -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/ -lBulletCollision
 BULLET_LIBS += -lBulletDynamics
 BULLET_LIBS += -lBulletSoftBody
@@ -103,14 +102,14 @@ BULLET_LIBS += -lBullet2FileLoader
 BULLET_LIBS += -lBulletInverseDynamics
 BULLET_LIBS += -lLinearMath
 
-LIBS =  $(BULLET_LIBS) --start-group -L$(TOOLCHAIN)/$(PLATFORM)/ -lsimv5rt --end-group -lstdc++ -lc -lm -lgcc  -lpthread -dynamic-linker /lib64/ld-linux-x86-64.so.2 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/lib -L/usr/lib -lsimv5rt -lstdc++ -lc -lm -lgcc -lglfw -lGLEW -lGL -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed --no-as-needed /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/crtn.o
 
-#lsimv5rt -lstdc++ -lc -lm -lgcc -lglfw -lGLEW -lGL -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed --no-as-needed /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/crtn.o
+# libraries
+LIBS = $(BULLET_LIBS) -L$(TOOLCHAIN)/$(PLATFORM)/vendor/assimp/lib -lassimp -L$(TOOLCHAIN)/$(PLATFORM)/vendor/assimp/contrib/zlib -lzlibstatic --start-group -L$(TOOLCHAIN)/$(PLATFORM)/ -lsimv5rt --end-group -lpthread -dynamic-linker  /lib64/ld-linux-x86-64.so.2 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/crtbeginS.o -L/home/richie/VEX/Sim/sdk/sim_vexv5/ -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/lib -L/usr/lib -lsimv5rt -lstdc++ -lc -lm -lgcc -lglfw -lGLEW -lGL -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed --no-as-needed /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/crtn.o
+
 # include file paths
 INC += $(addprefix -I, ${INC_F})
 INC += "-I$(TOOLCHAIN)/$(PLATFORM)/include/"
 INC += "-I$(TOOLCHAIN)/$(PLATFORM)/vendor/imgui"
 INC += "-I$(TOOLCHAIN)/$(PLATFORM)/vendor/imgui/backends"
-# remove stdlib things like printf and replace them with sim defined ones
 INC+= -include "$(TOOLCHAIN)/$(PLATFORM)/otherInclude/replacement.h"
-INC += $(TOOL_INC)
+INC += ${TOOL_INC}
