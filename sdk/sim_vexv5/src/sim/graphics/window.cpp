@@ -273,8 +273,8 @@ namespace sim
             return true;
         }
         glfwMakeContextCurrent(window);
-        renderer::setup();
         physics::setup();
+        renderer::setup();
         construction::setup();
         brain_screen::setup();
         controller::setup();

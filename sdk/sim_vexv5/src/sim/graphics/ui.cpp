@@ -1,5 +1,7 @@
 #include "sim/graphics/ui.h"
 
+#include "sim/physics.h"
+
 namespace sim
 {
     bool show_imgui_demo = false;
@@ -333,6 +335,9 @@ namespace sim
 
         // Vex Controller
         sim::controller::build_controller_ui();
+
+        // Physics control
+        sim::physics::build_ui();
 
         // Simulation Control
         drawSimControl();

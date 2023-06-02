@@ -286,6 +286,28 @@ namespace sim
             }
         }
 
+        /// make_convex_hull from a mesh
+        /// @pre sim::physics::setup() has been called
+        /// @return a collision shape that should be passed right into sim::physics::add_*_object()
+        std::unique_ptr<btCollisionShape> Model::make_convex_hull()
+        {
+            auto vec3TobtVec3 = [](glm::vec3 v){
+                return btVector3(v.x, v.y, v.z);
+            };
+
+            auto mesh = meshes[0];
+            std::vector<btVector3> verts(mesh.get_verts().size()); 
+            
+            for (std::size_t i = 0; i < verts.size(); i++){
+                verts[i] = vec3TobtVec3(mesh.get_verts()[i].position);
+            }
+            std::unique_ptr<btConvexHullShape> collision_mesh = std::make_unique<btConvexHullShape>(verts[0], verts.size());
+
+
+            collision_mesh->optimizeConvexHull();
+            return std::move(collision_mesh);
+        }
+
         /// @brief setup robot construction
         /// load and assemble robots stored in a file
         /// @pre openGL has been initialized

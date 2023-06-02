@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <map>
+#include <memory>
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -9,6 +10,7 @@
 #include <chrono>
 
 #include "imgui.h"
+#include "btBulletDynamicsCommon.h"
 
 #include "sim/graphics/render_common.h"
 
@@ -58,6 +60,7 @@ namespace sim
             /// @param path path of mesh
             Model(std::string path);
             void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) override;
+            std::unique_ptr<btCollisionShape> make_convex_hull();
 
         private:
             std::vector<MeshShape> meshes;

@@ -1,4 +1,5 @@
 #include "sim/physics.h"
+#include "imgui.h"
 #include <iostream>
 #include <map>
 
@@ -39,7 +40,7 @@ sim::physics::phys_id get_phys_id()
     return phys_id_count;
 }
 
-sim::physics::phys_id add_static_mesh(std::unique_ptr<btCollisionShape> shape, btTransform startTransform)
+sim::physics::phys_id sim::physics::add_static_mesh(std::unique_ptr<btCollisionShape> shape, btTransform startTransform)
 {
     sim::physics::phys_id my_id = get_phys_id();
 
@@ -51,6 +52,7 @@ sim::physics::phys_id add_static_mesh(std::unique_ptr<btCollisionShape> shape, b
 
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState.get(), shape.get(), localInertia);
     btRigidBody *body = new btRigidBody(rbInfo);
+    body->setFriction(.5);
 
     dynamicsWorld->addRigidBody(body);
 
@@ -59,6 +61,69 @@ sim::physics::phys_id add_static_mesh(std::unique_ptr<btCollisionShape> shape, b
 
     physics_objects[my_id] = std::move(obj);
     return my_id;
+}
+
+sim::physics::phys_id sim::physics::add_dynamic_mesh(btScalar mass, std::unique_ptr<btCollisionShape> shape, btTransform startTransform)
+{
+    // create a dynamic rigidbody
+    sim::physics::phys_id my_id = get_phys_id();
+
+    // rigidbody is dynamic if and only if mass is non zero, otherwise static
+    bool isDynamic = (mass != 0.f);
+
+    btVector3 localInertia(0, 0, 0);
+    if (isDynamic)
+        shape->calculateLocalInertia(mass, localInertia);
+
+    // using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+    std::unique_ptr<btDefaultMotionState> myMotionState = std::make_unique<btDefaultMotionState>(startTransform);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState.get(), shape.get(), localInertia);
+    btRigidBody *body = new btRigidBody(rbInfo);
+    body->setFriction(2.5);
+
+    dynamicsWorld->addRigidBody(body);
+
+    // save info for later
+    phys_object obj = phys_object{std::move(shape), mass, localInertia, std::move(myMotionState)};
+
+    physics_objects[my_id] = std::move(obj);
+    return my_id;
+}
+
+glm::mat4 sim::physics::get_transform_matrix(sim::physics::phys_id id)
+{
+    auto motion_state = physics_objects[id].motion_state.get();
+    btTransform trans;
+
+    if (motion_state == NULL)
+    {
+        std::cout << "No Motion state for id: " << id << '\n';
+        glm::mat4 ident = glm::mat4{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+        return ident;
+    }
+
+    motion_state->getWorldTransform(trans);
+    glm::mat4 ret;
+    trans.getOpenGLMatrix(&(ret[0][0]));
+    return ret;
+}
+
+void step_physics()
+{
+    dynamicsWorld->stepSimulation(1.f / 60.f, 10);
+}
+
+void sim::physics::build_ui()
+{
+    ImGui::Begin("Physics");
+    if (ImGui::Button("Step Physics"))
+    {
+    }
+    if (ImGui::IsItemHovered())
+    {
+        step_physics();
+    }
+    ImGui::End();
 }
 
 void sim::physics::setup()
