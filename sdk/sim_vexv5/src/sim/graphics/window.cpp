@@ -164,17 +164,15 @@ namespace sim
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 
         (void)io;
-        ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init((char *)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
         main_font = io.Fonts->AddFontFromMemoryCompressedTTF(embedded_font_compressed_data, embedded_font_compressed_size, font_size);
 
-        ImGui::StyleColorsDark();
-        // setRedStyle();
+
         return true;
     }
 
-    // Render imgui to screen. Call this last after all simulation renderring happens
+    /// @brief Render imgui to screen. Call this last after all simulation renderring happens
     void imguiRender()
     {
         ImGui::PopFont();
@@ -182,14 +180,14 @@ namespace sim
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
-    // Destruct Imgui
+    /// @brief Destruct Imgui
     void imguiCleanup()
     {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
-    // Destruct Main Window
+    /// @brief  Destruct Main Window
     void cleanUpWindow()
     {
 
