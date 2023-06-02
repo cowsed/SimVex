@@ -339,6 +339,8 @@ namespace sim
         // Physics control
         sim::physics::build_ui();
 
+        sim::renderer::build_ui();
+
         // Simulation Control
         drawSimControl();
 

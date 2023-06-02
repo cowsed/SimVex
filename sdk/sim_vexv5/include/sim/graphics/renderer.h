@@ -11,6 +11,7 @@ namespace sim
 
         void setup();
         void render();
+        void build_ui();
 
     }
 }

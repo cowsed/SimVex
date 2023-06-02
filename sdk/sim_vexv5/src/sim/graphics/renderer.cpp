@@ -15,6 +15,10 @@ namespace sim
 {
     namespace renderer
     {
+        bool phys_debug_draw = true;
+        bool main_draw = true;
+        bool draw_skybox = true;
+
         RenderTarget field_viewport;
         Camera field_camera(glm::vec3(0, 0, 0.2), 0, 0, field_viewport);
         Skybox field_skybox = {.nx = nx, .ny = ny, .nz = nz, .px = px, .py = py, .pz = pz};
@@ -67,36 +71,36 @@ namespace sim
             field_id = physics::add_static_mesh(std::move(field_collision), field_transform);
         }
 
-        void draw_line(float x1, float y1, float z1, float x2, float y2, float z2, glm::vec3 col)
+        void build_ui()
         {
-            glLineWidth(2);
-            glBegin(GL_LINES);
-            glColor3f(col.r, col.g, col.b);
-            glVertex3f(x1, y1, z1);
-            glVertex3f(x2, y2, z2);
-            glEnd();
+            ImGui::Begin("Render Settings");
+            ImGui::Checkbox("Physics Debug Draw", &phys_debug_draw);
+            ImGui::Checkbox("Normal Drawing", &main_draw);
+            ImGui::Checkbox("Draw Skybox", &draw_skybox);
+            ImGui::End();
         }
 
         void render()
         {
 
             field_viewport.activate();
-            glClearColor(1.f, 1.f, 1.f, 1.0f);
+            glClearColor(0.f, 0.f, 0.f, 1.0f);
             glEnable(GL_DEPTH_TEST);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_CULL_FACE);
 
-            field_skybox.render(field_camera, field_viewport);
-
+            if (draw_skybox)
+            {
+                field_skybox.render(field_camera, field_viewport);
+            }
+            
             ShaderProgram::activate_default();
-            bool phys_debug_draw = true;
-            bool main_draw = true;
 
             glm::mat4 view = field_camera.view_matrix();
             glm::mat4 persp = field_camera.persp_matrix(field_viewport);
 
-            // if (main_draw)
-            // {
+            if (main_draw)
+            {
                 auto brain_trans = physics::get_transform_matrix(brain_id);
                 brain_screen->render(persp, view, brain_trans);
                 brain_shape->render(persp, view, brain_trans);
@@ -106,8 +110,9 @@ namespace sim
 
                 glm::mat4 field_trans = physics::get_transform_matrix(field_id);
                 field_shape->render(persp, view, field_trans);
-            // } 
-            if (phys_debug_draw){
+            }
+            if (phys_debug_draw)
+            {
                 physics::draw_db_world(persp, view);
             }
 
@@ -116,4 +121,3 @@ namespace sim
 
     }
 }
-
