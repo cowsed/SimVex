@@ -1,4 +1,23 @@
 #include "sim/graphics/window.h"
+#include <stdio.h>
+#include <thread>
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <GL/glcorearb.h>
+
+#include "sim/util.h" //TODO figure out why this include is funky
+#include "sim/time.h"
+#include "sim/events.h"
+#include "sim/graphics/ui.h"
+#include "sim/graphics/embedded_font.h"
+#include "sim/robot_model.h"
+#include "sim/graphics/renderer.h"
+#include "sim/physics.h"
+
+#include "../../../vendor/imgui/imgui.h"
+#include "../../../vendor/imgui/backends/imgui_impl_glfw.h"
+#include "../../../vendor/imgui/backends/imgui_impl_opengl3.h"
 
 namespace sim
 {

@@ -1,6 +1,6 @@
 #include "sim/physics.h"
 #include <iostream>
-#include "btBulletDynamicsCommon.h"
+#include <map>
 
 /// collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
 static btDefaultCollisionConfiguration *collisionConfiguration;
@@ -21,6 +21,45 @@ static btDiscreteDynamicsWorld *dynamicsWorld;
 static btAlignedObjectArray<btCollisionShape *> collisionShapes;
 
 const float g = -9.8;
+
+struct phys_object
+{
+    std::unique_ptr<btCollisionShape> shape;
+    btScalar mass;
+    btVector3 local_inertia;
+    std::unique_ptr<btDefaultMotionState> motion_state;
+};
+
+std::map<sim::physics::phys_id, phys_object> physics_objects;
+
+sim::physics::phys_id phys_id_count = 0;
+sim::physics::phys_id get_phys_id()
+{
+    phys_id_count++;
+    return phys_id_count;
+}
+
+sim::physics::phys_id add_static_mesh(std::unique_ptr<btCollisionShape> shape, btTransform startTransform)
+{
+    sim::physics::phys_id my_id = get_phys_id();
+
+    btScalar mass(0.f);
+    btVector3 localInertia(0, 0, 0);
+
+    // using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+    std::unique_ptr myMotionState = std::make_unique<btDefaultMotionState>(startTransform);
+
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState.get(), shape.get(), localInertia);
+    btRigidBody *body = new btRigidBody(rbInfo);
+
+    dynamicsWorld->addRigidBody(body);
+
+    // save info for later
+    phys_object obj = phys_object{std::move(shape), mass, localInertia, std::move(myMotionState)};
+
+    physics_objects[my_id] = std::move(obj);
+    return my_id;
+}
 
 void sim::physics::setup()
 {

@@ -16,13 +16,13 @@ SRC_C += $(wildcard vendor/imgui/*.cpp)
 SRC_C += vendor/imgui/backends/imgui_impl_glfw.cpp
 SRC_C += vendor/imgui/backends/imgui_impl_opengl3.cpp
 
-SRC_C += $(wildcard vendor/assimp/code/*/*.cpp) 
-SRC_C += $(wildcard vendor/assimp/code/*/*/*.cpp) 
-SRC_C += $(wildcard vendor/assimp/code/*/*/*/*.cpp) 
-SRC_C += $(wildcard vendor/assimp/contrib/pugixml/src/*.cpp) 
-SRC_C += $(wildcard vendor/assimp/contrib/unzip/*.c) 
-SRC_C += $(wildcard vendor/assimp/contrib/zip/src/*.c) 
-SRC_C += $(wildcard vendor/assimp/contrib/zlib/*.c) 
+# SRC_C += $(wildcard vendor/assimp/code/*/*.cpp) 
+# SRC_C += $(wildcard vendor/assimp/code/*/*/*.cpp) 
+# SRC_C += $(wildcard vendor/assimp/code/*/*/*/*.cpp) 
+# SRC_C += $(wildcard vendor/assimp/contrib/pugixml/src/*.cpp) 
+# SRC_C += $(wildcard vendor/assimp/contrib/unzip/*.c) 
+# SRC_C += $(wildcard vendor/assimp/contrib/zip/src/*.c) 
+# SRC_C += $(wildcard vendor/assimp/contrib/zlib/*.c) 
 SRC_C += $(wildcard vendor/*.) 
 
 
@@ -32,7 +32,7 @@ SRC_H += $(wildcard include/*/*/*.h)
 SRC_H += $(wildcard include/*/*/*/*.h)
 SRC_H += $(wildcard include/*/*/*/*/*.h)
 SRC_H += $(wildcard vendor/imgui/*.h)
-SRC_H += $(wildcard vendor/assimp/contrib/pugixml/src/*.hpp)
+# SRC_H += $(wildcard vendor/assimp/contrib/pugixml/src/*.hpp)
 
 SRC_H += $(wildcard vendor/bullet3/src/*.h)
 SRC_H += $(wildcard vendor/bullet3/src/*/*.h)

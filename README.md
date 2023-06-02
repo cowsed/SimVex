@@ -24,14 +24,23 @@ Dependencies
 ## Installing Dependencies
 OpenGL, GLFW, and GLM Needs to be installed on your system
 
+Assimp requires the following steps to install
+```bash
+cd sdk/sim_vexv5/vendor/assimp/
+cmake CMakeLists.txt -dBUILD_SHARED_LIBS=OFF
+make -j2
+```
+where 2 is the number of cores you wish to devote to compilation
+
 Bullet3D requires the following steps to install (for now)
 ```bash
 cd sdk/sim_vexv5/vendor/bullet3/
 mkdir build
 cd build/
 cmake ../
-make
+make -j2
 ```
+where 2 is the number of cores you wish to devote to compilation
 
 ## Building your robot code
 
