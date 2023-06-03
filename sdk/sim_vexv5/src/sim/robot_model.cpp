@@ -49,7 +49,7 @@ namespace sim
             ""
             "out vec4 frag_colour;"
             ""
-            "vec3 light_pos = normalize(vec3(5, 10, 5));"
+            "uniform vec3 light_pos = normalize(vec3(5, 10, 5));"
             "float shininess = 0.05;"
             "vec3 light_color = vec3(1,1,1);"
             ""
@@ -116,7 +116,7 @@ namespace sim
         /// @param persp persp matrix
         /// @param view view matrix
         /// @param rt active Render Target
-        void MeshShape::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model)
+        void MeshShape::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model, glm::vec3 light_pos)
         {
             glm::vec4 view_pos = view[3];
             model_prog.activate();
@@ -130,6 +130,7 @@ namespace sim
             glUniform1i(glGetUniformLocation(model_prog.program, "has_texture"), has_texture);
             glUniform3f(glGetUniformLocation(model_prog.program, "diff_col"), diffuse_col.x, diffuse_col.y, diffuse_col.z);
             glUniform3f(glGetUniformLocation(model_prog.program, "view_pos"), view_pos.x, view_pos.y, view_pos.z);
+            glUniform3f(glGetUniformLocation(model_prog.program, "light_pos"), light_pos.x, light_pos.y, light_pos.z);
             glBindVertexArray(vao);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
@@ -292,11 +293,11 @@ namespace sim
         /// @param persp persp matrix
         /// @param view view matrix
         /// @param rt active Render Target
-        void Model::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model)
+        void Model::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model, glm::vec3 light_pos)
         {
             for (auto &mesh : meshes)
             {
-                mesh.render(persp, view, model);
+                mesh.render(persp, view, model, light_pos);
             }
         }
 

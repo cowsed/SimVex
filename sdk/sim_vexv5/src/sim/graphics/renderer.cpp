@@ -19,6 +19,8 @@ namespace sim
         bool main_draw = true;
         bool draw_skybox = true;
 
+        glm::vec3 light_pos = {5,10,5};
+
         RenderTarget field_viewport;
         Camera field_camera(glm::vec3(0, 0, 0.2), 0, 0, field_viewport);
         Skybox field_skybox = {.nx = nx, .ny = ny, .nz = nz, .px = px, .py = py, .pz = pz};
@@ -79,6 +81,7 @@ namespace sim
             ImGui::Checkbox("Physics Debug Draw", &phys_debug_draw);
             ImGui::Checkbox("Normal Drawing", &main_draw);
             ImGui::Checkbox("Draw Skybox", &draw_skybox);
+            ImGui::DragFloat3("Light Pos", &(light_pos[0]));
             ImGui::End();
         }
 
@@ -105,13 +108,13 @@ namespace sim
             {
                 auto brain_trans = physics::get_transform_matrix(brain_id);
                 brain_screen->render(persp, view, brain_trans);
-                brain_shape->render(persp, view, brain_trans);
+                brain_shape->render(persp, view, brain_trans, light_pos);
 
                 glm::mat4 nut_trans = physics::get_transform_matrix(nut_id);
-                nut_shape->render(persp, view, nut_trans);
+                nut_shape->render(persp, view, nut_trans, light_pos);
 
                 glm::mat4 field_trans = physics::get_transform_matrix(field_id);
-                field_shape->render(persp, view, field_trans);
+                field_shape->render(persp, view, field_trans,light_pos);
             }
             if (phys_debug_draw)
             {
