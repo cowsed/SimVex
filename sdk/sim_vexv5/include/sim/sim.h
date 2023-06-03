@@ -1,7 +1,4 @@
 #pragma once
-#include <iostream>
-#include "sim/events.h"
-#include "sim/time.h"
 
 #define isSim 1
 

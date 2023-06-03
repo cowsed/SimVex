@@ -1,24 +1,9 @@
 #pragma once
-#include <stdio.h>
 
-#include <GL/glew.h>
-#include <GL/glcorearb.h>
-
-#include "imgui.h"
 
 #include "v5_apitypes.h"
 #include "vex_units.h"
 #include "vex_global.h"
-#include "sim/events.h"
-
-#include "sim/graphics/brain_fonts/font_common.h"
-#include "sim/graphics/brain_fonts/noto_sans_mono_12.h"
-#include "sim/graphics/brain_fonts/noto_sans_mono_15.h"
-#include "sim/graphics/brain_fonts/noto_sans_mono_20.h"
-#include "sim/graphics/brain_fonts/noto_sans_mono_30.h"
-#include "sim/graphics/brain_fonts/noto_sans_mono_40.h"
-#include "sim/graphics/brain_fonts/noto_sans_mono_50.h"
-#include "sim/graphics/brain_fonts/noto_sans_mono_60.h"
 
 namespace sim
 {
@@ -26,7 +11,7 @@ namespace sim
     {
         /// @brief get the texture id of the active texture that shows the brain screen
         /// @return  the texture id of the active texture that shows the brain screen
-        GLuint get_gltex_handle();
+        unsigned int get_gltex_handle();
 
         /// @brief setup the brain screen and all of its dependencies
         /// @return true if successfull

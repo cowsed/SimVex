@@ -1,5 +1,19 @@
 #include "sim/events.h"
 
+#include <stdio.h>
+#include <pthread.h>
+#include <signal.h>
+#include <thread>
+#include <mutex>
+#include <iostream>
+#include <condition_variable>
+
+#include "imgui.h"
+
+#include "assert.h"
+
+#include "sim/sim.h"
+
 namespace sim::event_handler
 {
     volatile bool threads_should_pause = false;

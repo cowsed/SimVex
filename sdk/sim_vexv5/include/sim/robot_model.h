@@ -1,19 +1,14 @@
 #pragma once
 
 #include <vector>
-#include <map>
 #include <memory>
 #include <string>
-#include <fstream>
-#include <iostream>
-#include <thread>
-#include <chrono>
 
-#include "imgui.h"
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+
 #include "btBulletDynamicsCommon.h"
-
-
-#include "sim/graphics/render_common.h"
 
 
 namespace sim

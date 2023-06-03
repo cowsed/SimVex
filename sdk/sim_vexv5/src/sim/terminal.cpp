@@ -1,4 +1,9 @@
 #include "sim/terminal.h"
+
+#include <sstream>
+
+#include "imgui.h"
+
 // todo, make this a https://pubs.opengroup.org/onlinepubs/9699919799/functions/open_memstream.html
 static std::string terminal_text = "";
 

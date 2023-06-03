@@ -1,5 +1,24 @@
 #include "sim/graphics/brain_screen.h"
 
+#include <stdio.h>
+
+
+#include <GL/glew.h>
+#include <GL/glcorearb.h>
+
+#include "imgui.h"
+
+#include "sim/graphics/brain_fonts/font_common.h"
+#include "sim/graphics/brain_fonts/noto_sans_mono_12.h"
+#include "sim/graphics/brain_fonts/noto_sans_mono_15.h"
+#include "sim/graphics/brain_fonts/noto_sans_mono_20.h"
+#include "sim/graphics/brain_fonts/noto_sans_mono_30.h"
+#include "sim/graphics/brain_fonts/noto_sans_mono_40.h"
+#include "sim/graphics/brain_fonts/noto_sans_mono_50.h"
+#include "sim/graphics/brain_fonts/noto_sans_mono_60.h"
+#include "sim/events.h"
+
+
 namespace sim
 {
     namespace brain_screen
@@ -414,7 +433,7 @@ namespace sim
 
         /// @brief returns the texture handle of the OpenGL texture that holds the brain screen
         /// @return the OpenGL texture handle
-        GLuint get_gltex_handle()
+        unsigned int get_gltex_handle()
         {
             return brain_screen_texture_handle1;
         }

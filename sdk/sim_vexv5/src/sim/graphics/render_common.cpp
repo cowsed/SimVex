@@ -1,9 +1,17 @@
 #include "sim/graphics/render_common.h"
+
 #include <stdio.h>
+#include <iostream>
 #include <cstdlib>
 #include <array>
 #include <thread>
 #include <chrono>
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <GL/glcorearb.h>
+
+#include "sim/graphics/brain_screen.h"
 
 namespace sim
 {

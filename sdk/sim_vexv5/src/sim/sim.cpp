@@ -1,5 +1,9 @@
 #include "sim/sim.h"
 
+#include <iostream>
+#include "sim/events.h"
+#include "sim/time.h"
+
 namespace sim
 {
     static SimState sim_state = SimState::Playing;

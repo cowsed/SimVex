@@ -1,15 +1,5 @@
 #pragma once
-#include "stdio.h"
-#include <thread>
-#include <mutex>
-#include <iostream>
-#include <condition_variable>
-#include "assert.h"
-#include <pthread.h>
-#include <signal.h>
-#include "imgui.h"
 
-#include "sim.h"
 
 namespace sim
 {

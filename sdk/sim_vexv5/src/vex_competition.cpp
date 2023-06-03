@@ -1,4 +1,5 @@
 #include "vex_competition.h"
+#include "sim/sim.h"
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Copyright (c) Innovation First 2017-2019, All rights reserved.          */

@@ -1,11 +1,25 @@
 #include "sim/robot_model.h"
 
+#include <map>
+#include <fstream>
+#include <iostream>
+#include <thread>
+#include <chrono>
+
+#include <GL/glew.h>
+#include <GL/glcorearb.h>
+
+#include "imgui.h"
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
+
+#include "sim/graphics/render_common.h"
+
 
 namespace sim
 {

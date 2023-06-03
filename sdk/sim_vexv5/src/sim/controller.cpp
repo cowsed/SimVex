@@ -1,5 +1,10 @@
 #include "sim/controller.h"
 
+#include "sim/events.h"
+#include "imgui.h"
+#include <map>
+#include <GLFW/glfw3.h>
+
 namespace sim
 {
     namespace controller
