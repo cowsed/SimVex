@@ -24,7 +24,7 @@ namespace sim
 
         unsigned int load_texture(std::string filename);
 
-        class MeshShape : public Shape
+        class MeshShape
         {
         public:
             struct Vertex
@@ -41,7 +41,7 @@ namespace sim
             };
             MeshShape(std::vector<Vertex> vertices, std::vector<Tri> indices, unsigned int tex_handle_tbd, bool has_texture, glm::vec3 diffuse_col);
             ~MeshShape(){}
-            void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) override;
+            void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model);
 
             const std::vector<Vertex> &get_verts();
             const std::vector<Tri> &get_tris();
@@ -54,13 +54,13 @@ namespace sim
             glm::vec3 diffuse_col;
         };
 
-        class Model : public Shape
+        class Model
         {
         public:
             /// @brief Load a mesh through assimp
             /// @param path path of mesh
             Model(std::string path);
-            void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) override;
+            void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model);
             std::unique_ptr<btCollisionShape> make_convex_hull();
 
         private:

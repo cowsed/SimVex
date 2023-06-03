@@ -263,19 +263,13 @@ namespace sim
             glm::vec3 lookat = eye + dir;
             return glm::lookAt(eye, lookat, up_vec);
         }
+
         glm::mat4 Camera::persp_matrix(RenderTarget &rt)
         {
             return glm::perspective(glm::radians(35.0f), (float)rt.width / (float)rt.height, 0.01f, 100.0f);
         }
 
     } // renderer
-
-    Shape::~Shape() {}
-
-    // Dummy for space filling
-    DummyShape::DummyShape() {}
-    DummyShape::~DummyShape() {}
-    void DummyShape::render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) {}
 
     brain_screen_shape::brain_screen_shape()
     {

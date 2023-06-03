@@ -67,24 +67,8 @@ namespace sim
 
     } // renderer
 
-    class Shape
-    {
-    public:
-        Shape() {}
-        virtual ~Shape();
-        virtual void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) = 0;
-    };
-
-    class DummyShape : public Shape
-    {
-    public:
-        DummyShape();
-        ~DummyShape() override;
-        void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) override;
-    };
-
     /// @brief shape from cube definition
-    class brain_screen_shape : public Shape
+    class brain_screen_shape
     {
     private:
         std::vector<glm::vec3> points;
@@ -97,8 +81,8 @@ namespace sim
 
     public:
         brain_screen_shape();
-        ~brain_screen_shape() override;
-        void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model) override; // override;
+        ~brain_screen_shape();
+        void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model);
     };
 
 } // sim

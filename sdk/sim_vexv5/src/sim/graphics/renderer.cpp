@@ -65,7 +65,7 @@ namespace sim
             btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, 0)));
             std::unique_ptr<btCollisionShape> nut_collision = nut_shape->make_convex_hull();
             float nut_mass = .12; // kg
-            nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform, 20.0);
+            nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform, 20000.0);
 
             field_shape = new construction::Model("Construction/field.dae");
             btTransform field_transform = btTransFromOrigin(btVector3{0, 0, 0});
