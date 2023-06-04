@@ -20,67 +20,66 @@
 
 #include "sim/graphics/render_common.h"
 
-
 namespace sim
 {
     namespace construction
     {
         const float collision_margin = 0.0005;
-        static const char *model_vertex_shader =
-            "#version 400\n"
-            "uniform mat4 view;"
-            "uniform mat4 perspective;"
-            "uniform mat4 model;"
-            "uniform sampler2D tex;"
-            "uniform int has_texture;"
-            "uniform vec3 diff_col;"
-            "uniform vec3 view_pos;"
-            ""
-            "in vec3 vp;"
-            "in vec3 norm_v;"
-            "in vec2 UV_v;"
-            ""
-            "out vec3 frag_pos;"
-            "out vec3 world_normal;"
-            "out vec2 UV;"
-            ""
-            "void main() {"
-            "   frag_pos = (model * vec4(vp, 1.0)).xyz;"
-            "   UV = UV_v;"
-            "   world_normal = (model * vec4(norm_v, 1.0)).xyz;"
-            "  gl_Position = perspective * view * model * vec4(vp, 1.0);"
-            "}";
+        static const char *model_vertex_shader = R"glsl(
+#version 400
+uniform mat4 view;
+uniform mat4 perspective;
+uniform mat4 model;
+uniform sampler2D tex;
+uniform int has_texture;
+uniform vec3 diff_col;
+uniform vec3 view_pos;
+            
+in vec3 vp;
+in vec3 norm_v;
+in vec2 UV_v;
+            
+out vec3 frag_pos;
+out vec3 world_normal;
+out vec2 UV;
+            
+void main() {
+    frag_pos = (model * vec4(vp, 1.0)).xyz;
+    UV = UV_v;
+    world_normal = (model * vec4(norm_v, 1.0)).xyz;
+    gl_Position = perspective * view * model * vec4(vp, 1.0);
+})glsl";
 
-        static const char *model_fragment_shader =
-            "#version 400\n"
-            "uniform sampler2D tex;"
-            "in vec3 frag_pos;"
-            "in vec3 world_normal;"
-            "in vec2 UV;"
-            "uniform int has_texture;"
-            "uniform vec3 diff_col;"
-            "uniform vec3 view_pos;"
-            ""
-            "out vec4 frag_colour;"
-            ""
-            "uniform vec3 light_pos = normalize(vec3(5, 10, 5));"
-            "float shininess = 0.05;"
-            "vec3 light_color = vec3(1,1,1);"
-            ""
-            "float ambient_strength = .3;"
-            "void main() {"
-            "   vec3 ambient = ambient_strength * light_color;"
-            "   vec3 light_dir = normalize(light_pos - frag_pos);"
-            "   float diff = max(dot(world_normal, light_dir), 0.0);"
-            "   vec3 diffuse = diff * light_color;"
-            "   vec3 col = texture(tex, UV).xyz;"
-            "   if (has_texture==0){"
-            "       col = diff_col;"
-            "   }"
-            ""
-            "   vec3 out_col = (ambient + diffuse)  * col;"
-            "   frag_colour = vec4(out_col.x, out_col.y, out_col.z, 1.0);"
-            "}";
+        static const char *model_fragment_shader = R"glsl(
+#version 400
+uniform sampler2D tex;
+in vec3 frag_pos;
+in vec3 world_normal;
+in vec2 UV;
+uniform int has_texture;
+uniform vec3 diff_col;
+uniform vec3 view_pos;
+
+out vec4 frag_colour;
+
+uniform vec3 light_pos = normalize(vec3(5, 10, 5));
+float shininess = 0.05;
+vec3 light_color = vec3(1,1,1);
+
+float ambient_strength = .3;
+void main() {
+   vec3 ambient = ambient_strength * light_color;
+   vec3 light_dir = normalize(light_pos - frag_pos);
+   float diff = max(dot(world_normal, light_dir), 0.0);
+   vec3 diffuse = diff * light_color;
+   vec3 col = texture(tex, UV).xyz;
+   if (has_texture==0){
+       col = diff_col;
+   }
+
+   vec3 out_col = (ambient + diffuse)  * col;
+   frag_colour = vec4(out_col.x, out_col.y, out_col.z, 1.0);
+})glsl";
 
         renderer::ShaderProgram model_prog;
 
@@ -165,13 +164,15 @@ namespace sim
             int width, height, nrChannels;
             unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
 
-            if (data==NULL){
+            if (data == NULL)
+            {
                 std::cout << "Error loading texture found at " << path << '\n';
                 exit(EXIT_FAILURE);
             }
 
             unsigned int tex_channels = GL_RGBA;
-            if (nrChannels == 3){
+            if (nrChannels == 3)
+            {
                 tex_channels = GL_RGB;
             }
             unsigned int texture;

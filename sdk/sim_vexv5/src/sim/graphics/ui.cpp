@@ -1,10 +1,8 @@
 #include "sim/graphics/ui.h"
 
-
 #include "imgui.h"
-#include "../../../vendor/imgui/backends/imgui_impl_opengl3.h" 
+#include "../../../vendor/imgui/backends/imgui_impl_opengl3.h"
 #include "../../../vendor/imgui/backends/imgui_impl_glfw.h"
-
 
 #include "sim/util.h"
 #include "sim/time.h"
@@ -255,6 +253,14 @@ namespace sim
         cam->azimuth += dx * turn_speed;
 
         cam->altitude -= dy * turn_speed;
+        if (cam->altitude < -M_PI / 2)
+        {
+            cam->altitude = -M_PI / 2 + 0.001;
+        }
+        if (cam->altitude > M_PI / 2)
+        {
+            cam->altitude = M_PI / 2 - 0.001;
+        }
 
         glm::vec2 local_vel = {0, 0};
         float uppy_downy = 0.0;
@@ -304,7 +310,6 @@ namespace sim
         const int viewport_samples = 2;
         static int width = 1;
         static int height = 1;
-        static bool want_capture_mouse = false;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{8, 8});
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{0, 0});

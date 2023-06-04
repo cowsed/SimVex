@@ -19,72 +19,75 @@ namespace sim
     {
         static const glm::vec3 up_vec = glm::vec3(0.0, 1.0, 0.0);
 
-        static const char *brain_screen_vertex_shader =
-            "#version 400\n"
-            "uniform mat4 view;"
-            "uniform mat4 perspective;"
-            "uniform sampler2D tex;"
-            ""
-            "in vec3 vp;"
-            "in vec3 norm_v;"
-            "in vec2 UV_v;"
-            ""
-            "out vec3 norm;"
-            "out vec2 UV;"
-            ""
-            "void main() {"
-            "   UV = UV_v;"
-            "   norm = norm_v;"
-            "  gl_Position = perspective * view  * vec4(vp, 1.0);"
-            "}";
+        static const char *brain_screen_vertex_shader = R"glsl(
+#version 400
+uniform mat4 view;
+uniform mat4 perspective;
+uniform sampler2D tex;
 
-        static const char *brain_screen_fragment_shader =
-            "#version 400\n"
-            "uniform sampler2D tex;"
-            "in vec3 norm;"
-            "in vec2 UV;"
-            ""
-            "const float saturation = .75;"
-            "const float brightness = .5;"
-            ""
-            "out vec4 frag_colour;"
-            "void main() {"
-            "   vec3 tex_col = texture(tex, UV).xyz;"
-            "   vec3 col = mix(vec3(1), tex_col, saturation);"
-            "   col *= brightness;"
-            "   frag_colour = vec4(col.x, col.y, col.z, 1.0);"
-            "}";
+in vec3 vp;
+in vec3 norm_v;
+in vec2 UV_v;
 
-        static const char *model_vertex_shader =
-            "#version 400\n"
-            "uniform mat4 view;"
-            "uniform mat4 perspective;"
-            "uniform sampler2D tex;"
-            ""
-            "in vec3 vp;"
-            "in vec3 norm_v;"
-            "in vec2 UV_v;"
-            ""
-            "out vec3 norm;"
-            "out vec2 UV;"
-            ""
-            "void main() {"
-            "   UV = UV_v;"
-            "   norm = norm_v;"
-            "  gl_Position = perspective * view  * vec4(vp, 1.0);"
-            "}";
+out vec3 norm;
+out vec2 UV;
 
-        static const char *model_fragment_shader =
-            "#version 400\n"
-            "uniform sampler2D tex;"
-            "in vec3 norm;"
-            "in vec2 UV;"
-            ""
-            "out vec4 frag_colour;"
-            "void main() {"
-            "   vec4 col = texture(tex, UV);"
-            "   frag_colour = vec4(norm.x, norm.y, norm.z, 1.0);"
-            "}";
+void main() {
+   UV = UV_v;
+   norm = norm_v;
+  gl_Position = perspective * view  * vec4(vp, 1.0);
+}
+)glsl";
+        static const char *brain_screen_fragment_shader = R"glsl(
+#version 400
+uniform sampler2D tex;
+in vec3 norm;
+in vec2 UV;
+
+const float saturation = .75;
+const float brightness = .5;
+
+out vec4 frag_colour;
+void main() {
+   vec3 tex_col = texture(tex, UV).xyz;
+   vec3 col = mix(vec3(1), tex_col, saturation);
+   col *= brightness;
+   frag_colour = vec4(col.x, col.y, col.z, 1.0);
+}
+)glsl";
+
+        static const char *model_vertex_shader =R"glsl(
+#version 400
+uniform mat4 view;
+uniform mat4 perspective;
+uniform sampler2D tex;
+
+in vec3 vp;
+in vec3 norm_v;
+in vec2 UV_v;
+
+out vec3 norm;
+out vec2 UV;
+
+void main() {
+   UV = UV_v;
+   norm = norm_v;
+  gl_Position = perspective * view  * vec4(vp, 1.0);
+}
+)glsl";
+
+        static const char *model_fragment_shader = R"glsl(
+#version 400
+uniform sampler2D tex;
+in vec3 norm;
+in vec2 UV;
+
+out vec4 frag_colour;
+void main() {
+   vec4 col = texture(tex, UV);
+   frag_colour = vec4(norm.x, norm.y, norm.z, 1.0);
+}
+)glsl";
 
         ShaderProgram default_prog;
         void setup_common()
@@ -194,6 +197,7 @@ namespace sim
                 char *str = (char *)std::malloc(sizeof(char) * maxLength);
                 glGetShaderInfoLog(vs, maxLength, &maxLength, &str[0]);
                 std::cout << "Shader Vertex Program Failed size: " << maxLength << " : " << str << '\n';
+                std::cout << vertex_shader << '\n';
                 exit(EXIT_FAILURE);
             }
 
