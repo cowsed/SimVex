@@ -334,47 +334,12 @@ namespace sim
 
             if (accepting)
             {
-                ImGui::Text("accepting");
+                ImGui::TextColored(ImVec4(0.1, 1.0, 0.1, 1.0), "Accepting keyboard input");
             }
             else
             {
-                ImGui::Text("not accepting");
+                ImGui::TextColored(ImVec4(1.0, 0.1, 0.1, 1.0), "Not accepting keyboard input");
             }
-
-            ImDrawList *DrawList = ImGui::GetWindowDrawList();
-            ImVec2 pos = ImGui::GetWindowPos();
-            ImVec2 size = ImGui::GetWindowSize();
-            ImVec2 center = ImVec2(pos.x + size.x * 0.5f, pos.y + size.y * 0.5f);
-
-            float joy_outer_radius = size.x / 14.0;
-            float joy_inner_radius = size.x / 16.0;
-
-            ImVec2 ljoy_center = {center.x - size.x * .3f, center.y - size.y * .1f};
-            ImVec2 rjoy_center = {center.x + size.x * .3f, center.y - size.y * .1f};
-
-            ImVec2 lpad_center = {center.x - size.x * .2f, center.y + size.y * .1f};
-            ImVec2 rpad_center = {center.x + size.x * .2f, center.y + size.y * .1f};
-
-            float pad_dist = joy_inner_radius / 2;
-            float pad_button_radius = pad_dist / 2;
-
-            // controller background
-
-            // Left Joy
-            DrawList->AddCircleFilled(ljoy_center, joy_outer_radius, IM_COL32(100, 100, 100, 255));
-            DrawList->AddCircleFilled(ljoy_center, joy_inner_radius, IM_COL32(0, 0, 0, 255));
-            // Right Joy
-            DrawList->AddCircleFilled(rjoy_center, joy_outer_radius, IM_COL32(100, 100, 100, 255));
-            DrawList->AddCircleFilled(rjoy_center, joy_inner_radius, IM_COL32(0, 0, 0, 255));
-
-            // Left Pad
-            DrawList->AddCircleFilled(lpad_center, joy_outer_radius, IM_COL32(100, 100, 100, 255));
-            DrawList->AddCircleFilled(ImVec2Add(lpad_center, {pad_dist, 0}), pad_button_radius, IM_COL32(0, 0, 0, 255));
-            DrawList->AddCircleFilled(ImVec2Add(lpad_center, {-pad_dist, 0}), pad_button_radius, IM_COL32(0, 0, 0, 255));
-            DrawList->AddCircleFilled(ImVec2Add(lpad_center, {0, pad_dist}), pad_button_radius, IM_COL32(0, 0, 0, 255));
-            DrawList->AddCircleFilled(ImVec2Add(lpad_center, {0, -pad_dist}), pad_button_radius, IM_COL32(0, 0, 0, 255));
-
-            ImGui::SetCursorPos(ImVec2Add(ImGui::GetCursorPos(), {0, size.y / 30.f}));
 
             ImGui::DragFloat("Max Amount", &controller_state::max_amt, 0.01, 0.f, 1.f);
 
