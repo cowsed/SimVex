@@ -44,6 +44,9 @@ namespace sim
 
         construction::Model *field_shape;
         sim::physics::phys_id field_id;
+
+        construction::Model *bars_shape;
+
         void setup()
         {
             auto btVectorFromGlm3 = [](glm::vec3 v) -> btVector3
@@ -68,21 +71,24 @@ namespace sim
 
 
             brain_shape = new construction::Model("Construction/V5_Brain.dae");
-            btTransform brain_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(0, .3, 0)));
+            btTransform brain_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(0, .3, .4)));
             std::unique_ptr<btCollisionShape> brain_collision = brain_shape->make_convex_hull();
             float brain_mass = .11; // kg
-            brain_id = physics::add_dynamic_mesh(brain_mass, std::move(brain_collision), brain_transform, 0.4);
+            brain_id = physics::add_dynamic_mesh(brain_mass, std::move(brain_collision), brain_transform, 0.4, 0);
 
             nut_shape = new construction::Model("Construction/nut.dae");
-            btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, 0)));
+            btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, .4)));
             std::unique_ptr<btCollisionShape> nut_collision = nut_shape->make_convex_hull();
             float nut_mass = .12; // kg
-            nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform, 20000.0);
+            nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform, .4, 0.005);
 
             field_shape = new construction::Model("Construction/field.dae");
             btTransform field_transform = btTransFromOrigin(btVector3{0, 0, 0});
             std::unique_ptr<btCollisionShape> field_collision = field_shape->make_convex_hull();
-            field_id = physics::add_static_mesh(std::move(field_collision), field_transform, 10000.0);
+            field_id = physics::add_static_mesh(std::move(field_collision), field_transform, 1.0);
+
+            bars_shape = new construction::Model("Construction/bars.dae");
+
         }
 
         void build_ui()
@@ -113,7 +119,7 @@ namespace sim
 
             glm::mat4 view = field_camera.view_matrix();
             glm::mat4 persp = field_camera.persp_matrix(field_viewport);
-
+            glm::mat4 ident = {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
             if (main_draw)
             {
                 auto brain_trans = physics::get_transform_matrix(brain_id);
@@ -125,6 +131,8 @@ namespace sim
 
                 glm::mat4 field_trans = physics::get_transform_matrix(field_id);
                 field_shape->render(persp, view, field_trans,light_pos);
+
+                bars_shape->render(persp, view, ident, light_pos);
             }
             if (phys_debug_draw)
             {

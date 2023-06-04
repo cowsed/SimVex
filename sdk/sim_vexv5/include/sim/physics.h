@@ -10,7 +10,7 @@ namespace sim
     {
         typedef int phys_id;
         void setup();
-        phys_id add_dynamic_mesh(btScalar mass, std::unique_ptr<btCollisionShape> shape, btTransform startTransform, btScalar friction);
+        phys_id add_dynamic_mesh(btScalar mass, std::unique_ptr<btCollisionShape> shape, btTransform startTransform, btScalar friction, btScalar rolling_friction);
         phys_id add_static_mesh(std::unique_ptr<btCollisionShape> shape, btTransform startTransform, btScalar friction);
 
         glm::mat4 get_transform_matrix(phys_id object);
