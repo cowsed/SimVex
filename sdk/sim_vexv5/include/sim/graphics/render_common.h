@@ -1,12 +1,11 @@
 #pragma once
 #include <stdint.h>
 #include <vector>
-
+#include <string>
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/gtc/quaternion.hpp>
-
 
 namespace sim
 {
@@ -20,6 +19,9 @@ namespace sim
     {
         /// @brief initalize static and global stuff
         void setup_common();
+
+        // load a texture into opengl
+        unsigned int load_texture(std::string filename);
 
         struct ShaderProgram
         {

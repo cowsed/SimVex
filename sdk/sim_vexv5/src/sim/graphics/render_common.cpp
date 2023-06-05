@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstdlib>
+#include <map>
 #include <array>
 #include <thread>
 #include <chrono>
@@ -10,6 +11,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GL/glcorearb.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
+
 
 #include "sim/graphics/brain_screen.h"
 
@@ -56,7 +61,7 @@ void main() {
 }
 )glsl";
 
-        static const char *model_vertex_shader =R"glsl(
+        static const char *model_vertex_shader = R"glsl(
 #version 400
 uniform mat4 view;
 uniform mat4 perspective;
@@ -93,6 +98,52 @@ void main() {
         void setup_common()
         {
             default_prog = ShaderProgram(model_vertex_shader, model_fragment_shader);
+        }
+
+        // Cache structure for load_texture
+        static std::map<std::string, unsigned int> texture_cache = {};
+
+        unsigned int load_texture_internal(std::string path)
+        {
+            int width, height, nrChannels;
+            unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+
+            if (data == NULL)
+            {
+                std::cout << "Error loading texture found at " << path << '\n';
+                exit(EXIT_FAILURE);
+            }
+
+            unsigned int tex_channels = GL_RGBA;
+            if (nrChannels == 3)
+            {
+                tex_channels = GL_RGB;
+            }
+            unsigned int texture;
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, tex_channels, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            return texture;
+        }
+
+        ///@brief Load an image texture from the filesystem, upload it to openGL and return it's handle
+        /// If the texture has been loaded already, return its existing handle (and promise not to modify it)
+        /// @pre openGL has been initialized
+        unsigned int load_texture(std::string filename)
+        {
+
+            if (texture_cache.contains(filename))
+            {
+                return texture_cache[filename];
+            }
+
+            unsigned int handle = load_texture_internal(filename);
+
+            texture_cache.insert({filename, handle});
+
+            return handle;
         }
 
         /// @brief allocate and create all buffers and textures needed to draw to
@@ -217,7 +268,6 @@ void main() {
                 std::cout << "Shader Fragment Program Failed size: " << maxLength << " : " << str << '\n';
                 exit(EXIT_FAILURE);
             }
-
 
             program = glCreateProgram();
             glAttachShader(program, fs);

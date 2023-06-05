@@ -1,12 +1,14 @@
 #include <array>
 
+#include <iostream>
+
+#include "stb/stb_image.h"
+
 #include <GL/glew.h>
 #include <GL/glcorearb.h>
 
 #include "sim/graphics/skybox.h"
 #include "sim/graphics/render_common.h"
-
-
 
 const char skybox_vert[] =
     "#version 330 core\n"
@@ -83,6 +85,26 @@ namespace sim
             -1.0f, -1.0f, 1.0f,
             1.0f, -1.0f, 1.0f};
 
+        Skybox::Skybox(std::string folder_path)
+        {
+            std::array<std::string, 6> names = {"px", "nx", "py", "ny", "pz", "nz"};
+            std::array faces = {&px, &nx, &py, &ny, &pz, &nz};
+
+            for (int i = 0; i < 6; i++)
+            {
+                std::string file_path = folder_path + names[i] + ".png";
+                int width, height, nrChannels;
+                unsigned char *data = stbi_load(file_path.c_str(), &width, &height, &nrChannels, 0);
+
+                if (data == NULL)
+                {
+                    std::cout << "Error loading skybox side found at " << file_path << '\n';
+                    exit(EXIT_FAILURE);
+                }
+                *faces[i] = Image{.width = (unsigned int)width, .height = (unsigned int)height, .image_data = data};
+            }
+        }
+
         void Skybox::init()
         {
             // Initialize texture
@@ -102,8 +124,6 @@ namespace sim
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-            GLint swizzleMask[] = {GL_ALPHA, GL_BLUE, GL_GREEN, GL_RED};
-            glTexParameteriv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_RGBA, swizzleMask);
 
             // Initialize shader program
             skybox_prog = ShaderProgram(skybox_vert, skybox_frag);

@@ -15,8 +15,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
 
 #include "sim/graphics/render_common.h"
 
@@ -156,52 +154,6 @@ void main() {
             );
         }
 
-        // Cache structure for load_texture
-        static std::map<std::string, unsigned int> texture_cache = {};
-
-        unsigned int load_texture_internal(std::string path)
-        {
-            int width, height, nrChannels;
-            unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-
-            if (data == NULL)
-            {
-                std::cout << "Error loading texture found at " << path << '\n';
-                exit(EXIT_FAILURE);
-            }
-
-            unsigned int tex_channels = GL_RGBA;
-            if (nrChannels == 3)
-            {
-                tex_channels = GL_RGB;
-            }
-            unsigned int texture;
-            glGenTextures(1, &texture);
-            glBindTexture(GL_TEXTURE_2D, texture);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, tex_channels, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-
-            return texture;
-        }
-
-        ///@brief Load an image texture from the filesystem, upload it to openGL and return it's handle
-        /// If the texture has been loaded already, return its existing handle (and promise not to modify it)
-        /// @pre openGL has been initialized
-        unsigned int load_texture(std::string filename)
-        {
-
-            if (texture_cache.contains(filename))
-            {
-                return texture_cache[filename];
-            }
-
-            unsigned int handle = load_texture_internal(filename);
-
-            texture_cache.insert({filename, handle});
-
-            return handle;
-        }
-
         /// @brief procceses an Assimp mesh into a MeshShape
         /// @param mesh the mesh to convert
         /// @param scene the scene that the mesh is part
@@ -258,7 +210,7 @@ void main() {
                     // have at least one diffues texture
                     aiString path;
                     material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-                    unsigned int handle = load_texture(base_path +"/"+ std::string(path.C_Str()));
+                    unsigned int handle = renderer::load_texture(base_path +"/"+ std::string(path.C_Str()));
                     diffuse_tex_handle = handle;
                     has_texture = true;
                 }

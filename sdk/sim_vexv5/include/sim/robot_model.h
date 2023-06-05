@@ -17,7 +17,7 @@ namespace sim
     {
         void setup();
 
-        unsigned int load_texture(std::string filename);
+
 
         class MeshShape
         {

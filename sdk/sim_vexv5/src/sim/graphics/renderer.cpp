@@ -12,14 +12,7 @@
 #include "imgui.h"
 
 #include "sim/physics.h"
-
 #include "sim/graphics/skybox.h"
-#include "sim/graphics/images/default_skybox/nx.h"
-#include "sim/graphics/images/default_skybox/ny.h"
-#include "sim/graphics/images/default_skybox/nz.h"
-#include "sim/graphics/images/default_skybox/px.h"
-#include "sim/graphics/images/default_skybox/py.h"
-#include "sim/graphics/images/default_skybox/pz.h"
 
 namespace sim
 {
@@ -33,7 +26,7 @@ namespace sim
 
         RenderTarget field_viewport;
         Camera field_camera(glm::vec3(0, 0, 0.2), 0, 0, field_viewport);
-        Skybox field_skybox = {.nx = nx, .ny = ny, .nz = nz, .px = px, .py = py, .pz = pz};
+        Skybox field_skybox("/home/richie/VEX/Sim/sdk/sim_vexv5/media/Environments/hangar/");
 
         brain_screen_shape *brain_screen;
         construction::Model *brain_shape;
@@ -71,6 +64,7 @@ namespace sim
 #ifndef MODEL_PATH
 #define MODEL_PATH "./"
 #endif
+            
 
             auto brain_path = std::string(MODEL_PATH) + std::string("Devices/Brain/V5_Brain.dae");
             auto nut_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/nut.dae");
@@ -146,6 +140,7 @@ namespace sim
                 bars_shape->render(persp, view, ident, light_pos);
                 motor_shape->render(persp, view, glm::translate(ident, {0.1, 0.4, 0.3}), light_pos);
             }
+            
             if (phys_debug_draw)
             {
                 physics::draw_db_world(persp, view);
