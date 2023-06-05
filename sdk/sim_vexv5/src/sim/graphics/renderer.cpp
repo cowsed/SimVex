@@ -68,26 +68,38 @@ namespace sim
             field_skybox.init();
             brain_screen = new brain_screen_shape();
 
+            // MODEL_PATH is defined by the makefile. this guard is only here to make the ide be quiet
+            #ifndef MODEL_PATH
+            #define MODEL_PATH "./"
+            #endif
 
+            auto brain_path = std::string(MODEL_PATH) + std::string("Devices/Brain/V5_Brain.dae");
+            auto nut_path =   std::string(MODEL_PATH) + std::string("Fields/OverUnder/nut.dae");
+            auto field_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/field.dae");
+            auto bars_path =  std::string(MODEL_PATH) + std::string("Fields/OverUnder/bars.dae");
 
-            brain_shape = new construction::Model("Construction/V5_Brain.dae");
-            btTransform brain_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(0, .3, .4)));
+            brain_shape = new construction::Model(brain_path);
+            btTransform brain_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(0.1, .3, .4)));
+
+            brain_transform.setRotation(btQuaternion(btVector3{1,0,0}, -.55));
+
             std::unique_ptr<btCollisionShape> brain_collision = brain_shape->make_convex_hull();
             float brain_mass = .11; // kg
             brain_id = physics::add_dynamic_mesh(brain_mass, std::move(brain_collision), brain_transform, 0.4, 0);
 
-            nut_shape = new construction::Model("Construction/nut.dae");
+            nut_shape = new construction::Model(nut_path);
             btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, .4)));
             std::unique_ptr<btCollisionShape> nut_collision = nut_shape->make_convex_hull();
             float nut_mass = .12; // kg
             nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform, .4, 0.005);
 
-            field_shape = new construction::Model("Construction/field.dae");
+            field_shape = new construction::Model(field_path);
             btTransform field_transform = btTransFromOrigin(btVector3{0, 0, 0});
             std::unique_ptr<btCollisionShape> field_collision = field_shape->make_convex_hull();
             field_id = physics::add_static_mesh(std::move(field_collision), field_transform, 1.0);
 
-            bars_shape = new construction::Model("Construction/bars.dae");
+            bars_shape = new construction::Model(bars_path);
+            // motor_shape = new construction::Model("Construction/bars.dae");
 
         }
 

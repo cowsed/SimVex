@@ -189,18 +189,15 @@ void main() {
         /// @pre openGL has been initialized
         unsigned int load_texture(std::string filename)
         {
-            std::string path = "Construction/";
 
-            std::string tex_path = path.append(filename);
-
-            if (texture_cache.contains(tex_path))
+            if (texture_cache.contains(filename))
             {
-                return texture_cache[tex_path];
+                return texture_cache[filename];
             }
 
-            unsigned int handle = load_texture_internal(tex_path);
+            unsigned int handle = load_texture_internal(filename);
 
-            texture_cache.insert({tex_path, handle});
+            texture_cache.insert({filename, handle});
 
             return handle;
         }
@@ -210,7 +207,7 @@ void main() {
         /// @param scene the scene that the mesh is part
         /// @return Constructed Mesh Shape
         /// @pre openGL has been initialized
-        static MeshShape processAiMesh(aiMesh *mesh, const aiScene *scene)
+        static MeshShape processAiMesh(aiMesh *mesh, const aiScene *scene, std::string base_path)
         {
             // Local Helpers
             auto toGlm3 = [](aiVector3D v)
@@ -261,7 +258,7 @@ void main() {
                     // have at least one diffues texture
                     aiString path;
                     material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-                    unsigned int handle = load_texture(std::string(path.C_Str()));
+                    unsigned int handle = load_texture(base_path +"/"+ std::string(path.C_Str()));
                     diffuse_tex_handle = handle;
                     has_texture = true;
                 }
@@ -281,17 +278,17 @@ void main() {
         }
 
         /// @pre openGL has been initialized
-        static void processAiNode(aiNode *node, const aiScene *scene, std::vector<MeshShape> &meshes)
+        static void processAiNode(aiNode *node, const aiScene *scene, std::vector<MeshShape> &meshes, std::string base_path)
         {
             for (unsigned int i = 0; i < node->mNumMeshes; i++)
             {
                 aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-                meshes.push_back(processAiMesh(mesh, scene));
+                meshes.push_back(processAiMesh(mesh, scene, base_path));
             }
             // add child nodes
             for (unsigned int i = 0; i < node->mNumChildren; i++)
             {
-                processAiNode(node->mChildren[i], scene, meshes);
+                processAiNode(node->mChildren[i], scene, meshes, base_path);
             }
         }
 
@@ -309,7 +306,7 @@ void main() {
             std::string directory = path.substr(0, path.find_last_of('/'));
 
             std::vector<MeshShape> shapes;
-            processAiNode(scene->mRootNode, scene, shapes);
+            processAiNode(scene->mRootNode, scene, shapes, directory);
             this->meshes = shapes;
         }
 

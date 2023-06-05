@@ -265,6 +265,14 @@ namespace sim
                 }
                 return (_V5_ControllerIndex)-1;
             };
+            float joy_deadzone = .1;
+
+            auto deadzone = [joy_deadzone](float val){
+                if (val < joy_deadzone && val > -joy_deadzone){
+                    val = 0;
+                }
+                return val;
+            };
             bool controller_present = glfwJoystickPresent(GLFW_JOYSTICK_1);
             if (controller_present)
             {
@@ -276,6 +284,7 @@ namespace sim
                 {
                     V5_ControllerIndex index = map_index_to_vex(i);
                     float val = axes[i] * map_index_to_sign(i);
+                    val = deadzone(val);
                     if (val != last_axes[i])
                     {
                         sim::event_handler::send_mevent(controller_state::primary_controller_index, _axisIndexToChangedEvent(index));
