@@ -41,6 +41,8 @@ namespace sim
 
         construction::Model *bars_shape;
         construction::Model *motor_shape;
+        construction::Model *wheel_shape;
+        construction::Model *alum_shape;
 
         void setup()
         {
@@ -76,6 +78,8 @@ namespace sim
             auto field_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/field.dae");
             auto bars_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/bars.dae");
             auto motor_path = std::string(MODEL_PATH) + std::string("Devices/Motor/Motor.dae");
+            auto wheel_path = std::string(MODEL_PATH) + std::string("Motion/Wheels/4_inch_omni.dae");
+            auto alum_path = std::string(MODEL_PATH) + std::string("Aluminum/1_2_25_aluminum.dae");
 
             brain_shape = new construction::Model(brain_path);
             btTransform brain_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(0.1, .3, .4)));
@@ -99,12 +103,14 @@ namespace sim
 
             bars_shape = new construction::Model(bars_path);
             motor_shape = new construction::Model(motor_path);
+            wheel_shape = new construction::Model(wheel_path);
+            alum_shape = new construction::Model(alum_path);
 
             auto end = std::chrono::steady_clock::now();
 
             std::cout << "Loaded models time in seconds: "
-                 << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
-                 << " millisec\n";
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
+                      << " millisec\n";
         }
 
         void build_ui()
@@ -149,7 +155,9 @@ namespace sim
                 field_shape->render(persp, view, field_trans, light_pos);
 
                 bars_shape->render(persp, view, ident, light_pos);
-                motor_shape->render(persp, view, glm::translate(ident, {0.1, 0.4, 0.3}), light_pos);
+                motor_shape->render(persp, view, glm::translate(ident, {0.0, 0.4, 0.3}), light_pos);
+                wheel_shape->render(persp, view, glm::translate(ident, {0.0, 0.4, 0.3}), light_pos);
+                alum_shape->render(persp, view, glm::translate(ident, {0.18, 0.34, 0.3}), light_pos);
             }
 
             if (phys_debug_draw)
