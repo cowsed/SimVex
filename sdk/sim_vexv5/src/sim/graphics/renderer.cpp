@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <memory>
+#include <chrono>
 
 #include <GL/glew.h>
 #include <GL/glcorearb.h>
@@ -26,7 +27,7 @@ namespace sim
 
         RenderTarget field_viewport;
         Camera field_camera(glm::vec3(0, 0, 0.2), 0, 0, field_viewport);
-        Skybox field_skybox("/home/richie/VEX/Sim/sdk/sim_vexv5/media/Environments/hangar/");
+        Skybox *field_skybox;
 
         brain_screen_shape *brain_screen;
         construction::Model *brain_shape;
@@ -57,14 +58,18 @@ namespace sim
             setup_common();
 
             field_viewport.init(800, 600);
-            field_skybox.init();
+            field_skybox = new Skybox("/home/richie/VEX/Sim/sdk/sim_vexv5/media/Environments/hangar/");
+            field_skybox->init();
             brain_screen = new brain_screen_shape();
 
-// MODEL_PATH is defined by the makefile. this guard is only here to make the ide be quiet
+// MODEL_PATH is defined by the makefile. this guard is only here to make the IDE be quiet
 #ifndef MODEL_PATH
 #define MODEL_PATH "./"
 #endif
-            
+
+            // BEFORE CACHING 4364
+
+            auto start = std::chrono::steady_clock::now();
 
             auto brain_path = std::string(MODEL_PATH) + std::string("Devices/Brain/V5_Brain.dae");
             auto nut_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/nut.dae");
@@ -94,6 +99,12 @@ namespace sim
 
             bars_shape = new construction::Model(bars_path);
             motor_shape = new construction::Model(motor_path);
+
+            auto end = std::chrono::steady_clock::now();
+
+            std::cout << "Loaded models time in seconds: "
+                 << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
+                 << " millisec\n";
         }
 
         void build_ui()
@@ -117,7 +128,7 @@ namespace sim
 
             if (draw_skybox)
             {
-                field_skybox.render(field_camera, field_viewport);
+                field_skybox->render(field_camera, field_viewport);
             }
 
             ShaderProgram::activate_default();
@@ -140,7 +151,7 @@ namespace sim
                 bars_shape->render(persp, view, ident, light_pos);
                 motor_shape->render(persp, view, glm::translate(ident, {0.1, 0.4, 0.3}), light_pos);
             }
-            
+
             if (phys_debug_draw)
             {
                 physics::draw_db_world(persp, view);

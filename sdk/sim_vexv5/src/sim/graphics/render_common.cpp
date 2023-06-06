@@ -15,7 +15,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
-
 #include "sim/graphics/brain_screen.h"
 
 namespace sim
@@ -102,6 +101,7 @@ void main() {
 
         // Cache structure for load_texture
         static std::map<std::string, unsigned int> texture_cache = {};
+        static std::map<unsigned int, std::string> rev_texture_cache = {};
 
         unsigned int load_texture_internal(std::string path)
         {
@@ -142,8 +142,13 @@ void main() {
             unsigned int handle = load_texture_internal(filename);
 
             texture_cache.insert({filename, handle});
+            rev_texture_cache.insert({handle, filename});
 
             return handle;
+        }
+        std::string get_texture_path(unsigned int tex_handle)
+        {
+            return rev_texture_cache[tex_handle];
         }
 
         /// @brief allocate and create all buffers and textures needed to draw to

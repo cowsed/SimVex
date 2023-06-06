@@ -22,6 +22,9 @@ namespace sim
 
         // load a texture into opengl
         unsigned int load_texture(std::string filename);
+        // get a texture path based on its gl handle        
+        std::string get_texture_path(unsigned int tex_handle);
+
 
         struct ShaderProgram
         {
