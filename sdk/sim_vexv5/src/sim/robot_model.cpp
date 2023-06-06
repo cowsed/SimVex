@@ -84,6 +84,12 @@ void main() {
 
         renderer::ShaderProgram model_prog;
 
+        /// @brief create a MeshShape from assimp data structures
+        /// @param vertices vertex spec
+        /// @param tris element buffer
+        /// @param diffuse_tex_handle texture handle 
+        /// @param has_texture whether or not to use texture or just the diffuse color
+        /// @param diffuse_col base color if no texture
         MeshShape::MeshShape(std::vector<MeshShape::Vertex> vertices, std::vector<MeshShape::Tri> tris, unsigned int diffuse_tex_handle, bool has_texture, glm::vec3 diffuse_col)
         {
             this->verts = vertices;
@@ -114,6 +120,9 @@ void main() {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, tris.size() * sizeof(Tri), (void *)&(tris[0]), GL_STATIC_DRAW);
         }
+
+        /// @brief construct a MeshShape from a cache file
+        /// @param file file containing streamlined version
         MeshShape::MeshShape(std::ifstream &file)
         {
             std::uint64_t num_verts = 0;
@@ -167,6 +176,8 @@ void main() {
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, tris.size() * sizeof(Tri), (void *)&(tris[0]), GL_STATIC_DRAW);
         }
 
+        /// @brief write the model to the streamlined cache version 
+        /// @param file the file to write to
         void MeshShape::write_to_cache_file(std::ofstream &file)
         {
             std::uint64_t num_verts = verts.size();
@@ -327,6 +338,8 @@ void main() {
         const std::string model_cache_path = ".model_cache";
         static bool is_cache_loaded = false;
         static std::map<std::string, std::filesystem::file_time_type> cached_names;
+        /// @brief initializes the model cache
+        /// reads the model_cache directory for models we have cached
         void load_model_cache()
         {
 
@@ -363,6 +376,9 @@ void main() {
             return false;
         }
 
+
+        /// @brief loads a model from a cache file
+        /// @param cache_path file path to cached model
         void Model::load_from_cache(std::string cache_path)
         {
             std::ifstream input_file(cache_path);
@@ -374,6 +390,9 @@ void main() {
                 meshes.emplace_back(MeshShape(input_file));
             }
         }
+
+        /// @brief Write a model cache
+        /// @param cache_path file path of where to write the cached model
         void Model::write_to_cache(std::string cache_path)
         {
             std::uint64_t num_meshes = meshes.size();
@@ -419,6 +438,10 @@ void main() {
             this->meshes = shapes;
         }
 
+        /// @brief performs a check if a model is available to load from the cache
+        /// checks if we have a cache of the model and if the cache is not out of date
+        /// @param path the path from which to load the model
+        /// @return true if we can use the cache, false otherwise
         bool should_load_from_cache(std::string path)
         {
             std::string path_hash = std::to_string(std::hash<std::string>{}(path));
@@ -440,6 +463,9 @@ void main() {
             return true;
         }
 
+        /// @brief Constructs a model from a path to a 3d model
+        /// will use a cached model if available
+        /// @param path the path to the model file
         Model::Model(std::string path)
         {
             // make sure we have the cache
