@@ -14,6 +14,7 @@
 
 #include "sim/physics.h"
 #include "sim/graphics/skybox.h"
+#include "sim/urdf_loader.h"
 
 namespace sim
 {
@@ -33,16 +34,15 @@ namespace sim
         construction::Model *brain_shape;
         sim::physics::phys_id brain_id;
 
-        construction::Model *nut_shape;
-        sim::physics::phys_id nut_id;
+        // construction::Model *nut_shape;
+        // sim::physics::phys_id nut_id;
 
         construction::Model *field_shape;
         sim::physics::phys_id field_id;
 
-        construction::Model *bars_shape;
-        construction::Model *motor_shape;
-        construction::Model *wheel_shape;
-        construction::Model *alum_shape;
+        // construction::Model *bars_shape;
+
+        loader::RobotModel robot_model;
 
         void setup()
         {
@@ -64,6 +64,9 @@ namespace sim
             field_skybox->init();
             brain_screen = new brain_screen_shape();
 
+            robot_model = sim::loader::load_urdf("Construction/flynn.urdf");
+            std::cout << "loaded urdf\n";
+
 // MODEL_PATH is defined by the makefile. this guard is only here to make the IDE be quiet
 #ifndef MODEL_PATH
 #define MODEL_PATH "./"
@@ -73,38 +76,25 @@ namespace sim
 
             auto start = std::chrono::steady_clock::now();
 
-            auto brain_path = std::string(MODEL_PATH) + std::string("Devices/Brain/V5_Brain.dae");
             auto nut_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/nut.dae");
             auto field_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/field.dae");
             auto bars_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/bars.dae");
-            auto motor_path = std::string(MODEL_PATH) + std::string("Devices/Motor/Motor.dae");
-            auto wheel_path = std::string(MODEL_PATH) + std::string("Motion/Wheels/4_inch_omni.dae");
-            auto alum_path = std::string(MODEL_PATH) + std::string("Aluminum/1_2_25_aluminum.dae");
 
-            brain_shape = new construction::Model(brain_path);
-            btTransform brain_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(0.1, .3, .4)));
 
-            brain_transform.setRotation(btQuaternion(btVector3{1, 0, 0}, -.55));
 
-            std::unique_ptr<btCollisionShape> brain_collision = brain_shape->make_convex_hull();
-            float brain_mass = .11; // kg
-            brain_id = physics::add_dynamic_mesh(brain_mass, std::move(brain_collision), brain_transform, 0.4, 0);
 
-            nut_shape = new construction::Model(nut_path);
-            btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, .4)));
-            std::unique_ptr<btCollisionShape> nut_collision = nut_shape->make_convex_hull();
-            float nut_mass = .12; // kg
-            nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform, .4, 0.005);
+            // nut_shape = new construction::Model(nut_path);
+            // btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, .4)));
+            // std::unique_ptr<btCollisionShape> nut_collision = nut_shape->make_convex_hull();
+            // float nut_mass = .12; // kg
+            // nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform, .4, 0.005);
 
             field_shape = new construction::Model(field_path);
             btTransform field_transform = btTransFromOrigin(btVector3{0, 0, 0});
             std::unique_ptr<btCollisionShape> field_collision = field_shape->make_convex_hull();
             field_id = physics::add_static_mesh(std::move(field_collision), field_transform, 1.0);
 
-            bars_shape = new construction::Model(bars_path);
-            motor_shape = new construction::Model(motor_path);
-            wheel_shape = new construction::Model(wheel_path);
-            alum_shape = new construction::Model(alum_path);
+            // bars_shape = new construction::Model(bars_path);
 
             auto end = std::chrono::steady_clock::now();
 
@@ -144,20 +134,12 @@ namespace sim
             glm::mat4 ident = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
             if (main_draw)
             {
-                auto brain_trans = physics::get_transform_matrix(brain_id);
-                brain_screen->render(persp, view, brain_trans);
-                brain_shape->render(persp, view, brain_trans, light_pos);
-
-                glm::mat4 nut_trans = physics::get_transform_matrix(nut_id);
-                nut_shape->render(persp, view, nut_trans, light_pos);
-
                 glm::mat4 field_trans = physics::get_transform_matrix(field_id);
                 field_shape->render(persp, view, field_trans, light_pos);
 
-                bars_shape->render(persp, view, ident, light_pos);
-                motor_shape->render(persp, view, glm::translate(ident, {0.0, 0.4, 0.3}), light_pos);
-                wheel_shape->render(persp, view, glm::translate(ident, {0.0, 0.4, 0.3}), light_pos);
-                alum_shape->render(persp, view, glm::translate(ident, {0.18, 0.34, 0.3}), light_pos);
+                // bars_shape->render(persp, view, ident, light_pos);
+
+                robot_model.render(persp, view, glm::translate(ident, {0, .5, .5}), light_pos);
             }
 
             if (phys_debug_draw)

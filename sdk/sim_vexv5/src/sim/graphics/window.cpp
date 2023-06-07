@@ -10,7 +10,7 @@
 #include "sim/time.h"
 #include "sim/events.h"
 #include "sim/physics.h"
-#include "sim/robot_model.h"
+#include "sim/3d_model.h"
 #include "sim/controller.h"
 
 

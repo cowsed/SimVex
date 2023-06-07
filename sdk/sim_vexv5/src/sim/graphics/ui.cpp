@@ -11,7 +11,7 @@
 #include "sim/controller.h"
 #include "sim/sim.h"
 #include "sim/events.h"
-#include "sim/robot_model.h"
+#include "sim/3d_model.h"
 #include "sim/graphics/renderer.h"
 #include "sim/physics.h"
 
