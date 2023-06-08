@@ -114,6 +114,17 @@ glm::mat4 sim::physics::get_transform_matrix(sim::physics::phys_id id)
     return ret;
 }
 
+void sim::physics::add_rigid_body(btRigidBody *body)
+{
+    get_phys_id();
+    dynamicsWorld->addRigidBody(body);
+}
+
+void sim::physics::add_constraint(btTypedConstraint *constraint){
+    dynamicsWorld->addConstraint(constraint);
+}
+
+
 void step_physics()
 {
     dynamicsWorld->stepSimulation(1.f / 60.f, 10);

@@ -64,7 +64,9 @@ namespace sim
             field_skybox->init();
             brain_screen = new brain_screen_shape();
 
-            robot_model = sim::loader::load_urdf("Construction/flynn.urdf");
+            btTransform initial_robot_transform;
+            initial_robot_transform.setOrigin({0, .3, 0});
+            robot_model = sim::loader::load_urdf("Construction/flynn.urdf", initial_robot_transform);
             std::cout << "loaded urdf\n";
 
 // MODEL_PATH is defined by the makefile. this guard is only here to make the IDE be quiet
@@ -79,9 +81,6 @@ namespace sim
             auto nut_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/nut.dae");
             auto field_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/field.dae");
             auto bars_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/bars.dae");
-
-
-
 
             // nut_shape = new construction::Model(nut_path);
             // btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, .4)));

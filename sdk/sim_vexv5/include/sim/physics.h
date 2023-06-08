@@ -15,6 +15,11 @@ namespace sim
 
         glm::mat4 get_transform_matrix(phys_id object);
 
+
+        void add_constraint(btTypedConstraint *constraint);
+
+        void add_rigid_body(btRigidBody *body);
+
         void build_ui();
 
         void draw_db_world(glm::mat4 persp, glm::mat4 view);
