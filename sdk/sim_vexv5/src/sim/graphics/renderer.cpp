@@ -65,6 +65,8 @@ namespace sim
             brain_screen = new brain_screen_shape();
 
             btTransform initial_robot_transform;
+            initial_robot_transform.setIdentity();
+            // initial_robot_transform.setRotation(btQuaternion(btVector3(0,1,0), M_PI/2));
             initial_robot_transform.setOrigin({0, .3, 0});
             robot_model = sim::loader::load_urdf("Construction/flynn.urdf", initial_robot_transform);
             std::cout << "loaded urdf\n";

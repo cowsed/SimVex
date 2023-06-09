@@ -285,6 +285,7 @@ namespace sim
                 btTransform to_child;
                 to_child.setIdentity();
                 to_child.setOrigin(to_btVector3(joint_origin.xyz));
+                // to_child.setRotation(btQuaternion({0.0,0,1.0}, joint_origin.rpy.x));
                 std::cout << "to child: " << joint_origin.xyz.x << ", " << joint_origin.xyz.y << ", " << joint_origin.xyz.z << '\n';
 
                 btTransform world_transform = current_transform;
@@ -327,7 +328,11 @@ namespace sim
                 }
             };
 
-            create_physics_from_tree(&(model.link_tree_root.children[0]), initial_transform);
+            btTransform initial_transform_and_rotate = btTransform(initial_transform);
+            // initial_transform_and_rotate.setRotation(initial_transform_and_rotate.getRotation() * btQuaternion({0, 1, 0}, M_PI / 2.0));
+            // initial_transform_and_rotate.setRotation(initial_transform_and_rotate.getRotation() * btQuaternion({1, 0, 0}, -M_PI / 2.0));
+
+            create_physics_from_tree(&(model.link_tree_root.children[0]), initial_transform_and_rotate);
 
             // start with initial transform. walk tree and generate rigid bodies and motionstates based on accumulating transforms
             // initial_transform.
@@ -400,10 +405,10 @@ namespace sim
                     trans.getOpenGLMatrix(&(model_mat[0][0]));
                     models[link.visual]->render(persp, view, model_mat, light_pos);
 
-                    std::cout << model_mat[0][0] << "\t" << model_mat[0][1] << "\t" << model_mat[0][2] << "\t" << model_mat[0][3] << "\n";
-                    std::cout << model_mat[1][0] << "\t" << model_mat[1][1] << "\t" << model_mat[1][2] << "\t" << model_mat[1][3] << "\n";
-                    std::cout << model_mat[2][0] << "\t" << model_mat[2][1] << "\t" << model_mat[2][2] << "\t" << model_mat[2][3] << "\n";
-                    std::cout << model_mat[3][0] << "\t" << model_mat[3][1] << "\t" << model_mat[3][2] << "\t" << model_mat[3][3] << "\n";
+                    std::cout << model_mat[0][0] << "\t" << model_mat[1][0] << "\t" << model_mat[2][0] << "\t" << model_mat[3][0] << "\n";
+                    std::cout << model_mat[0][1] << "\t" << model_mat[1][1] << "\t" << model_mat[2][1] << "\t" << model_mat[3][1] << "\n";
+                    std::cout << model_mat[0][2] << "\t" << model_mat[1][2] << "\t" << model_mat[2][2] << "\t" << model_mat[3][2] << "\n";
+                    std::cout << model_mat[0][3] << "\t" << model_mat[1][3] << "\t" << model_mat[2][3] << "\t" << model_mat[3][3] << "\n";
                 }
 
                 id++;

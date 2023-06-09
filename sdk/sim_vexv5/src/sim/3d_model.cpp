@@ -422,6 +422,7 @@ void main() {
         void Model::load_from_model(std::string model_path)
         {
             Assimp::Importer import;
+            
             const aiScene *scene = import.ReadFile(model_path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenBoundingBoxes);
             if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
             {
