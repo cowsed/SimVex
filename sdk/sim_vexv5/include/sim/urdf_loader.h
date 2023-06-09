@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <map>
-#include <memory>
 
 #include <glm/vec3.hpp>
 #include "btBulletDynamicsCommon.h"
@@ -21,15 +20,19 @@ namespace sim
             static constexpr link_id link_tree_root_id = -1;
 
             typedef std::size_t joint_id;
+            static constexpr joint_id unknown_joint_id = -1;
 
             struct Link
             {
-                model_id visual;
-                btRigidBody *body;
-                btMotionState *motion_state;
+                model_id visual = no_visual;
+                btScalar mass = 0;
+
+                btRigidBody *body = nullptr;
+                btMotionState *motion_state = nullptr;
             };
             struct LinkTreeNode
             {
+                joint_id joint_to_parent;
                 link_id link;
                 std::vector<LinkTreeNode> children;
             };
@@ -58,11 +61,11 @@ namespace sim
 
             std::map<std::string, model_id> model_paths;
             std::vector<sim::construction::Model *> models;
-            std::vector<std::unique_ptr<btCollisionShape>> coll_shapes;
+            std::vector<btCollisionShape *> coll_shapes;
 
             std::map<std::string, link_id> link_names;
             std::vector<Link> links; // indexed by link_id
-            LinkTreeNode link_tree_root = LinkTreeNode{link_tree_root_id, {}};
+            LinkTreeNode link_tree_root = LinkTreeNode{unknown_joint_id, link_tree_root_id, {}};
 
             std::map<std::string, joint_id> joint_names;
             std::vector<Joint> joints; // indexed by joint_id

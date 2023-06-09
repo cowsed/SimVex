@@ -512,7 +512,7 @@ void main() {
         /// make_convex_hull from a mesh
         /// @pre sim::physics::setup() has been called
         /// @return a collision shape that should be passed right into sim::physics::add_*_object()
-        std::unique_ptr<btCollisionShape> Model::make_convex_hull()
+        btCollisionShape  *Model::make_convex_hull()
         {
             auto vec3TobtVec3 = [](glm::vec3 v)
             {
@@ -526,11 +526,11 @@ void main() {
             {
                 verts[i] = vec3TobtVec3(mesh.get_verts()[i].position);
             }
-            std::unique_ptr<btConvexHullShape> collision_mesh = std::make_unique<btConvexHullShape>(verts[0], verts.size());
+            btConvexHullShape *collision_mesh = new btConvexHullShape(verts[0], verts.size());
             collision_mesh->setMargin(collision_margin);
 
             collision_mesh->optimizeConvexHull();
-            return std::move(collision_mesh);
+            return collision_mesh;
         }
 
         /// @brief setup robot construction

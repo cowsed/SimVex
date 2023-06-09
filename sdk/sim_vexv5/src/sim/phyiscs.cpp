@@ -29,10 +29,10 @@ const float g = -9.8;
 
 struct phys_object
 {
-    std::unique_ptr<btCollisionShape> shape;
+    btCollisionShape *shape;
     btScalar mass;
     btVector3 local_inertia;
-    std::unique_ptr<btDefaultMotionState> motion_state;
+    btDefaultMotionState *motion_state;
 };
 
 std::map<sim::physics::phys_id, phys_object> physics_objects;
@@ -44,7 +44,7 @@ sim::physics::phys_id get_phys_id()
     return phys_id_count;
 }
 
-sim::physics::phys_id sim::physics::add_static_mesh(std::unique_ptr<btCollisionShape> shape, btTransform startTransform, btScalar friction)
+sim::physics::phys_id sim::physics::add_static_mesh(btCollisionShape *shape, btTransform startTransform, btScalar friction)
 {
     sim::physics::phys_id my_id = get_phys_id();
 
@@ -52,22 +52,22 @@ sim::physics::phys_id sim::physics::add_static_mesh(std::unique_ptr<btCollisionS
     btVector3 localInertia(0, 0, 0);
 
     // using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
-    std::unique_ptr myMotionState = std::make_unique<btDefaultMotionState>(startTransform);
+    btDefaultMotionState *myMotionState = new btDefaultMotionState(startTransform);
 
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState.get(), shape.get(), localInertia);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
     btRigidBody *body = new btRigidBody(rbInfo);
     body->setFriction(friction);
 
     dynamicsWorld->addRigidBody(body);
 
     // save info for later
-    phys_object obj = phys_object{std::move(shape), mass, localInertia, std::move(myMotionState)};
+    phys_object obj = phys_object{shape, mass, localInertia, myMotionState};
 
-    physics_objects[my_id] = std::move(obj);
+    physics_objects[my_id] = obj;
     return my_id;
 }
 
-sim::physics::phys_id sim::physics::add_dynamic_mesh(btScalar mass, std::unique_ptr<btCollisionShape> shape, btTransform startTransform, btScalar friction, btScalar rolling_friction)
+sim::physics::phys_id sim::physics::add_dynamic_mesh(btScalar mass, btCollisionShape *shape, btTransform startTransform, btScalar friction, btScalar rolling_friction)
 {
     // create a dynamic rigidbody
     sim::physics::phys_id my_id = get_phys_id();
@@ -82,15 +82,15 @@ sim::physics::phys_id sim::physics::add_dynamic_mesh(btScalar mass, std::unique_
     std::cout << "localInertia: " << localInertia.x() << ", " << localInertia.y() << ", " << localInertia.z() << '\n';
 
     // using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
-    std::unique_ptr<btDefaultMotionState> myMotionState = std::make_unique<btDefaultMotionState>(startTransform);
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState.get(), shape.get(), localInertia);
+    btDefaultMotionState *myMotionState = new btDefaultMotionState(startTransform);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
     btRigidBody *body = new btRigidBody(rbInfo);
     body->setFriction(friction);
     body->setRollingFriction(rolling_friction);
     dynamicsWorld->addRigidBody(body);
 
     // save info for later
-    phys_object obj = phys_object{std::move(shape), mass, localInertia, std::move(myMotionState)};
+    phys_object obj = phys_object{shape, mass, localInertia, myMotionState};
 
     physics_objects[my_id] = std::move(obj);
     return my_id;
@@ -98,7 +98,7 @@ sim::physics::phys_id sim::physics::add_dynamic_mesh(btScalar mass, std::unique_
 
 glm::mat4 sim::physics::get_transform_matrix(sim::physics::phys_id id)
 {
-    auto motion_state = physics_objects[id].motion_state.get();
+    auto motion_state = physics_objects[id].motion_state;
     btTransform trans;
 
     if (motion_state == NULL)

@@ -36,7 +36,7 @@ namespace sim
             MeshShape(std::ifstream &file);
             ~MeshShape() {}
             void write_to_cache_file(std::ofstream &file);
-            
+
             void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model, glm::vec3 light_pos);
 
             const std::vector<Vertex> &get_verts();
@@ -61,7 +61,7 @@ namespace sim
             void write_to_file_cache(std::string cache_name);
 
             void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model, glm::vec3 light_pos);
-            std::unique_ptr<btCollisionShape> make_convex_hull();
+            btCollisionShape *make_convex_hull();
 
         private:
             std::vector<MeshShape> meshes;

@@ -20,7 +20,7 @@ namespace sim
 {
     namespace renderer
     {
-        bool phys_debug_draw = false;
+        bool phys_debug_draw = true;
         bool main_draw = true;
         bool draw_skybox = true;
 
@@ -34,8 +34,8 @@ namespace sim
         construction::Model *brain_shape;
         sim::physics::phys_id brain_id;
 
-        // construction::Model *nut_shape;
-        // sim::physics::phys_id nut_id;
+        construction::Model *nut_shape;
+        sim::physics::phys_id nut_id;
 
         construction::Model *field_shape;
         sim::physics::phys_id field_id;
@@ -82,16 +82,16 @@ namespace sim
             auto field_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/field.dae");
             auto bars_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/bars.dae");
 
-            // nut_shape = new construction::Model(nut_path);
-            // btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, .4)));
-            // std::unique_ptr<btCollisionShape> nut_collision = nut_shape->make_convex_hull();
-            // float nut_mass = .12; // kg
-            // nut_id = physics::add_dynamic_mesh(nut_mass, std::move(nut_collision), nut_transform, .4, 0.005);
+            nut_shape = new construction::Model(nut_path);
+            btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, .4)));
+            btCollisionShape *nut_collision = nut_shape->make_convex_hull();
+            float nut_mass = .12; // kg
+            nut_id = physics::add_dynamic_mesh(nut_mass, nut_collision, nut_transform, .4, 0.005);
 
             field_shape = new construction::Model(field_path);
             btTransform field_transform = btTransFromOrigin(btVector3{0, 0, 0});
-            std::unique_ptr<btCollisionShape> field_collision = field_shape->make_convex_hull();
-            field_id = physics::add_static_mesh(std::move(field_collision), field_transform, 1.0);
+            btCollisionShape *field_collision = field_shape->make_convex_hull();
+            field_id = physics::add_static_mesh(field_collision, field_transform, 1.0);
 
             // bars_shape = new construction::Model(bars_path);
 
@@ -137,6 +137,7 @@ namespace sim
                 field_shape->render(persp, view, field_trans, light_pos);
 
                 // bars_shape->render(persp, view, ident, light_pos);
+                nut_shape->render(persp, view, physics::get_transform_matrix(nut_id), light_pos);
 
                 robot_model.render(persp, view, glm::translate(ident, {0, .5, .5}), light_pos);
             }
