@@ -67,7 +67,7 @@ namespace sim
             btTransform initial_robot_transform;
             initial_robot_transform.setIdentity();
             // initial_robot_transform.setRotation(btQuaternion(btVector3(0,1,0), M_PI/2));
-            initial_robot_transform.setOrigin({0, .3, 0});
+            initial_robot_transform.setOrigin({0, 0, 0.3});
             robot_model = sim::loader::load_urdf("Construction/flynn.urdf", initial_robot_transform);
             std::cout << "loaded urdf\n";
 
@@ -141,7 +141,7 @@ namespace sim
                 // bars_shape->render(persp, view, ident, light_pos);
                 nut_shape->render(persp, view, physics::get_transform_matrix(nut_id), light_pos);
 
-                robot_model.render(persp, view, glm::translate(ident, {0, .5, .5}), light_pos);
+                robot_model.render(persp, view, ident, light_pos);
             }
 
             if (phys_debug_draw)

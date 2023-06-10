@@ -21,7 +21,7 @@ namespace sim
 {
     namespace renderer
     {
-        static const glm::vec3 up_vec = glm::vec3(0.0, 1.0, 0.0);
+        static const glm::vec3 up_vec = glm::vec3(0.0, 0.0, 1.0);
 
         static const char *brain_screen_vertex_shader = R"glsl(
 #version 400
@@ -319,14 +319,14 @@ void main() {
                 return {x, y};
             };
 
-            auto rotateY = [&](glm::vec3 v, float angle)
+            auto rotateZ = [&](glm::vec3 v, float angle)
             {
-                glm::vec2 base = {v.x, v.z};
+                glm::vec2 base = {v.x, v.y};
                 base = rotate2D(base, angle);
-                return glm::vec3(base.x, v.y, base.y);
+                return glm::vec3(base.x, base.y, v.z);
             };
-            glm::vec3 updir = {cos(altitude), sin(altitude), 0};
-            glm::vec3 dir = rotateY(updir, azimuth);
+            glm::vec3 updir = {cos(altitude), 0, sin(altitude)};
+            glm::vec3 dir = rotateZ(updir, azimuth);
             glm::vec3 lookat = eye + dir;
             return glm::lookAt(eye, lookat, up_vec);
         }

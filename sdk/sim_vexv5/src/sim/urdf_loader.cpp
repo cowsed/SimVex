@@ -215,11 +215,8 @@ namespace sim
                 std::string parent_name = joint.child("parent").attribute("link").as_string();
                 std::string child_name = joint.child("child").attribute("link").as_string();
 
-                auto to_opengl_coords = [](auto v) -> glm::vec3
-                { return {v.x, v.z, -v.y}; };
-
                 pugi::xml_node origin = joint.child("origin");
-                glm::vec3 xyz = to_opengl_coords(parse_origin_xyz(origin.attribute("xyz").as_string()));
+                glm::vec3 xyz = parse_origin_xyz(origin.attribute("xyz").as_string());
                 std::cout << "xyz "
                           << "{" << xyz.x << ", " << xyz.y << ", " << xyz.z << "}\n";
                 glm::vec3 rpy = parse_origin_xyz(origin.attribute("rpy").as_string());
@@ -395,14 +392,51 @@ namespace sim
                 if (link.visual != no_visual)
                 {
                     glm::mat4 model_mat;
+                    // model_mat[0][0] = 1;
+                    // model_mat[0][1] = 0;
+                    // model_mat[0][2] = 0;
+                    // model_mat[0][3] = 0;
+
+                    // model_mat[1][0] = 0;
+                    // model_mat[1][1] = 1;
+                    // model_mat[1][2] = 0;
+                    // model_mat[1][3] = 0;
+
+                    // model_mat[2][0] = 0;
+                    // model_mat[2][1] = 0;
+                    // model_mat[2][2] = 1;
+                    // model_mat[2][3] = 0;
+
+                    // model_mat[3][0] = 0;
+                    // model_mat[3][1] = 0;
+                    // model_mat[3][2] = 0;
+                    // model_mat[3][3] = 1;
+
                     btTransform trans;
                     links[id].motion_state->getWorldTransform(trans);
-                    std::cout << "pos: " << trans.getOrigin().x() << ", " << trans.getOrigin().y() << ", " << trans.getOrigin().z() << '\n';
+
+                    // model_mat[3][0] = trans.getOrigin().x();
+                    // model_mat[3][1] = trans.getOrigin().z();
+                    // model_mat[3][2] = -trans.getOrigin().y();
+
+                    // model_mat[0][0] = trans.getBasis()[0][0];
+                    // model_mat[1][0] = trans.getBasis()[1][0];
+                    // model_mat[2][0] = trans.getBasis()[2][0];
+
+                    // model_mat[0][1] = trans.getBasis()[0][1];
+                    // model_mat[1][1] = trans.getBasis()[1][1];
+                    // model_mat[2][1] = trans.getBasis()[2][1];
+
+                    // model_mat[0][2] = trans.getBasis()[0][2];
+                    // model_mat[1][2] = trans.getBasis()[1][2];
+                    // model_mat[2][2] = trans.getBasis()[2][2];
+                    // trans.getBasis().extractRotation()
 
                     // btTransform trans2 = links[id].body->getWorldTransform();
                     // std::cout << "pos2: " << trans2.getOrigin().x() << ", " << trans2.getOrigin().y() << ", " << trans2.getOrigin().z() << '\n';
                     std::cout << link_name(id) << " with visual " << link.visual << '\n';
                     trans.getOpenGLMatrix(&(model_mat[0][0]));
+
                     models[link.visual]->render(persp, view, model_mat, light_pos);
 
                     std::cout << model_mat[0][0] << "\t" << model_mat[1][0] << "\t" << model_mat[2][0] << "\t" << model_mat[3][0] << "\n";

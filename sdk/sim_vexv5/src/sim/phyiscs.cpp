@@ -100,17 +100,18 @@ glm::mat4 sim::physics::get_transform_matrix(sim::physics::phys_id id)
 {
     auto motion_state = physics_objects[id].motion_state;
     btTransform trans;
+    glm::mat4 ident = glm::mat4{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
 
     if (motion_state == NULL)
     {
         std::cout << "No Motion state for id: " << id << '\n';
-        glm::mat4 ident = glm::mat4{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
         return ident;
     }
 
     motion_state->getWorldTransform(trans);
-    glm::mat4 ret;
+    glm::mat4 ret = ident;
     trans.getOpenGLMatrix(&(ret[0][0]));
+
     return ret;
 }
 
@@ -120,10 +121,10 @@ void sim::physics::add_rigid_body(btRigidBody *body)
     dynamicsWorld->addRigidBody(body);
 }
 
-void sim::physics::add_constraint(btTypedConstraint *constraint){
+void sim::physics::add_constraint(btTypedConstraint *constraint)
+{
     dynamicsWorld->addConstraint(constraint);
 }
-
 
 void step_physics()
 {
@@ -222,7 +223,7 @@ static char *line_frag_shader = "#version 330 core\n"
                                 "}\n"
                                 "";
 static char *line_vert_shader = "#version 330 core\n"
-                                "layout (location = 0) in vec3 position;\n"
+                                "layout (location = 0) in vec3 position_physics;\n"
                                 "layout (location = 1) in vec3 color;\n"
                                 "out vec3 fColor;\n"
                                 "\n"
@@ -231,6 +232,7 @@ static char *line_vert_shader = "#version 330 core\n"
                                 "\n"
                                 "void main()\n"
                                 "{\n"
+                                "   vec3 position = vec3(position_physics.x, position_physics.y, position_physics.z);"
                                 "   gl_Position = projection * view * vec4(position, 1.0f);\n"
                                 "   fColor = color;\n"
                                 "\n"
@@ -243,7 +245,7 @@ void sim::physics::setup()
     overlappingPairCache = new btDbvtBroadphase();
     solver = new btSequentialImpulseConstraintSolver;
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-    dynamicsWorld->setGravity(btVector3(0, g, 0));
+    dynamicsWorld->setGravity(btVector3(0, 0, g));
 
     // Debug Drawer
     line_shader = sim::renderer::ShaderProgram(line_vert_shader, line_frag_shader);

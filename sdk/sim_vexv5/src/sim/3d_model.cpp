@@ -36,7 +36,7 @@ uniform int has_texture;
 uniform vec3 diff_col;
 uniform vec3 view_pos;
             
-in vec3 vp;
+in vec3 vp_physics;
 in vec3 norm_v;
 in vec2 UV_v;
             
@@ -45,6 +45,7 @@ out vec3 world_normal;
 out vec2 UV;
             
 void main() {
+    vec3 vp = vec3(vp_physics.x, vp_physics.y, vp_physics.z);
     frag_pos = (model * vec4(vp, 1.0)).xyz;
     UV = UV_v;
     world_normal = (model * vec4(norm_v, 1.0)).xyz;

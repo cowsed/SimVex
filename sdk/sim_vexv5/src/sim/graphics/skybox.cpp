@@ -32,7 +32,7 @@ const char skybox_frag[] =
     "\n"
     "void main()\n"
     "{    \n"
-    "    FragColor = texture(skybox, TexCoords);\n"
+    "    FragColor = texture(skybox, TexCoords.xzy);\n"
     "}\n";
 
 namespace sim

@@ -250,7 +250,7 @@ namespace sim
         double move_speed = 0.02;
         double turn_speed = 0.004;
 
-        cam->azimuth += dx * turn_speed;
+        cam->azimuth -= dx * turn_speed;
 
         cam->altitude -= dy * turn_speed;
         if (cam->altitude < -M_PI / 2)
@@ -270,11 +270,11 @@ namespace sim
             // X
             if (ImGui::IsKeyDown(left_key))
             {
-                local_vel.y--;
+                local_vel.y++;
             }
             else if (ImGui::IsKeyDown(right_key))
             {
-                local_vel.y++;
+                local_vel.y--;
             }
             // Y
             if (ImGui::IsKeyDown(forward_key))
@@ -300,7 +300,7 @@ namespace sim
         uppy_downy *= move_speed;
         //
         glm::vec2 global_xy = rotate2D(local_vel, cam->azimuth);
-        glm::vec3 global_vel = {global_xy.x, uppy_downy, global_xy.y};
+        glm::vec3 global_vel = {global_xy.x, global_xy.y, uppy_downy};
 
         cam->eye += global_vel;
     }
