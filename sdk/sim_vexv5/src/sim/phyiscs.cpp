@@ -110,7 +110,11 @@ glm::mat4 sim::physics::get_transform_matrix(sim::physics::phys_id id)
 
     motion_state->getWorldTransform(trans);
     glm::mat4 ret = ident;
-    trans.getOpenGLMatrix(&(ret[0][0]));
+    double d_mat[16];
+    trans.getOpenGLMatrix(d_mat);
+    for (int i = 0; i < 16; i++){
+        (&ret[0][0])[i] = d_mat[i];
+    }
 
     return ret;
 }
@@ -128,7 +132,7 @@ void sim::physics::add_constraint(btTypedConstraint *constraint)
 
 void step_physics()
 {
-    dynamicsWorld->stepSimulation(1.f / 60.f, 10);
+    dynamicsWorld->stepSimulation(1.f / 60.f, 1000);
 }
 
 void sim::physics::build_ui()
@@ -242,9 +246,12 @@ void sim::physics::setup()
 {
     collisionConfiguration = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
-    overlappingPairCache = new btDbvtBroadphase();
+    overlappingPairCache = new btSimpleBroadphase();
     solver = new btSequentialImpulseConstraintSolver;
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+    dynamicsWorld->getSolverInfo().m_splitImpulse = true;
+    dynamicsWorld->getSolverInfo().m_splitImpulsePenetrationThreshold = -0.000001;
+    dynamicsWorld->getSolverInfo().m_splitImpulseTurnErp = 1.0;
     dynamicsWorld->setGravity(btVector3(0, 0, g));
 
     // Debug Drawer
@@ -259,4 +266,5 @@ void sim::physics::draw_db_world(glm::mat4 persp, glm::mat4 view)
     line_shader.activate();
     my_drawer->SetMatrices(view, persp);
     dynamicsWorld->debugDrawWorld();
+    
 }

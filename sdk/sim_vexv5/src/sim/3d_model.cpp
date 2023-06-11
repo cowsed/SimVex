@@ -25,7 +25,7 @@ namespace sim
 {
     namespace construction
     {
-        const float collision_margin = 0.0005;
+        const float collision_margin = 0.00005;
         static const char *model_vertex_shader = R"glsl(
 #version 400
 uniform mat4 view;
@@ -530,9 +530,13 @@ void main() {
             }
             btConvexHullShape *collision_mesh = new btConvexHullShape(verts[0], verts.size());
             collision_mesh->setMargin(collision_margin);
-
             collision_mesh->optimizeConvexHull();
-            return collision_mesh;
+            btCompoundShape * shape = new btCompoundShape(true, 1);
+            btTransform shape_transform;
+            shape_transform.setIdentity();
+            // shape_transform.setOrigin({0,0,-0.15});
+            shape->addChildShape(shape_transform, collision_mesh);
+            return shape;
         }
 
         /// @brief setup robot construction

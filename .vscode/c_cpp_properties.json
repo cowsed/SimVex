@@ -8,7 +8,7 @@
                 "${workspaceFolder}/sdk/sim_vexv5/vendor/assimp/include",
                 "${workspaceFolder}/sdk/sim_vexv5/vendor/bullet3/src/**"
             ],
-            "defines": [],
+            "defines": ["BT_USE_DOUBLE_PRECISION"],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
             "cppStandard": "c++20",

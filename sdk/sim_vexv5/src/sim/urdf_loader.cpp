@@ -220,6 +220,8 @@ namespace sim
                 std::cout << "xyz "
                           << "{" << xyz.x << ", " << xyz.y << ", " << xyz.z << "}\n";
                 glm::vec3 rpy = parse_origin_xyz(origin.attribute("rpy").as_string());
+                std::cout << "rpy "
+                          << "{" << rpy.x << ", " << rpy.y << ", " << rpy.z << "}\n";
 
                 if (!model.link_names.contains(parent_name))
                 {
@@ -277,16 +279,26 @@ namespace sim
                 auto &link = model.links[node->link];
 
                 std::cout << "Setting up Link: " << model.link_name(node->link) << "\n";
-
-                RobotModel::Joint::Origin joint_origin = model.joints[node->joint_to_parent].origin;
-                btTransform to_child;
-                to_child.setIdentity();
-                to_child.setOrigin(to_btVector3(joint_origin.xyz));
-                // to_child.setRotation(btQuaternion({0.0,0,1.0}, joint_origin.rpy.x));
-                std::cout << "to child: " << joint_origin.xyz.x << ", " << joint_origin.xyz.y << ", " << joint_origin.xyz.z << '\n';
-
                 btTransform world_transform = current_transform;
-                world_transform.mult(to_child, world_transform);
+
+                // joint transform
+                if (node->joint_to_parent != RobotModel::unknown_joint_id)
+                {
+                    RobotModel::Joint::Origin joint_origin = model.joints[node->joint_to_parent].origin;
+                    btTransform to_child;
+                    to_child.setIdentity();
+                    to_child.setOrigin(to_btVector3(joint_origin.xyz));
+
+                    std::cout << "to child rpy: " << joint_origin.rpy.x << ", " << joint_origin.rpy.y << ", " << joint_origin.rpy.z << '\n';
+
+                    btQuaternion roll = btQuaternion({1, 0, 0}, joint_origin.rpy.x);
+                    btQuaternion pitch = btQuaternion({0, 1, 0}, joint_origin.rpy.y);
+                    btQuaternion yaw = btQuaternion({0, 0, 1}, joint_origin.rpy.z);
+
+                    to_child.setRotation(yaw * pitch * roll);
+
+                    world_transform = current_transform * to_child;
+                }
 
                 btCollisionShape *coll_shape = nullptr;
                 if (link.visual != RobotModel::no_visual)
@@ -306,12 +318,14 @@ namespace sim
 
                 btDefaultMotionState *motion_state = new btDefaultMotionState(world_transform);
 
-                btRigidBody *body = new btRigidBody(link.mass, motion_state, coll_shape, local_inertia);
-                // body->setWorldTransform(world_transform);
+                btRigidBody::btRigidBodyConstructionInfo info(link.mass, motion_state, coll_shape, local_inertia);
+                btRigidBody *body = new btRigidBody(info);
+                body->setFriction(0.75);
+                body->setRollingFriction(.005);
+                body->setSpinningFriction(0.05);
 
                 auto origin = body->getCenterOfMassPosition();
                 std::cout << "Creating " + model.link_name(node->link) + " at   " << origin.x() << ", " << origin.y() << ", " << origin.z();
-                // body->getWorldTransform().get
                 std::cout << " has mass: " << link.mass << '\n';
 
                 link.body = body;
@@ -325,11 +339,7 @@ namespace sim
                 }
             };
 
-            btTransform initial_transform_and_rotate = btTransform(initial_transform);
-            // initial_transform_and_rotate.setRotation(initial_transform_and_rotate.getRotation() * btQuaternion({0, 1, 0}, M_PI / 2.0));
-            // initial_transform_and_rotate.setRotation(initial_transform_and_rotate.getRotation() * btQuaternion({1, 0, 0}, -M_PI / 2.0));
-
-            create_physics_from_tree(&(model.link_tree_root.children[0]), initial_transform_and_rotate);
+            create_physics_from_tree(&(model.link_tree_root.children[0]), initial_transform);
 
             // start with initial transform. walk tree and generate rigid bodies and motionstates based on accumulating transforms
             // initial_transform.
@@ -392,51 +402,16 @@ namespace sim
                 if (link.visual != no_visual)
                 {
                     glm::mat4 model_mat;
-                    // model_mat[0][0] = 1;
-                    // model_mat[0][1] = 0;
-                    // model_mat[0][2] = 0;
-                    // model_mat[0][3] = 0;
-
-                    // model_mat[1][0] = 0;
-                    // model_mat[1][1] = 1;
-                    // model_mat[1][2] = 0;
-                    // model_mat[1][3] = 0;
-
-                    // model_mat[2][0] = 0;
-                    // model_mat[2][1] = 0;
-                    // model_mat[2][2] = 1;
-                    // model_mat[2][3] = 0;
-
-                    // model_mat[3][0] = 0;
-                    // model_mat[3][1] = 0;
-                    // model_mat[3][2] = 0;
-                    // model_mat[3][3] = 1;
-
                     btTransform trans;
+                    double d_mat[16];
                     links[id].motion_state->getWorldTransform(trans);
 
-                    // model_mat[3][0] = trans.getOrigin().x();
-                    // model_mat[3][1] = trans.getOrigin().z();
-                    // model_mat[3][2] = -trans.getOrigin().y();
-
-                    // model_mat[0][0] = trans.getBasis()[0][0];
-                    // model_mat[1][0] = trans.getBasis()[1][0];
-                    // model_mat[2][0] = trans.getBasis()[2][0];
-
-                    // model_mat[0][1] = trans.getBasis()[0][1];
-                    // model_mat[1][1] = trans.getBasis()[1][1];
-                    // model_mat[2][1] = trans.getBasis()[2][1];
-
-                    // model_mat[0][2] = trans.getBasis()[0][2];
-                    // model_mat[1][2] = trans.getBasis()[1][2];
-                    // model_mat[2][2] = trans.getBasis()[2][2];
-                    // trans.getBasis().extractRotation()
-
-                    // btTransform trans2 = links[id].body->getWorldTransform();
-                    // std::cout << "pos2: " << trans2.getOrigin().x() << ", " << trans2.getOrigin().y() << ", " << trans2.getOrigin().z() << '\n';
                     std::cout << link_name(id) << " with visual " << link.visual << '\n';
-                    trans.getOpenGLMatrix(&(model_mat[0][0]));
-
+                    trans.getOpenGLMatrix(d_mat);
+                    for (int i = 0; i < 16; i++)
+                    {
+                        (&(model_mat[0][0]))[i] = d_mat[i];
+                    }
                     models[link.visual]->render(persp, view, model_mat, light_pos);
 
                     std::cout << model_mat[0][0] << "\t" << model_mat[1][0] << "\t" << model_mat[2][0] << "\t" << model_mat[3][0] << "\n";

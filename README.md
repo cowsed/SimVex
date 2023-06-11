@@ -27,7 +27,7 @@ OpenGL, GLFW, and GLM Needs to be installed on your system
 Assimp requires the following steps to install
 ```bash
 cd sdk/sim_vexv5/vendor/assimp/
-cmake CMakeLists.txt -dBUILD_SHARED_LIBS=OFF
+cmake CMakeLists.txt -DBUILD_SHARED_LIBS=OFF
 make -j2
 ```
 where 2 is the number of cores you wish to devote to compilation
@@ -37,7 +37,7 @@ Bullet3D requires the following steps to install (for now)
 cd sdk/sim_vexv5/vendor/bullet3/
 mkdir build
 cd build/
-cmake ../
+cmake ../ -DUSE_DOUBLE_PRECISION=ON
 make -j2
 ```
 where 2 is the number of cores you wish to devote to compilation

@@ -66,8 +66,8 @@ namespace sim
 
             btTransform initial_robot_transform;
             initial_robot_transform.setIdentity();
-            // initial_robot_transform.setRotation(btQuaternion(btVector3(0,1,0), M_PI/2));
-            initial_robot_transform.setOrigin({0, 0, 0.3});
+            initial_robot_transform.setOrigin({0, 0.4, 0.7});
+            
             robot_model = sim::loader::load_urdf("Construction/flynn.urdf", initial_robot_transform);
             std::cout << "loaded urdf\n";
 
@@ -75,8 +75,6 @@ namespace sim
 #ifndef MODEL_PATH
 #define MODEL_PATH "./"
 #endif
-
-            // BEFORE CACHING 4364
 
             auto start = std::chrono::steady_clock::now();
 
