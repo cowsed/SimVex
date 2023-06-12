@@ -25,7 +25,7 @@ namespace sim
 {
     namespace construction
     {
-        const float collision_margin = 0.0005;
+        const float collision_margin = 0.0005 * 100.f;
         static const char *model_vertex_shader = R"glsl(
 #version 400
 uniform mat4 view;
@@ -46,9 +46,10 @@ out vec2 UV;
             
 void main() {
     vec3 vp = vec3(vp_physics.x, vp_physics.y, vp_physics.z);
-    frag_pos = (model * vec4(vp, 1.0)).xyz;
+    frag_pos = (model * vec4(vp, 1.0)).xyz / 100.f;
     UV = UV_v;
-    world_normal = (model * vec4(norm_v, 1.0)).xyz;
+    mat4 model_no_trans = mat4(mat3(model));
+    world_normal = (model_no_trans * vec4(norm_v, 1.0)).xyz;
     gl_Position = perspective * view * model * vec4(vp, 1.0);
 })glsl";
 
@@ -78,8 +79,10 @@ void main() {
    if (has_texture==0){
        col = diff_col;
    }
+//    float a = dot(normalize(world_normal), normalize(light_pos-frag_pos))*.75 + .15;
 
    vec3 out_col = (ambient + diffuse)  * col;
+//    out_col = world_normal;
    frag_colour = vec4(out_col.x, out_col.y, out_col.z, 1.0);
 })glsl";
 
@@ -423,8 +426,8 @@ void main() {
         void Model::load_from_model(std::string model_path)
         {
             Assimp::Importer import;
-            
-            const aiScene *scene = import.ReadFile(model_path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenBoundingBoxes);
+
+            const aiScene *scene = import.ReadFile(model_path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenBoundingBoxes | aiProcess_GenNormals);
             if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
             {
                 std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
@@ -514,7 +517,7 @@ void main() {
         /// make_convex_hull from a mesh
         /// @pre sim::physics::setup() has been called
         /// @return a collision shape that should be passed right into sim::physics::add_*_object()
-        btCollisionShape  *Model::make_convex_hull()
+        btCollisionShape *Model::make_convex_hull()
         {
             auto vec3TobtVec3 = [](glm::vec3 v)
             {
@@ -531,7 +534,7 @@ void main() {
             btConvexHullShape *collision_mesh = new btConvexHullShape(verts[0], verts.size());
             collision_mesh->setMargin(collision_margin);
             collision_mesh->optimizeConvexHull();
-            btCompoundShape * shape = new btCompoundShape(true, 1);
+            btCompoundShape *shape = new btCompoundShape(true, 1);
             btTransform shape_transform;
             shape_transform.setIdentity();
             // shape_transform.setOrigin({0,0,-0.15});

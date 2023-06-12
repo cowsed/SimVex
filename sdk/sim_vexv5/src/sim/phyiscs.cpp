@@ -25,7 +25,7 @@ static btDiscreteDynamicsWorld *dynamicsWorld;
 // make sure to re-use collision shapes among rigid bodies whenever possible!
 static btAlignedObjectArray<btCollisionShape *> collisionShapes;
 
-const float g = -9.8 * 100.f;
+const float g = -9.8 * 10.f;
 
 struct phys_object
 {
