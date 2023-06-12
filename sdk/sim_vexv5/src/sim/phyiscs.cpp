@@ -25,7 +25,7 @@ static btDiscreteDynamicsWorld *dynamicsWorld;
 // make sure to re-use collision shapes among rigid bodies whenever possible!
 static btAlignedObjectArray<btCollisionShape *> collisionShapes;
 
-const float g = -9.8;
+const float g = -9.8 * 100.f;
 
 struct phys_object
 {
@@ -112,7 +112,8 @@ glm::mat4 sim::physics::get_transform_matrix(sim::physics::phys_id id)
     glm::mat4 ret = ident;
     double d_mat[16];
     trans.getOpenGLMatrix(d_mat);
-    for (int i = 0; i < 16; i++){
+    for (int i = 0; i < 16; i++)
+    {
         (&ret[0][0])[i] = d_mat[i];
     }
 
@@ -127,25 +128,12 @@ void sim::physics::add_rigid_body(btRigidBody *body)
 
 void sim::physics::add_constraint(btTypedConstraint *constraint)
 {
-    dynamicsWorld->addConstraint(constraint);
+    dynamicsWorld->addConstraint(constraint, true);
 }
 
 void step_physics()
 {
-    dynamicsWorld->stepSimulation(1.f / 60.f, 1000);
-}
-
-void sim::physics::build_ui()
-{
-    ImGui::Begin("Physics");
-    if (ImGui::Button("Step Physics"))
-    {
-    }
-    if (ImGui::IsItemHovered())
-    {
-        step_physics();
-    }
-    ImGui::End();
+    dynamicsWorld->stepSimulation(1.f / 60.f, 0);
 }
 
 // Helper class; draws the world as seen by Bullet.
@@ -212,8 +200,8 @@ public:
     {
         m = p;
     }
-    int getDebugMode(void) const { return 3; }
-    int m;
+    int getDebugMode(void) const { return m; }
+    int m = 3;
 };
 static BulletDebugDrawer_OpenGL *my_drawer;
 
@@ -248,15 +236,18 @@ void sim::physics::setup()
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
     overlappingPairCache = new btSimpleBroadphase();
     solver = new btSequentialImpulseConstraintSolver;
+
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-    dynamicsWorld->getSolverInfo().m_splitImpulse = true;
+    dynamicsWorld->getSolverInfo().m_numIterations = 1000;
+    // dynamicsWorld->getSolverInfo().m_motor
     dynamicsWorld->getSolverInfo().m_splitImpulsePenetrationThreshold = -0.000001;
-    dynamicsWorld->getSolverInfo().m_splitImpulseTurnErp = 1.0;
+    // dynamicsWorld->getSolverInfo().m_splitImpulseTurnErp = 1.0;
     dynamicsWorld->setGravity(btVector3(0, 0, g));
 
     // Debug Drawer
     line_shader = sim::renderer::ShaderProgram(line_vert_shader, line_frag_shader);
     my_drawer = new BulletDebugDrawer_OpenGL();
+    my_drawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawConstraints);
     dynamicsWorld->setDebugDrawer(my_drawer);
     std::cout << "starint physics\n";
 }
@@ -266,5 +257,17 @@ void sim::physics::draw_db_world(glm::mat4 persp, glm::mat4 view)
     line_shader.activate();
     my_drawer->SetMatrices(view, persp);
     dynamicsWorld->debugDrawWorld();
-    
+}
+
+void sim::physics::build_ui()
+{
+    ImGui::Begin("Physics");
+    if (ImGui::Button("Step Physics"))
+    {
+    }
+    if (ImGui::IsItemHovered())
+    {
+        step_physics();
+    }
+    ImGui::End();
 }

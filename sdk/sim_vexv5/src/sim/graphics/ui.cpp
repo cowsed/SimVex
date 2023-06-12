@@ -247,7 +247,7 @@ namespace sim
             last_mouse_pos = mouse_pos;
         }
 
-        double move_speed = 0.02;
+        double move_speed = 0.02 * 100.f;
         double turn_speed = 0.004;
 
         cam->azimuth -= dx * turn_speed;

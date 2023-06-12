@@ -20,7 +20,7 @@ namespace sim
 {
     namespace renderer
     {
-        bool phys_debug_draw = true;
+        bool phys_debug_draw = false;
         bool main_draw = true;
         bool draw_skybox = true;
 
@@ -66,8 +66,8 @@ namespace sim
 
             btTransform initial_robot_transform;
             initial_robot_transform.setIdentity();
-            initial_robot_transform.setOrigin({0, 0.4, 0.7});
-            
+            initial_robot_transform.setOrigin({0, 0.4 * 100.f, 0.3 * 100.f});
+
             robot_model = sim::loader::load_urdf("Construction/flynn.urdf", initial_robot_transform);
             std::cout << "loaded urdf\n";
 
@@ -83,7 +83,7 @@ namespace sim
             auto bars_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/bars.dae");
 
             nut_shape = new construction::Model(nut_path);
-            btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1, .5, .4)));
+            btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1 * 100.f, .5 * 100.f, .4 * 100.f)));
             btCollisionShape *nut_collision = nut_shape->make_convex_hull();
             float nut_mass = .12; // kg
             nut_id = physics::add_dynamic_mesh(nut_mass, nut_collision, nut_transform, .4, 0.005);

@@ -25,7 +25,7 @@ namespace sim
 {
     namespace construction
     {
-        const float collision_margin = 0.00005;
+        const float collision_margin = 0.0005;
         static const char *model_vertex_shader = R"glsl(
 #version 400
 uniform mat4 view;
@@ -264,7 +264,7 @@ void main() {
             for (unsigned int i = 0; i < mesh->mNumVertices; i++)
             {
                 MeshShape::Vertex v;
-                v.position = toGlm3(mesh->mVertices[i]);
+                v.position = toGlm3(mesh->mVertices[i]) * 100.f;
                 v.normal = toGlm3(mesh->mNormals[i]);
                 if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
                 {

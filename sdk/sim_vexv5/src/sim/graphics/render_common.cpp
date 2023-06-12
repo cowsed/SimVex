@@ -333,7 +333,7 @@ void main() {
 
         glm::mat4 Camera::persp_matrix(RenderTarget &rt)
         {
-            return glm::perspective(glm::radians(35.0f), (float)rt.width / (float)rt.height, 0.01f, 100.0f);
+            return glm::perspective(glm::radians(35.0f), (float)rt.width / (float)rt.height, 0.01f, 10000.0f);
         }
 
     } // renderer

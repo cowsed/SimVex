@@ -125,8 +125,8 @@ namespace sim
             }
 
             pugi::xml_node robot = doc.child("robot");
-            std::string name = robot.attribute("name").as_string();
-            std::cout << "Robot: " << name << '\n';
+            model.name = robot.attribute("name").as_string();
+            std::cout << "Robot: " << model.name << '\n';
             std::cout << "Links: \n";
 
             // Load links
@@ -216,7 +216,7 @@ namespace sim
                 std::string child_name = joint.child("child").attribute("link").as_string();
 
                 pugi::xml_node origin = joint.child("origin");
-                glm::vec3 xyz = parse_origin_xyz(origin.attribute("xyz").as_string());
+                glm::vec3 xyz = parse_origin_xyz(origin.attribute("xyz").as_string()) * 100.f;
                 std::cout << "xyz "
                           << "{" << xyz.x << ", " << xyz.y << ", " << xyz.z << "}\n";
                 glm::vec3 rpy = parse_origin_xyz(origin.attribute("rpy").as_string());
@@ -263,7 +263,7 @@ namespace sim
             };
 
             std::cout << "Link Tree:\n";
-            print_link_tree(&model.link_tree_root, "+-");
+            print_link_tree(&model.link_tree_root.children[0], "+-");
 
             if (model.link_tree_root.children.size() > 1)
             {
@@ -281,24 +281,27 @@ namespace sim
                 std::cout << "Setting up Link: " << model.link_name(node->link) << "\n";
                 btTransform world_transform = current_transform;
 
-                // joint transform
+                btTransform to_child;
+                to_child.setIdentity();
+
+                // joint transform - only ever unknown for the root node
                 if (node->joint_to_parent != RobotModel::unknown_joint_id)
                 {
-                    RobotModel::Joint::Origin joint_origin = model.joints[node->joint_to_parent].origin;
-                    btTransform to_child;
-                    to_child.setIdentity();
-                    to_child.setOrigin(to_btVector3(joint_origin.xyz));
+                    RobotModel::Joint this_joint = model.joints[node->joint_to_parent];
+                    RobotModel::Joint::Origin joint_origin = this_joint.origin;
 
                     std::cout << "to child rpy: " << joint_origin.rpy.x << ", " << joint_origin.rpy.y << ", " << joint_origin.rpy.z << '\n';
 
                     btQuaternion roll = btQuaternion({1, 0, 0}, joint_origin.rpy.x);
                     btQuaternion pitch = btQuaternion({0, 1, 0}, joint_origin.rpy.y);
                     btQuaternion yaw = btQuaternion({0, 0, 1}, joint_origin.rpy.z);
+                    to_child.setOrigin(to_btVector3(joint_origin.xyz));
 
                     to_child.setRotation(yaw * pitch * roll);
 
                     world_transform = current_transform * to_child;
                 }
+                btTransform to_child2 = to_child;
 
                 btCollisionShape *coll_shape = nullptr;
                 if (link.visual != RobotModel::no_visual)
@@ -333,6 +336,22 @@ namespace sim
 
                 physics::add_rigid_body(body);
 
+                // constrain to parent
+                if (node->joint_to_parent != RobotModel::unknown_joint_id)
+                {
+                    btTransform parent_transform;
+                    parent_transform.setIdentity();
+
+                    RobotModel::Joint this_joint = model.joints[node->joint_to_parent];
+
+                    std::cout << "constraining " << model.link_name(this_joint.parent) << " to " << model.link_name(this_joint.child) << '\n';
+                    btTypedConstraint *constraint = new btFixedConstraint(*(model.links[this_joint.parent].body), *(model.links[this_joint.child].body), to_child2, parent_transform);
+                    // btTypedConstraint *constraint = new btHingeConstraint(*(model.links[this_joint.parent].body), *(model.links[this_joint.child].body), to_child2, parent_transform);
+
+                    physics::add_constraint(constraint);
+                }
+
+                // Add any children of this node
                 for (std::size_t i = 0; i < node->children.size(); i++)
                 {
                     create_physics_from_tree(&(node->children[i]), world_transform);
@@ -406,7 +425,7 @@ namespace sim
                     double d_mat[16];
                     links[id].motion_state->getWorldTransform(trans);
 
-                    std::cout << link_name(id) << " with visual " << link.visual << '\n';
+                    // std::cout << link_name(id) << " with visual " << link.visual << '\n';
                     trans.getOpenGLMatrix(d_mat);
                     for (int i = 0; i < 16; i++)
                     {
@@ -414,10 +433,10 @@ namespace sim
                     }
                     models[link.visual]->render(persp, view, model_mat, light_pos);
 
-                    std::cout << model_mat[0][0] << "\t" << model_mat[1][0] << "\t" << model_mat[2][0] << "\t" << model_mat[3][0] << "\n";
-                    std::cout << model_mat[0][1] << "\t" << model_mat[1][1] << "\t" << model_mat[2][1] << "\t" << model_mat[3][1] << "\n";
-                    std::cout << model_mat[0][2] << "\t" << model_mat[1][2] << "\t" << model_mat[2][2] << "\t" << model_mat[3][2] << "\n";
-                    std::cout << model_mat[0][3] << "\t" << model_mat[1][3] << "\t" << model_mat[2][3] << "\t" << model_mat[3][3] << "\n";
+                    // std::cout << model_mat[0][0] << "\t" << model_mat[1][0] << "\t" << model_mat[2][0] << "\t" << model_mat[3][0] << "\n";
+                    // std::cout << model_mat[0][1] << "\t" << model_mat[1][1] << "\t" << model_mat[2][1] << "\t" << model_mat[3][1] << "\n";
+                    // std::cout << model_mat[0][2] << "\t" << model_mat[1][2] << "\t" << model_mat[2][2] << "\t" << model_mat[3][2] << "\n";
+                    // std::cout << model_mat[0][3] << "\t" << model_mat[1][3] << "\t" << model_mat[2][3] << "\t" << model_mat[3][3] << "\n";
                 }
 
                 id++;

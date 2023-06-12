@@ -77,34 +77,40 @@ endif
 
 
 # compiler flags
-CFLAGS_CL =  -ggdb 
+CFLAGS_CL =  -ggdb
 CFLAGS    = ${CFLAGS_CL} --std=gnu++20
 # -Wall -Werror=return-type
 # $(DEFINES)
 CXX_FLAGS = ${CFLAGS_CL} $(DEFINES) -stdlib=libstdc++ -fno-exceptions
 
 # linker flags
-LNK_FLAGS = -pie --build-id --eh-frame-hdr -m elf_x86_64 
+LNK_FLAGS = -pie --build-id --eh-frame-hdr -m elf_x86_64
 # future statuc library
 PROJECTLIB = lib$(PROJECT)
 ARCH_FLAGS = rcs
 
 
-BULLET_LIBS =  -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/ -lBulletCollision
-BULLET_LIBS += -lBulletDynamics
-BULLET_LIBS += -lBulletSoftBody
-BULLET_LIBS += -lBullet3Collision
-BULLET_LIBS += -lBullet3Common
-BULLET_LIBS += -lBullet3Dynamics
-BULLET_LIBS += -lBullet3Geometry
-BULLET_LIBS += -lBullet3OpenCL_clew
-BULLET_LIBS += -lBullet2FileLoader
-BULLET_LIBS += -lBulletInverseDynamics
-BULLET_LIBS += -lLinearMath
+BULLET_LIBS = --start-group -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/BulletCollision -l:libBulletCollision.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/Bullet3Collision -l:libBullet3Collision.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/BulletDynamics -l:libBulletDynamics.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/BulletSoftBody -l:libBulletSoftBody.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/Bullet3Collision -l:libBullet3Collision.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/Bullet3Common -l:libBullet3Common.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/Bullet3Dynamics -l:libBullet3Dynamics.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/Bullet3Geometry -l:libBullet3Geometry.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/Bullet3OpenCL -l:libBullet3OpenCL_clew.a
+#BULLET_LIBS += -l:$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/ libBullet2FileLoader.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/BulletInverseDynamics -l:libBulletInverseDynamics.a
+BULLET_LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/bullet3/build/src/LinearMath -l:libLinearMath.a --end-group
 
 
 # libraries
-LIBS = $(BULLET_LIBS) -L$(TOOLCHAIN)/$(PLATFORM)/vendor/assimp/lib -lassimp -L$(TOOLCHAIN)/$(PLATFORM)/vendor/assimp/contrib/zlib -lzlibstatic --start-group -L$(TOOLCHAIN)/$(PLATFORM)/ -lsimv5rt --end-group -lpthread -dynamic-linker  /lib64/ld-linux-x86-64.so.2 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/crtbeginS.o -L/home/richie/VEX/Sim/sdk/sim_vexv5/ -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/lib -L/usr/lib -lsimv5rt -lstdc++ -lc -lm -lgcc -lglfw -lGLEW -lGL -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed --no-as-needed /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/12.2.1/../../../../lib64/crtn.o
+LIBS =  $(BULLET_LIBS)
+LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/assimp/lib -lassimp
+LIBS += -L$(TOOLCHAIN)/$(PLATFORM)/vendor/assimp/contrib/zlib -lzlibstatic
+LIBS += --start-group -L$(TOOLCHAIN)/$(PLATFORM)/ -lsimv5rt --end-group
+LIBS += -lpthread -dynamic-linker  /lib64/ld-linux-x86-64.so.2 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.1.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.1.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.1.1/crtbeginS.o -L/home/richie/VEX/Sim/sdk/sim_vexv5/ -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.1.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.1.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/lib -L/usr/lib -lsimv5rt -lstdc++ -lc -lm -lgcc -lglfw -lGLEW -lGL -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed --no-as-needed /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.1.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.1.1/../../../../lib64/crtn.o
+
 
 # include file paths
 INC += $(addprefix -I, ${INC_F})
