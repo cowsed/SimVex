@@ -11,3 +11,6 @@
 [submodule "bullet3"]
 	path = sdk/sim_vexv5/vendor/bullet3
 	url = https://github.com/bulletphysics/bullet3
+[submodule "sdk/sim_vexv5/vendor/mujoco"]
+	path = sdk/sim_vexv5/vendor/mujoco
+	url = http://github.com/deepmind/mujoco.git
