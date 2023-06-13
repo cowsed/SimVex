@@ -3,7 +3,6 @@
 #include <map>
 
 #include <glm/vec3.hpp>
-#include "btBulletDynamicsCommon.h"
 
 #include "3d_model.h"
 namespace sim

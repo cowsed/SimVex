@@ -6,6 +6,9 @@
 #include <vector>
 #include <functional>
 
+
+#include "../examples/Importers/ImportURDFDemo/UrdfParser.h"
+
 namespace sim
 {
     namespace loader
@@ -271,8 +274,8 @@ namespace sim
                 exit(EXIT_FAILURE);
             }
 
-            std::function<void(RobotModel::LinkTreeNode *, btTransform)> create_physics_from_tree;
-            create_physics_from_tree = [&model, &create_physics_from_tree](RobotModel::LinkTreeNode *node, btTransform current_transform)
+            std::function<void(btMultiBody *, RobotModel::LinkTreeNode *, btTransform)> create_physics_from_tree;
+            create_physics_from_tree = [&model, &create_physics_from_tree](btMultiBody *mbC, RobotModel::LinkTreeNode *node, btTransform current_transform)
             {
                 auto to_btVector3 = [](auto v) -> btVector3
                 { return {v.x, v.y, v.z}; };
@@ -345,21 +348,37 @@ namespace sim
                     RobotModel::Joint this_joint = model.joints[node->joint_to_parent];
 
                     std::cout << "constraining " << model.link_name(this_joint.parent) << " to " << model.link_name(this_joint.child) << '\n';
-                    btTypedConstraint *constraint = new btFixedConstraint(*(model.links[this_joint.parent].body), *(model.links[this_joint.child].body), to_child2, parent_transform);
-                    // btTypedConstraint *constraint = new btHingeConstraint(*(model.links[this_joint.parent].body), *(model.links[this_joint.child].body), to_child2, parent_transform);
+                    auto child = (model.links[this_joint.child].body);
+                    auto parent = (model.links[this_joint.child].body);
+                    btVector3 pivotA = {0, 0, 0};
+                    btVector3 pivotB = {0, 0, 0};
 
-                    physics::add_constraint(constraint);
+                    btMatrix3x3 frameA;
+                    btMatrix3x3 frameB;
+                    frameA.setIdentity();
+                    frameB.setIdentity();
+
+                    mbC->setupFixed(this_joint.child, child->getMass(), child->getLocalInertia(), this_joint.parent, btQuaternion({1, 0, 0}, 0), pivotA, pivotB);
+
+                    // btMultiBodyConstraint *constraint = new btMultiBodyFixedConstraint(mbC, this_joint.parent, mbC, this_joint.child, pivotA, pivotB, frameA, frameB);
+                    // btTypedConstraint *constraint = new btHingeConstraint(*(model.links[this_joint.parent].body), *(model.links[this_joint.child].body), to_child2, parent_transform);
                 }
 
                 // Add any children of this node
                 for (std::size_t i = 0; i < node->children.size(); i++)
                 {
-                    create_physics_from_tree(&(node->children[i]), world_transform);
+                    create_physics_from_tree(mbC, &(node->children[i]), world_transform);
                 }
             };
 
-            create_physics_from_tree(&(model.link_tree_root.children[0]), initial_transform);
+            btMultiBody *mbC = new btMultiBody(model.links.size(), 0.0, {0, 0, 0}, false, false);
 
+            create_physics_from_tree(mbC, &(model.link_tree_root.children[0]), initial_transform);
+
+            physics::get_dynamics_world()->addMultiBody(mbC);
+            
+
+            mbC->finalizeMultiDof();
             // start with initial transform. walk tree and generate rigid bodies and motionstates based on accumulating transforms
             // initial_transform.
 
