@@ -47,17 +47,6 @@ namespace sim
 
         void setup()
         {
-            auto btVectorFromGlm3 = [](glm::vec3 v) -> btVector3
-            {
-                return {v.x, v.y, v.z};
-            };
-            auto btTransFromOrigin = [](btVector3 v)
-            {
-                btTransform t;
-                t.setIdentity();
-                t.setOrigin(v);
-                return t;
-            };
             setup_common();
 
             field_viewport.init(800, 600);
@@ -65,13 +54,8 @@ namespace sim
             field_skybox->init();
             brain_screen = new brain_screen_shape();
 
-            btTransform initial_robot_transform;
-            initial_robot_transform.setIdentity();
-            initial_robot_transform.setOrigin({0, 0.2 * 100.f, 0.2 * 100.f});
-            initial_robot_transform.setRotation(btQuaternion({0, 1, 0}, 1.57));
 
-            robot_model = sim::loader::load_urdf("Construction/simple.urdf", initial_robot_transform);
-            // robot_model.links[0].body->applyCentralImpulse({0,10,0});
+            robot_model = sim::loader::load_urdf("Construction/simple.urdf");
             std::cout << "loaded urdf\n";
 
 // MODEL_PATH is defined by the makefile. this guard is only here to make the IDE be quiet
@@ -86,15 +70,8 @@ namespace sim
             auto bars_path = std::string(MODEL_PATH) + std::string("Fields/OverUnder/bars.dae");
 
             nut_shape = new construction::Model(nut_path);
-            btTransform nut_transform = btTransFromOrigin(btVectorFromGlm3(glm::vec3(-.1 * 100.f, .5 * 100.f, .4 * 100.f)));
-            btCollisionShape *nut_collision = nut_shape->make_convex_hull();
-            float nut_mass = .12; // kg
-            nut_id = physics::add_dynamic_mesh(nut_mass, nut_collision, nut_transform, .4, 0.005);
 
             field_shape = new construction::Model(field_path);
-            btTransform field_transform = btTransFromOrigin(btVector3{0, 0, 0});
-            btCollisionShape *field_collision = field_shape->make_convex_hull();
-            field_id = physics::add_static_mesh(field_collision, field_transform, 1.0);
 
             // bars_shape = new construction::Model(bars_path);
 
@@ -113,23 +90,7 @@ namespace sim
             ImGui::Checkbox("Draw Skybox", &draw_skybox);
             ImGui::DragFloat3("Light Pos", &(light_pos[0]));
 
-            std::function<void(loader::RobotModel::LinkTreeNode *)> display_positions;
-            display_positions = [&display_positions](loader::RobotModel::LinkTreeNode *node)
-            {
-                btTransform trans;
-                robot_model.links[node->link].motion_state->getWorldTransform(trans);
-                if (ImGui::CollapsingHeader(robot_model.link_name(node->link).c_str()))
-                {
-                    btVector3 o = trans.getOrigin();
-                    ImGui::Text("pos: %.3f, %.3f, %.3f", o.x(), o.y(), o.z());
-                    for (int i = 0; i < node->children.size(); i++)
-                    {
-                        display_positions(&node->children[i]);
-                    }
-                }
-            };
 
-            display_positions(&robot_model.link_tree_root.children[0]);
             ImGui::End();
         }
 
@@ -154,19 +115,11 @@ namespace sim
             glm::mat4 ident = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
             if (main_draw)
             {
-                glm::mat4 field_trans = physics::get_transform_matrix(field_id);
-                field_shape->render(persp, view, field_trans, light_pos);
 
-                // bars_shape->render(persp, view, ident, light_pos);
-                nut_shape->render(persp, view, physics::get_transform_matrix(nut_id), light_pos);
 
                 robot_model.render(persp, view, ident, light_pos);
             }
 
-            if (phys_debug_draw)
-            {
-                physics::draw_db_world(persp, view);
-            }
 
             field_viewport.deactivate();
         }

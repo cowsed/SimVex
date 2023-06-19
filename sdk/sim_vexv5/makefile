@@ -78,7 +78,7 @@ BOTH_FLAGS += -DASSIMP_BUILD_NO_M3D_IMPORTER
 BOTH_FLAGS += -DPUGIXML_HEADER_ONLY
 
 C_FLAGS = $(BOTH_FLAGS)
-CXX_FLAGS = $(BOTH_FLAGS) -O2 -Wall -Werror=return-type -Wextra --std=gnu++20 
+CXX_FLAGS = $(BOTH_FLAGS) --std=gnu++20 
 
 # sim stuff
 INC = -I$(VEX_SIM_INSTALL_PATH)/sdk/sim_vexv5/include 

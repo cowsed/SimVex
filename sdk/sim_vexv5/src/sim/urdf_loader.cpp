@@ -6,7 +6,6 @@
 #include <vector>
 #include <functional>
 
-
 #include "../examples/Importers/ImportURDFDemo/UrdfParser.h"
 
 namespace sim
@@ -26,7 +25,6 @@ namespace sim
             model_paths.emplace(path, id);
             construction::Model *model = new construction::Model(path);
             models.emplace_back(model);
-            coll_shapes.emplace_back(model->make_convex_hull());
 
             return id;
         }
@@ -115,7 +113,7 @@ namespace sim
         {
         };
 
-        RobotModel load_urdf(std::string path, btTransform initial_transform)
+        RobotModel load_urdf(std::string path)
         {
             RobotModel model;
 
@@ -138,7 +136,6 @@ namespace sim
             {
                 std::string link_name = link.attribute("name").as_string();
                 RobotModel::Link this_link;
-                this_link.mass = 0.0000001;
 
                 // Visual
                 pugi::xml_node visual = link.child("visual");
@@ -181,7 +178,6 @@ namespace sim
                     throw URDF_Load_Error{};
                 }
 
-                this_link.mass = mass_node.attribute("value").as_float();
 
                 RobotModel::link_id id = model.add_link(link_name, this_link);
                 std::cout << "Link Name: " << link_name << " - " << id << '\n';
@@ -258,7 +254,7 @@ namespace sim
             std::function<void(RobotModel::LinkTreeNode *, std::string)> print_link_tree;
             print_link_tree = [&print_link_tree, &model](RobotModel::LinkTreeNode *current, std::string prefix)
             {
-                std::cout << prefix << " " << current->link << ": " << model.link_name(current->link) << " : " << model.links[current->link].mass << "kg  \tvisual: " << model.links[current->link].visual << "\n";
+                std::cout << prefix << " " << current->link << ": " << model.link_name(current->link) << " : " << "\tvisual: " << model.links[current->link].visual << "\n";
                 for (auto &child : current->children)
                 {
                     print_link_tree(&child, "  " + prefix);
@@ -274,161 +270,6 @@ namespace sim
                 exit(EXIT_FAILURE);
             }
 
-            std::function<void(btMultiBody *, RobotModel::LinkTreeNode *, btTransform)> create_physics_from_tree;
-            create_physics_from_tree = [&model, &create_physics_from_tree](btMultiBody *mbC, RobotModel::LinkTreeNode *node, btTransform current_transform)
-            {
-                auto to_btVector3 = [](auto v) -> btVector3
-                { return {v.x, v.y, v.z}; };
-                auto &link = model.links[node->link];
-
-                std::cout << "Setting up Link: " << model.link_name(node->link) << "\n";
-                btTransform world_transform = current_transform;
-
-                btTransform to_child;
-                to_child.setIdentity();
-
-                // joint transform - only ever unknown for the root node
-                if (node->joint_to_parent != RobotModel::unknown_joint_id)
-                {
-                    RobotModel::Joint this_joint = model.joints[node->joint_to_parent];
-                    RobotModel::Joint::Origin joint_origin = this_joint.origin;
-
-                    std::cout << "to child rpy: " << joint_origin.rpy.x << ", " << joint_origin.rpy.y << ", " << joint_origin.rpy.z << '\n';
-
-                    btQuaternion roll = btQuaternion({1, 0, 0}, joint_origin.rpy.x);
-                    btQuaternion pitch = btQuaternion({0, 1, 0}, joint_origin.rpy.y);
-                    btQuaternion yaw = btQuaternion({0, 0, 1}, joint_origin.rpy.z);
-                    to_child.setOrigin(to_btVector3(joint_origin.xyz));
-
-                    to_child.setRotation(yaw * pitch * roll);
-
-                    world_transform = current_transform * to_child;
-                }
-                btTransform to_child2 = to_child;
-
-                btCollisionShape *coll_shape = nullptr;
-                if (link.visual != RobotModel::no_visual)
-                {
-                    coll_shape = model.coll_shapes[link.visual];
-                }
-                else
-                {
-                    coll_shape = new btSphereShape(0.0);
-                }
-
-                btVector3 local_inertia(0.0, 0.0, 0.0);
-                if (link.visual != RobotModel::no_visual)
-                {
-                    coll_shape->calculateLocalInertia(link.mass, local_inertia);
-                }
-
-                btDefaultMotionState *motion_state = new btDefaultMotionState(world_transform);
-
-                btRigidBody::btRigidBodyConstructionInfo info(link.mass, motion_state, coll_shape, local_inertia);
-                btRigidBody *body = new btRigidBody(info);
-                body->setFriction(0.75);
-                body->setRollingFriction(.005);
-                body->setSpinningFriction(0.05);
-
-                auto origin = body->getCenterOfMassPosition();
-                std::cout << "Creating " + model.link_name(node->link) + " at   " << origin.x() << ", " << origin.y() << ", " << origin.z();
-                std::cout << " has mass: " << link.mass << '\n';
-
-                link.body = body;
-                link.motion_state = motion_state;
-
-                physics::add_rigid_body(body);
-
-                // constrain to parent
-                if (node->joint_to_parent != RobotModel::unknown_joint_id)
-                {
-                    btTransform parent_transform;
-                    parent_transform.setIdentity();
-
-                    RobotModel::Joint this_joint = model.joints[node->joint_to_parent];
-
-                    std::cout << "constraining " << model.link_name(this_joint.parent) << " to " << model.link_name(this_joint.child) << '\n';
-                    auto child = (model.links[this_joint.child].body);
-                    auto parent = (model.links[this_joint.child].body);
-                    btVector3 pivotA = {0, 0, 0};
-                    btVector3 pivotB = {0, 0, 0};
-
-                    btMatrix3x3 frameA;
-                    btMatrix3x3 frameB;
-                    frameA.setIdentity();
-                    frameB.setIdentity();
-
-                    mbC->setupFixed(this_joint.child, child->getMass(), child->getLocalInertia(), this_joint.parent, btQuaternion({1, 0, 0}, 0), pivotA, pivotB);
-
-                    // btMultiBodyConstraint *constraint = new btMultiBodyFixedConstraint(mbC, this_joint.parent, mbC, this_joint.child, pivotA, pivotB, frameA, frameB);
-                    // btTypedConstraint *constraint = new btHingeConstraint(*(model.links[this_joint.parent].body), *(model.links[this_joint.child].body), to_child2, parent_transform);
-                }
-
-                // Add any children of this node
-                for (std::size_t i = 0; i < node->children.size(); i++)
-                {
-                    create_physics_from_tree(mbC, &(node->children[i]), world_transform);
-                }
-            };
-
-            btMultiBody *mbC = new btMultiBody(model.links.size(), 0.0, {0, 0, 0}, false, false);
-
-            create_physics_from_tree(mbC, &(model.link_tree_root.children[0]), initial_transform);
-
-            physics::get_dynamics_world()->addMultiBody(mbC);
-            
-
-            mbC->finalizeMultiDof();
-            // start with initial transform. walk tree and generate rigid bodies and motionstates based on accumulating transforms
-            // initial_transform.
-
-            // Walk Tree and assemble into model with joints
-            // find a base link
-
-            /*
-                float mass = .1;
-        float friction = .9;
-        float rolling_friction = .4;
-
-        bool isDynamic = (mass != 0.f);
-
-        // Replace with loaded inertia from urdf
-        btVector3 localInertia(0, 0, 0);
-        if (isDynamic)
-            coll_shapes[l.visual]->calculateLocalInertia(mass, localInertia);
-
-        btTransform trans;
-        trans.setIdentity();
-        trans.setOrigin({0, .4, 0});
-        btDefaultMotionState *myMotionState = new btDefaultMotionState(trans);
-        btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, coll_shapes[l.visual].get(), localInertia);
-        btRigidBody *body = new btRigidBody(rbInfo);
-        body->setFriction(friction);
-        body->setRollingFriction(rolling_friction);
-
-        physics::add_rigid_body(body);
-
-        l.body = body;
-        l.motion_state = myMotionState;
-*/
-
-            /*
-        btTransform parent_transform;
-        parent_transform.setIdentity();
-
-        btTransform child_transform;
-        child_transform.setIdentity();
-        child_transform.setOrigin({xyz.x, xyz.y+1, xyz.z});
-
-        // model.link_bodies[this_joint.child]->setWorldTransform({xyz.x, xyz.y, xyz.z});
-        model.link_bodies[this_joint.child]->setWorldTransform(child_transform);
-        model.link_motion_states[this_joint.child]->setWorldTransform(child_transform);
-
-        std::cout << "constraining " << (void *)(model.link_bodies[this_joint.parent]) << " to " << model.link_bodies[this_joint.child] << '\n';
-        btTypedConstraint *constraint = new btFixedConstraint(*model.link_bodies[this_joint.parent], *model.link_bodies[this_joint.child], parent_transform, child_transform);
-        physics::add_constraint(constraint);
-
-            */
 
             return model;
         }
@@ -440,22 +281,7 @@ namespace sim
                 if (link.visual != no_visual)
                 {
                     glm::mat4 model_mat;
-                    btTransform trans;
-                    double d_mat[16];
-                    links[id].motion_state->getWorldTransform(trans);
-
-                    // std::cout << link_name(id) << " with visual " << link.visual << '\n';
-                    trans.getOpenGLMatrix(d_mat);
-                    for (int i = 0; i < 16; i++)
-                    {
-                        (&(model_mat[0][0]))[i] = d_mat[i];
-                    }
                     models[link.visual]->render(persp, view, model_mat, light_pos);
-
-                    // std::cout << model_mat[0][0] << "\t" << model_mat[1][0] << "\t" << model_mat[2][0] << "\t" << model_mat[3][0] << "\n";
-                    // std::cout << model_mat[0][1] << "\t" << model_mat[1][1] << "\t" << model_mat[2][1] << "\t" << model_mat[3][1] << "\n";
-                    // std::cout << model_mat[0][2] << "\t" << model_mat[1][2] << "\t" << model_mat[2][2] << "\t" << model_mat[3][2] << "\n";
-                    // std::cout << model_mat[0][3] << "\t" << model_mat[1][3] << "\t" << model_mat[2][3] << "\t" << model_mat[3][3] << "\n";
                 }
 
                 id++;

@@ -25,7 +25,6 @@ namespace sim
 {
     namespace construction
     {
-        const float collision_margin = 0.0005 * 100.f;
         static const char *model_vertex_shader = R"glsl(
 #version 400
 uniform mat4 view;
@@ -514,33 +513,7 @@ void main() {
             }
         }
 
-        /// make_convex_hull from a mesh
-        /// @pre sim::physics::setup() has been called
-        /// @return a collision shape that should be passed right into sim::physics::add_*_object()
-        btCollisionShape *Model::make_convex_hull()
-        {
-            auto vec3TobtVec3 = [](glm::vec3 v)
-            {
-                return btVector3(v.x, v.y, v.z);
-            };
 
-            auto mesh = meshes[0];
-            std::vector<btVector3> verts(mesh.get_verts().size());
-
-            for (std::size_t i = 0; i < verts.size(); i++)
-            {
-                verts[i] = vec3TobtVec3(mesh.get_verts()[i].position);
-            }
-            btConvexHullShape *collision_mesh = new btConvexHullShape(verts[0], verts.size());
-            collision_mesh->setMargin(collision_margin);
-            collision_mesh->optimizeConvexHull();
-            btCompoundShape *shape = new btCompoundShape(true, 1);
-            btTransform shape_transform;
-            shape_transform.setIdentity();
-            // shape_transform.setOrigin({0,0,-0.15});
-            shape->addChildShape(shape_transform, collision_mesh);
-            return shape;
-        }
 
         /// @brief setup robot construction
         /// load and assemble robots stored in a file

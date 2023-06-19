@@ -24,10 +24,6 @@ namespace sim
             struct Link
             {
                 model_id visual = no_visual;
-                btScalar mass = 0;
-
-                btRigidBody *body = nullptr;
-                btMotionState *motion_state = nullptr;
             };
             struct LinkTreeNode
             {
@@ -60,7 +56,6 @@ namespace sim
 
             std::map<std::string, model_id> model_paths;
             std::vector<sim::construction::Model *> models;
-            std::vector<btCollisionShape *> coll_shapes;
 
             std::map<std::string, link_id> link_names;
             std::vector<Link> links; // indexed by link_id
@@ -78,6 +73,6 @@ namespace sim
             void render(glm::mat4 persp, glm::mat4 view, glm::mat4 model, glm::vec3 light_pos);
         };
 
-        RobotModel load_urdf(std::string path, btTransform initial_transform);
+        RobotModel load_urdf(std::string path);
     } // namespace loader
 } // namespace sim

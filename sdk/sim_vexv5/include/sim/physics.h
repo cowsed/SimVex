@@ -8,21 +8,8 @@ namespace sim
     {
         typedef int phys_id;
         void setup();
-        // phys_id add_dynamic_mesh(btScalar mass, btCollisionShape * shape, btTransform startTransform, btScalar friction, btScalar rolling_friction);
-        // phys_id add_static_mesh(btCollisionShape *shape, btTransform startTransform, btScalar friction);
+         void build_ui();
 
-        // glm::mat4 get_transform_matrix(phys_id object);
-
-
-        // void add_constraint(btTypedConstraint *constraint);
-
-        // void add_rigid_body(btRigidBody *body);
-
-        void build_ui();
-
-        // btMultiBodyDynamicsWorld *get_dynamics_world();
-
-        void draw_db_world(glm::mat4 persp, glm::mat4 view);
 
     } // namespace physics
 } // namespace sim

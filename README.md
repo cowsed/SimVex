@@ -32,15 +32,7 @@ make -j2
 ```
 where 2 is the number of cores you wish to devote to compilation
 
-Bullet3D requires the following steps to install (for now)
-```bash
-cd sdk/sim_vexv5/vendor/bullet3/
-mkdir build
-cd build/
-cmake ../ -DUSE_DOUBLE_PRECISION=ON
-make -j2
-```
-where 2 is the number of cores you wish to devote to compilation
+Download Mujoco binaries and place them in vendor/mujoco
 
 ## Building your robot code
 
