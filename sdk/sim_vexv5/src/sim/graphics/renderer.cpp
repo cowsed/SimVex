@@ -54,7 +54,6 @@ namespace sim
             field_skybox->init();
             brain_screen = new brain_screen_shape();
 
-
             robot_model = sim::loader::load_urdf("Construction/simple.urdf");
             std::cout << "loaded urdf\n";
 
@@ -116,8 +115,8 @@ namespace sim
             if (main_draw)
             {
 
-
-                robot_model.render(persp, view, ident, light_pos);
+                nut_shape->render(persp, view, ident, light_pos);
+                // robot_model.render(persp, view, ident, light_pos);
             }
 
 

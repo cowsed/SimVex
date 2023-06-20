@@ -6,16 +6,20 @@ project(libsimv5rt LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(VEX_SIM_INSTALL_PATH /home/richie/VEX/Sim)
+set(VEX_SIM_MODEL_PATH ${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/media/Models/)
+
+
 set(COMPILE_FLAGS -O2 -Wall -Werror=return-type -Wextra -ggdb
--DMODEL_PATH="\"$(VEX_SIM_MODEL_PATH)\""
+-DMODEL_PATH=\"${VEX_SIM_MODEL_PATH}\"
 )
 
+message(STATUS \"${VEX_SIM_MODEL_PATH}\")
 
 set(C_FLAGS ${COMPILE_FLAGS})
 set(CXX_FLAGS ${COMPILE_FLAGS} --std=gnu++20)
 
-
-
+add_definitions(-DMODEL_PATH=\"${VEX_SIM_MODEL_PATH}\")
 
 
 
