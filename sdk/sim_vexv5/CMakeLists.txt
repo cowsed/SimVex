@@ -144,7 +144,5 @@ add_library(simv5rt STATIC ${project_sources} )
 #29s pch
 
 target_include_directories(simv5rt PUBLIC include vendor/imgui/ vendor/assimp/include vendor/)
-
-
-# target_precompile_headers(simv5rt PUBLIC ${project_headers})
+#target_precompile_headers(simv5rt PUBLIC ${project_headers})
 
