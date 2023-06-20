@@ -8,11 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(COMPILE_FLAGS -O2 -Wall -Werror=return-type -Wextra -ggdb
 -DMODEL_PATH="\"$(VEX_SIM_MODEL_PATH)\""
--DBT_USE_DOUBLE_PRECISION
--DASSIMP_BUILD_BOOST_WORKAROUND -DASSIMP_BUILD_NO_C4D_IMPORTER 
--DASSIMP_BUILD_NO_EXPORT -DASSIMP_BUILD_NO_IFC_IMPORTER -DASSIMP_BUILD_NO_OPENGEX_IMPORTER -DASSIMP_BUILD_NO_X3D_IMPORTER
--DASSIMP_BUILD_NO_M3D_IMPORTER
--DPUGIXML_HEADER_ONLY
 )
 
 
@@ -20,7 +15,8 @@ set(C_FLAGS ${COMPILE_FLAGS})
 set(CXX_FLAGS ${COMPILE_FLAGS} --std=gnu++20)
 
 
-include_directories(include vendor/imgui/ vendor/ vendor/assimp/include vendor/bullet3/src)
+
+
 
 
 set(project_sources 
@@ -42,7 +38,7 @@ set(project_sources
     src/sim/3d_model.cpp
     src/sim/controller.cpp
     src/sim/events.cpp
-    src/sim/phyiscs.cpp
+    src/sim/physics.cpp
     src/sim/sim.cpp
     src/sim/terminal.cpp
     src/sim/time.cpp
@@ -71,9 +67,80 @@ set(project_sources
     src/vex_units.cpp
     src/vex_vision.cpp
 
+
+    vendor/imgui/imgui.cpp
+    vendor/imgui/imgui_widgets.cpp
+    vendor/imgui/imgui_demo.cpp
+    vendor/imgui/imgui_draw.cpp
+    vendor/imgui/imgui_tables.cpp
+
+    vendor/imgui/backends/imgui_impl_glfw.cpp
+    vendor/imgui/backends/imgui_impl_opengl3.cpp
+
     )
 
-set(project_headers include/my_vector.h)
 
-add_library(simv5rt STATIC
-             ${project_sources} )
+#include vendor/imgui/ vendor/ vendor/assimp/include vendor/bullet3/src
+set(project_headers 
+    include/sim/graphics/brain_fonts/noto_sans_mono_15.h
+    include/sim/graphics/brain_fonts/noto_sans_mono_12.h
+    include/sim/graphics/brain_fonts/noto_sans_mono_20.h
+    include/sim/graphics/brain_fonts/noto_sans_mono_30.h
+    include/sim/graphics/brain_fonts/noto_sans_mono_40.h
+    include/sim/graphics/brain_fonts/noto_sans_mono_50.h
+    include/sim/graphics/brain_fonts/noto_sans_mono_60.h
+    include/sim/graphics/brain_fonts/font_common.h
+
+    include/sim/graphics/brain_screen.h
+    include/sim/graphics/render_common.h
+    include/sim/graphics/renderer.h
+    include/sim/graphics/skybox.h
+    include/sim/graphics/ui.h
+    include/sim/graphics/window.h
+
+    include/sim/3d_model.h
+    include/sim/controller.h
+    include/sim/events.h
+    include/sim/physics.h
+    include/sim/sim.h
+    include/sim/terminal.h
+    include/sim/time.h
+    include/sim/urdf_loader.h
+    include/sim/util.h
+
+    include/v5_api.h
+    include/v5_apitypes.h
+    include/v5_apiuser.h
+    include/vex_brain.h
+    include/vex_color.h
+    include/vex_competition.h
+    include/vex_controller.h
+    include/vex_device.h
+    include/vex_global.h
+    include/vex_imu.h
+    include/vex_mevent.h
+    include/vex_motor.h
+    include/vex_motorgroup.h
+    include/vex_optical.h
+    include/vex_rotation.h
+    include/vex_task.h
+    include/vex_thread.h
+    include/vex_timer.h
+    include/vex_triport.h
+    include/vex_units.h
+    include/vex_vision.h
+
+)
+
+add_library(simv5rt STATIC ${project_sources} )
+
+#39s
+# include_directories(include vendor/imgui/ vendor/ vendor/assimp/include vendor/bullet3/src)
+
+#29s pch
+
+target_include_directories(simv5rt PUBLIC include vendor/imgui/ vendor/assimp/include vendor/)
+
+
+# target_precompile_headers(simv5rt PUBLIC ${project_headers})
+

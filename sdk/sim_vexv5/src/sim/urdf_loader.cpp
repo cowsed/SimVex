@@ -6,7 +6,6 @@
 #include <vector>
 #include <functional>
 
-#include "../examples/Importers/ImportURDFDemo/UrdfParser.h"
 
 namespace sim
 {
