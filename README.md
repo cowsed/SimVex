@@ -19,7 +19,7 @@ Dependencies
 - glm https://github.com/g-truc/glm (install)
 - Dear ImGui (submoduled)
 - Assimp (submoduled)
-- Bullet3D (submoduled*)
+- Mujoco (see below)
 
 ## Installing Dependencies
 OpenGL, GLFW, and GLM Needs to be installed on your system

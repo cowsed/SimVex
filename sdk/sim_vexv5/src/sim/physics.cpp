@@ -6,7 +6,7 @@
 
 #include "sim/graphics/render_common.h"
 #include <GL/glew.h>
-#include <GL/glcorearb.h>
+// #include <GL/glcorearb.h>
 
 // Helper class; draws the world as seen by Bullet.
 // This is very handy to see it Bullet's world matches yours

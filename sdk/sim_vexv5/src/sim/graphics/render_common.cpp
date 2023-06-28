@@ -10,7 +10,7 @@
 
 #include <GL/glew.h>
 
-#include <GL/glcorearb.h>
+// #include <GL/glcorearb.h>
 #include <GLFW/glfw3.h>
 
 #define STB_IMAGE_IMPLEMENTATION

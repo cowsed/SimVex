@@ -4,7 +4,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <GL/glcorearb.h>
+// #include <GL/glcorearb.h>
 
 #include "sim/util.h" 
 #include "sim/time.h"
@@ -214,8 +214,8 @@ namespace sim
             return false;
         }
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        //        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        //        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         window = glfwCreateWindow(1200, 800, "Vex Sim", NULL, NULL);
 
         if (!window)
@@ -227,8 +227,8 @@ namespace sim
         glfwMakeContextCurrent(window);
 
         GLenum err = glewInit();
-        if (GLEW_OK != err)
-        {
+
+        if (GLEW_OK != err) {
             /* Problem: glewInit failed, something is seriously wrong. */
             fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
             return false;
@@ -253,6 +253,7 @@ namespace sim
         printf("OpenGL Version: %d.%d\n", gl_major, gl_minor);
         printf("Dear ImGui Version: %s\n", ImGui::GetVersion());
         printf("SimVex Version: %s, %s\n", __DATE__, __TIME__);
+        // printf("GL Extension %s\n", glGetStringi(GL_EXTENSIONS, 0));
 
         return true;
     }

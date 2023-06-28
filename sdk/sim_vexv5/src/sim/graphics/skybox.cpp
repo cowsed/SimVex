@@ -5,7 +5,7 @@
 #include "stb/stb_image.h"
 
 #include <GL/glew.h>
-#include <GL/glcorearb.h>
+// #include <GL/glcorearb.h>
 
 #include "sim/graphics/skybox.h"
 #include "sim/graphics/render_common.h"
