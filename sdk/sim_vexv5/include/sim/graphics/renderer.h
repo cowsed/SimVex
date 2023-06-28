@@ -1,18 +1,18 @@
 #pragma once
-#include "sim/3d_model.h"
+
 #include "sim/graphics/render_common.h"
 
 namespace sim
 {
-    namespace renderer 
-    {
+  namespace renderer
+  {
 
-        extern RenderTarget field_viewport;
-        extern Camera field_camera;
+    extern RenderTarget field_viewport;
+    void move_camera(float dx, float dy, float dz);
 
-        void setup();
-        void render();
-        void build_ui();
+    void setup();
+    void render();
+    void build_ui();
 
-    }
+  } // namespace renderer
 }

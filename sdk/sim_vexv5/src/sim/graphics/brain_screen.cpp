@@ -67,7 +67,7 @@ namespace sim
 
             bool doingVSYNC = false;
         };
-        thread_local brain_stats_t brain_stats{};
+        brain_stats_t brain_stats{};
 
         ///@brief marks the texture on the GPU as out of sync with the texture on the CPU. When we get there, we will have to sync them back up
         void mark_dirty()

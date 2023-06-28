@@ -50,18 +50,9 @@ namespace sim
 {
     namespace renderer
     {
-        bool phys_debug_draw = false;
-        bool main_draw = true;
-        bool draw_skybox = true;
-
-        glm::vec3 light_pos = {5, 10, 5};
-
         RenderTarget field_viewport;
-        Camera field_camera(glm::vec3(0, 0, 0.2), 0, 0, field_viewport);
 
         brain_screen_shape *brain_screen;
-
-        loader::RobotModel robot_model;
 
         mjModel *mj_model = NULL; // MuJoCo model
         mjData *mj_data = NULL;   // MuJoCo data
@@ -69,6 +60,17 @@ namespace sim
         mjvOption opt;            // visualization options
         mjvScene scn;             // abstract scene
         mjrContext con;           // custom GPU context
+
+        bool draw_segment = false;
+
+        void move_camera(float dx, float dy, float dz)
+        {
+          float width = field_viewport.width;
+          float height = field_viewport.height;
+
+          mjv_moveCamera(mj_model, mjMOUSE_ROTATE_H, dx / width, dy / height, &scn, &cam);
+          mjv_moveCamera(mj_model, mjMOUSE_ZOOM, 0, dz / 100.0, &scn, &cam);
+        }
 
         void setup()
         {
@@ -85,6 +87,7 @@ namespace sim
           mjv_defaultCamera(&cam);
           //            mjv_defaultPerturb(&pert);
           mjv_defaultOption(&opt);
+
           mjr_defaultContext(&con);
 
           mjv_makeScene(mj_model, &scn, 1000);
@@ -92,8 +95,6 @@ namespace sim
 
           field_viewport.init(800, 600);
           brain_screen = new brain_screen_shape();
-
-          std::cout << "loaded urdf\n";
 
           auto end = std::chrono::steady_clock::now();
 
@@ -104,32 +105,41 @@ namespace sim
 
         void build_ui()
         {
-            ImGui::Begin("Render Settings");
-            ImGui::Checkbox("Physics Debug Draw", &phys_debug_draw);
-            ImGui::Checkbox("Normal Drawing", &main_draw);
-            ImGui::Checkbox("Draw Skybox", &draw_skybox);
-            ImGui::DragFloat3("Light Pos", &(light_pos[0]));
+          ImGui::Begin("Render Settings");
+          if (ImGui::Button("restart")) {
+            mj_resetData(mj_model, mj_data);
+            mj_forward(mj_model, mj_data);
+          }
+          ImGui::Checkbox("Segment", (bool *)(&scn.flags[mjtRndFlag::mjRND_SEGMENT]));
+          ImGui::Checkbox("Id", (bool *)(&scn.flags[mjtRndFlag::mjRND_IDCOLOR]));
+          ImGui::Checkbox("Shadow", (bool *)(&scn.flags[mjtRndFlag::mjRND_SHADOW]));
+          ImGui::Checkbox("Reflection", (bool *)(&scn.flags[mjtRndFlag::mjRND_REFLECTION]));
+          ImGui::Checkbox("Haze", (bool *)(&scn.flags[mjtRndFlag::mjRND_HAZE]));
+          ImGui::Checkbox("Cull Face", (bool *)(&scn.flags[mjtRndFlag::mjRND_CULL_FACE]));
+          ImGui::Checkbox("Additive", (bool *)(&scn.flags[mjtRndFlag::mjRND_ADDITIVE]));
+          ImGui::Checkbox("Skybox", (bool *)(&scn.flags[mjtRndFlag::mjRND_SKYBOX]));
 
-
-            ImGui::End();
+          ImGui::End();
         }
 
         void render()
         {
-            field_viewport.activate();
-            mjtNum simstart = mj_data->time;
-            while (mj_data->time - simstart < 1.0 / 60.0)
-              mj_step(mj_model, mj_data);
+          field_viewport.activate();
+          glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+          mjtNum simstart = mj_data->time;
+          while (mj_data->time - simstart < 1.0 / 60.0)
+            mj_step(mj_model, mj_data);
 
-            // get framebuffer viewport
-            mjrRect viewport = {0, 0, static_cast<int>(field_viewport.width),
-                                static_cast<int>(field_viewport.height)};
+          // get framebuffer viewport
+          mjrRect viewport = {0, 0, static_cast<int>(field_viewport.width),
+                              static_cast<int>(field_viewport.height)};
 
-            // update scene and render
-            mjv_updateScene(mj_model, mj_data, &opt, NULL, &cam, mjCAT_ALL, &scn);
-            mjr_render(viewport, &scn, &con);
+          // update scene and render
 
-            field_viewport.deactivate();
+          mjv_updateScene(mj_model, mj_data, &opt, NULL, &cam, mjCAT_ALL, &scn);
+          mjr_render(viewport, &scn, &con);
+          field_viewport.deactivate();
+          glDisable(GL_FRAMEBUFFER_SRGB_EXT);
         }
     } // namespace renderer
 }

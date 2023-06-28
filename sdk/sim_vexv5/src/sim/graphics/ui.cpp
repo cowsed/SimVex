@@ -4,16 +4,17 @@
 #include "../../../vendor/imgui/backends/imgui_impl_opengl3.h"
 #include "../../../vendor/imgui/backends/imgui_impl_glfw.h"
 
-#include "sim/util.h"
-#include "sim/time.h"
-#include "sim/terminal.h"
-#include "sim/graphics/brain_screen.h"
-#include "sim/controller.h"
-#include "sim/sim.h"
-#include "sim/events.h"
+#include "mujoco/mujoco.h"
 #include "sim/3d_model.h"
+#include "sim/controller.h"
+#include "sim/events.h"
+#include "sim/graphics/brain_screen.h"
 #include "sim/graphics/renderer.h"
 #include "sim/physics.h"
+#include "sim/sim.h"
+#include "sim/terminal.h"
+#include "sim/time.h"
+#include "sim/util.h"
 
 namespace sim
 {
@@ -220,19 +221,14 @@ namespace sim
     /// up down move global Y
     /// fore/back and left/right move relative to where youre looking
     /// @param cam the camera to move
-    void moveViewportCamera(sim::renderer::Camera *cam)
+    void moveViewportCamera()
     {
-        auto rotate2D = [](glm::vec2 v, float ang) -> glm::vec2
-        {
-            float c = cos(ang);
-            float s = sin(ang);
-            float x = c * v.x - s * v.y;
-            float y = s * v.x + c * v.y;
-            return {x, y};
-        };
 
         float dx = 0;
         float dy = 0;
+        float dz = 0;
+        double turn_speed = 0.004;
+
         static ImVec2 last_mouse_pos = ImVec2{0, 0};
         if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
         {
@@ -244,23 +240,14 @@ namespace sim
 
             dx = (mouse_pos.x - last_mouse_pos.x);
             dy = (mouse_pos.y - last_mouse_pos.y);
+            dz = ImGui::GetIO().MouseWheel;
+
             last_mouse_pos = mouse_pos;
         }
 
+        if (dx != 0 || dy != 0 || dz != 0)
+            renderer::move_camera(dx, dy, dz);
         double move_speed = 0.02 * 100.f;
-        double turn_speed = 0.004;
-
-        cam->azimuth -= dx * turn_speed;
-
-        cam->altitude -= dy * turn_speed;
-        if (cam->altitude < -M_PI / 2)
-        {
-            cam->altitude = -M_PI / 2 + 0.001;
-        }
-        if (cam->altitude > M_PI / 2)
-        {
-            cam->altitude = M_PI / 2 - 0.001;
-        }
 
         glm::vec2 local_vel = {0, 0};
         float uppy_downy = 0.0;
@@ -299,10 +286,10 @@ namespace sim
         local_vel *= move_speed;
         uppy_downy *= move_speed;
         //
-        glm::vec2 global_xy = rotate2D(local_vel, cam->azimuth);
-        glm::vec3 global_vel = {global_xy.x, global_xy.y, uppy_downy};
+        //        glm::vec2 global_xy = rotate2D(local_vel, cam->azimuth);
+        //        glm::vec3 global_vel = {global_xy.x, global_xy.y, uppy_downy};
 
-        cam->eye += global_vel;
+        //        cam->eye += global_vel;
     }
 
     void drawViewport()
@@ -325,9 +312,12 @@ namespace sim
             renderer::field_viewport.resize(width * viewport_samples, height * viewport_samples);
         }
 
-        ImGui::Image((void *)(intptr_t)(renderer::field_viewport.color_handle), ImVec2((float)renderer::field_viewport.width / viewport_samples, (float)renderer::field_viewport.height / viewport_samples), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void *)(intptr_t)(renderer::field_viewport.color_handle),
+                     ImVec2((float)renderer::field_viewport.width / viewport_samples,
+                            (float)renderer::field_viewport.height / viewport_samples),
+                     ImVec2(0, 1), ImVec2(1, 0));
 
-        moveViewportCamera(&sim::renderer::field_camera);
+        moveViewportCamera();
 
         ImGui::End();
         ImGui::PopStyleVar(2);
