@@ -11,7 +11,7 @@ set(VEX_SIM_MODEL_PATH ${VEX_SIM_INSTALL_PATH}/sdk/sim_vexv5/media/Models/)
 
 
 set(COMPILE_FLAGS -O2 -Wall -Werror=return-type -Wextra -ggdb
--DMODEL_PATH=\"${VEX_SIM_MODEL_PATH}\"
+-DMODEL_PATH=\"${VEX_SIM_MODEL_PATH}\" -fPIC
 )
 
 message(STATUS \"${VEX_SIM_MODEL_PATH}\")
@@ -143,6 +143,8 @@ add_library(simv5rt STATIC ${project_sources} )
 
 #29s pch
 
-target_include_directories(simv5rt PUBLIC include vendor/imgui/ vendor/assimp/include vendor/)
+#target_link_libraries(simv5rt vendor/mujoco-2.3.5/lib/libmujoco.so.2.3.5)
+
+target_include_directories(simv5rt PUBLIC include vendor/imgui/ vendor/assimp/include vendor/ vendor/mujoco-2.3.5/include/)
 #target_precompile_headers(simv5rt PUBLIC ${project_headers})
 

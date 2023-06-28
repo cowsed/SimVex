@@ -50,7 +50,7 @@ namespace sim
         // Display State
         // TODO: make each thread have its own drawing parameters
         // map of thread_id to struct of brain stats
-        namespace brain_stats
+        struct brain_stats_t
         {
             uint32_t bg_col = 0xFF000000;
             uint32_t fg_col = 0xFFFFFFFF;
@@ -66,7 +66,8 @@ namespace sim
             vex::fontType current_font = vex::mono20;
 
             bool doingVSYNC = false;
-        }
+        };
+        thread_local brain_stats_t brain_stats{};
 
         ///@brief marks the texture on the GPU as out of sync with the texture on the CPU. When we get there, we will have to sync them back up
         void mark_dirty()
@@ -177,7 +178,7 @@ namespace sim
         /// @return the width in pixels that the font would take up
         int calc_string_width(const char *str)
         {
-            vex::fontType font_name = brain_stats::current_font;
+            vex::fontType font_name = brain_stats.current_font;
             full_font_info this_font = get_font_info(font_name);
 
             int i = 0;
@@ -207,7 +208,7 @@ namespace sim
         /// @return the height in pixels that the font would take up
         int calc_string_height(const char *str)
         {
-            vex::fontType font_name = brain_stats::current_font;
+            vex::fontType font_name = brain_stats.current_font;
             full_font_info this_font = get_font_info(font_name);
 
             return this_font.font_info.height;
@@ -223,11 +224,13 @@ namespace sim
         /// @param col the color to set
         void setPixelAccordingly(brain_screen_buffer buf, int x, int y, uint32_t col)
         {
-            int screenX = x + brain_stats::origin_x; // x pos in screen
-            int screenY = y + brain_stats::origin_y; // y pos in screen
+            int screenX = x + brain_stats.origin_x; // x pos in screen
+            int screenY = y + brain_stats.origin_y; // y pos in screen
 
-            bool inX = (screenX > brain_stats::clip_rect_x) && (screenX < brain_stats::clip_rect_x + brain_stats::clip_rect_width);
-            bool inY = (screenY > brain_stats::clip_rect_y) && (screenY < brain_stats::clip_rect_y + brain_stats::clip_rect_height);
+            bool inX = (screenX > brain_stats.clip_rect_x)
+                       && (screenX < brain_stats.clip_rect_x + brain_stats.clip_rect_width);
+            bool inY = (screenY > brain_stats.clip_rect_y)
+                       && (screenY < brain_stats.clip_rect_y + brain_stats.clip_rect_height);
 
             if (inX && inY)
             {
@@ -244,11 +247,13 @@ namespace sim
         /// @param col the color to set
         uint32_t getPixelAccordingly(brain_screen_buffer buf, int x, int y)
         {
-            int screenX = x + brain_stats::origin_x; // x pos in screen
-            int screenY = y + brain_stats::origin_y; // y pos in screen
+            int screenX = x + brain_stats.origin_x; // x pos in screen
+            int screenY = y + brain_stats.origin_y; // y pos in screen
 
-            bool inX = (screenX > brain_stats::clip_rect_x) && (screenX < brain_stats::clip_rect_x + brain_stats::clip_rect_width);
-            bool inY = (screenY > brain_stats::clip_rect_y) && (screenY < brain_stats::clip_rect_y + brain_stats::clip_rect_height);
+            bool inX = (screenX > brain_stats.clip_rect_x)
+                       && (screenX < brain_stats.clip_rect_x + brain_stats.clip_rect_width);
+            bool inY = (screenY > brain_stats.clip_rect_y)
+                       && (screenY < brain_stats.clip_rect_y + brain_stats.clip_rect_height);
 
             if (inX && inY)
             {
@@ -376,7 +381,14 @@ namespace sim
         /// @param str string to print
         void print_at_internal(int x, int y, bool opaque, char *str)
         {
-            blitString(str, *working_screen_buffer, get_fg_col_internal(), get_bg_col_internal(), brain_stats::current_font, opaque, x, y);
+            blitString(str,
+                       *working_screen_buffer,
+                       get_fg_col_internal(),
+                       get_bg_col_internal(),
+                       brain_stats.current_font,
+                       opaque,
+                       x,
+                       y);
             mark_dirty();
         }
 
@@ -397,8 +409,7 @@ namespace sim
             {
                 buffer_switch_mutex.lock();
                 brain_screen_buffer *to_draw = drawing_screen_buffer;
-                if (!brain_stats::doingVSYNC)
-                {
+                if (!brain_stats.doingVSYNC) {
                     to_draw = working_screen_buffer;
                 }
 
@@ -466,10 +477,12 @@ namespace sim
         // Implementations of vex functions
         void draw_rect_internal(int x, int y, int width, int height, uint32_t fill_argb)
         {
-            for (int iy = max(brain_stats::clip_rect_y, y); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height); iy++)
-            {
-                for (int ix = max(brain_stats::clip_rect_x, x); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width); ix++)
-                {
+            for (int iy = max(brain_stats.clip_rect_y, y);
+                 iy < min(brain_stats.clip_rect_y + brain_stats.clip_rect_height, y + height);
+                 iy++) {
+                for (int ix = max(brain_stats.clip_rect_x, x);
+                     ix < min(brain_stats.clip_rect_x + brain_stats.clip_rect_width, x + width);
+                     ix++) {
                     (*working_screen_buffer)[iy][ix] = fill_argb;
                 }
             }
@@ -484,10 +497,14 @@ namespace sim
         /// @param border_argb border color in argb format
         void draw_rect_border_internal(int x, int y, int width, int height, uint32_t fill_argb, uint32_t border_argb, int border_width)
         {
-            for (int iy = max(brain_stats::clip_rect_y, y - border_width); iy < min(brain_stats::clip_rect_y + brain_stats::clip_rect_height, y + height + border_width); iy++)
-            {
-                for (int ix = max(brain_stats::clip_rect_x, x - border_width); ix < min(brain_stats::clip_rect_x + brain_stats::clip_rect_width, x + width + border_width); ix++)
-                {
+            for (int iy = max(brain_stats.clip_rect_y, y - border_width);
+                 iy < min(brain_stats.clip_rect_y + brain_stats.clip_rect_height,
+                          y + height + border_width);
+                 iy++) {
+                for (int ix = max(brain_stats.clip_rect_x, x - border_width);
+                     ix < min(brain_stats.clip_rect_x + brain_stats.clip_rect_width,
+                              x + width + border_width);
+                     ix++) {
                     bool isBorder = (ix < x) || (ix >= x + width) || (iy < y) || (iy >= y + height);
                     if (!isBorder)
                     {
@@ -511,7 +528,7 @@ namespace sim
 
             for (int x = x1; x < x2; x++)
             {
-                setPixelAccordingly(*working_screen_buffer, x, y, brain_stats::fg_col);
+                setPixelAccordingly(*working_screen_buffer, x, y, brain_stats.fg_col);
                 // plot(x, y)
                 if (D > 0)
                 {
@@ -529,7 +546,7 @@ namespace sim
             int sy = y0 < y1 ? 1 : -1;
             int error = dx + dy;
 
-            uint32_t col = brain_stats::fg_col;
+            uint32_t col = brain_stats.fg_col;
             while (true)
             {
                 setPixelAccordingly(*working_screen_buffer, x0, y0, col);
@@ -651,16 +668,16 @@ namespace sim
         /// @param y2
         void set_clip_space_internal(int x1, int y1, int x2, int y2)
         {
-            brain_stats::clip_rect_x = min(x1, x2);
-            brain_stats::clip_rect_y = min(y1, y2);
-            brain_stats::clip_rect_width = abs(x1 - x2);
-            brain_stats::clip_rect_height = abs(y1 - y2);
+            brain_stats.clip_rect_x = min(x1, x2);
+            brain_stats.clip_rect_y = min(y1, y2);
+            brain_stats.clip_rect_width = abs(x1 - x2);
+            brain_stats.clip_rect_height = abs(y1 - y2);
         }
         /// @brief sets this threads font
         /// @param font the font to set to
         void set_font_internal(vex::fontType font)
         {
-            brain_stats::current_font = font;
+            brain_stats.current_font = font;
         }
 
         /// @brief  sets the background (fill) color of this threads rendering parameters
@@ -668,37 +685,40 @@ namespace sim
         /// TODO: make this only affect the current thread
         void set_bg_col_internal(uint32_t col)
         {
-            brain_stats::bg_col = col;
+            brain_stats.bg_col = col;
         }
         /// @brief sets the foreground (pen) color of this threads rendering parameters
         /// @param col the color to set it to
         /// TODO: make this only affect the current thread
         void set_fg_col_internal(uint32_t col)
         {
-            brain_stats::fg_col = col;
+            brain_stats.fg_col = col;
         }
 
         /// @brief  gets the background (fill) color of this threads rendering parameters
         /// @return the color to set it to
         uint32_t get_bg_col_internal()
         {
-            return brain_stats::bg_col;
+            return brain_stats.bg_col;
         }
         /// @brief sets the foreground (pen) color of this threads rendering parameters
         /// @param col the color to set it to
         uint32_t get_fg_col_internal()
         {
-            return brain_stats::fg_col;
+            return brain_stats.fg_col;
         }
         /// @brief gets the size of the pen aka width of lines or borders
         /// @return the size of the pen
-        int get_pen_width() { return brain_stats::line_width; }
+        int get_pen_width()
+        {
+            return brain_stats.line_width;
+        }
 
         /// @brief sets the size of the pen aka width of lines or borders
         /// @param width the new size to set to
         void set_pen_width(int width)
         {
-            brain_stats::line_width = width;
+            brain_stats.line_width = width;
         }
 
         V5_TouchStatus *get_touch_status_internal()
@@ -708,7 +728,7 @@ namespace sim
 
         void setVSYNC(bool doit)
         {
-            brain_stats::doingVSYNC = doit;
+            brain_stats.doingVSYNC = doit;
         }
 
         void render_internal()

@@ -1,9 +1,9 @@
 #include "sim/graphics/renderer.h"
 
-#include <iostream>
-#include <memory>
 #include <chrono>
 #include <functional>
+#include <iostream>
+#include <memory>
 
 #include <GL/glew.h>
 #include <GL/glcorearb.h>
@@ -16,6 +16,8 @@
 #include "sim/physics.h"
 #include "sim/graphics/skybox.h"
 #include "sim/urdf_loader.h"
+
+#include "mujoco/mujoco.h"
 
 namespace sim
 {
@@ -45,17 +47,39 @@ namespace sim
 
         loader::RobotModel robot_model;
 
+        mjModel *m = NULL; // MuJoCo model
+        mjData *d = NULL;  // MuJoCo data
+        mjvCamera cam;     // abstract camera
+        mjvOption opt;     // visualization options
+        mjvScene scn;      // abstract scene
+        mjrContext con;    // custom GPU context
+
         void setup()
         {
-            setup_common();
+          setup_common();
 
-            field_viewport.init(800, 600);
-            field_skybox = new Skybox("/home/richie/VEX/Sim/sdk/sim_vexv5/media/Environments/hangar/");
-            field_skybox->init();
-            brain_screen = new brain_screen_shape();
+          // initialize visualization data structures
+          std::cout << "mj camera" << std::endl;
+          mjv_defaultCamera(&cam);
+          //            mjv_defaultPerturb(&pert);
+          std::cout << "mj option" << std::endl;
+          mjv_defaultOption(&opt);
+          std::cout << "mj context" << std::endl;
+          mjr_defaultContext(&con);
 
-            robot_model = sim::loader::load_urdf("Construction/simple.urdf");
-            std::cout << "loaded urdf\n";
+          std::cout << "mj scene" << std::endl;
+          mjv_makeScene(m, &scn, 1000);
+          std::cout << "mj make coneext" << std::endl;
+          mjr_makeContext(m, &con, mjFONTSCALE_100);
+
+          field_viewport.init(800, 600);
+          field_skybox
+              = new Skybox("/home/richie/VEX/Sim/sdk/sim_vexv5/media/Environments/hangar/");
+          field_skybox->init();
+          brain_screen = new brain_screen_shape();
+
+          robot_model = sim::loader::load_urdf("Construction/simple.urdf");
+          std::cout << "loaded urdf\n";
 
 // MODEL_PATH is defined by the makefile. this guard is only here to make the IDE be quiet
 #ifndef MODEL_PATH
@@ -97,6 +121,22 @@ namespace sim
         {
 
             field_viewport.activate();
+            mjtNum simstart = d->time;
+            while (d->time - simstart < 1.0 / 60.0)
+              mj_step(m, d);
+
+            // get framebuffer viewport
+            mjrRect viewport = {0, 0, static_cast<int>(field_viewport.width),
+                                static_cast<int>(field_viewport.height)};
+
+            // update scene and render
+            std::cout << "mj updating" << std::endl;
+            //            mjv_updateScene(m, d, &opt, NULL, &cam, mjCAT_ALL, &scn);
+            std::cout << "mj renderering" << std::endl;
+            //            mjr_render(viewport, &scn, &con);
+
+            /*
+
             glClearColor(0.f, 0.f, 0.f, 1.0f);
             glEnable(GL_DEPTH_TEST);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -120,8 +160,8 @@ namespace sim
             }
 
 
+*/
             field_viewport.deactivate();
         }
-
-    }
+    } // namespace renderer
 }

@@ -1,16 +1,17 @@
 #include "sim/graphics/render_common.h"
 
-#include <stdio.h>
-#include <iostream>
-#include <cstdlib>
-#include <map>
 #include <array>
-#include <thread>
 #include <chrono>
+#include <cstdlib>
+#include <iostream>
+#include <map>
+#include <stdio.h>
+#include <thread>
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
+
 #include <GL/glcorearb.h>
+#include <GLFW/glfw3.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
