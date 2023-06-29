@@ -234,13 +234,15 @@ namespace sim
         {
             last_mouse_pos = ImGui::GetMousePos();
         }
+        if (ImGui::IsWindowHovered()) {
+            dz = ImGui::GetIO().MouseWheel;
+        }
         if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsWindowFocused())
         {
             ImVec2 mouse_pos = ImGui::GetMousePos();
 
             dx = (mouse_pos.x - last_mouse_pos.x);
             dy = (mouse_pos.y - last_mouse_pos.y);
-            dz = ImGui::GetIO().MouseWheel;
 
             last_mouse_pos = mouse_pos;
         }
@@ -345,9 +347,6 @@ namespace sim
 
         // Vex Controller
         sim::controller::build_ui();
-
-        // Physics control
-        sim::physics::build_ui();
 
         sim::renderer::build_ui();
 

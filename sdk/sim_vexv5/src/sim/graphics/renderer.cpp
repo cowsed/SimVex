@@ -74,10 +74,14 @@ namespace sim
 
         void setup()
         {
+          for (int i = 0; i < 30; i++) {
+            printf("%s,", mjRNDSTRING[i / 3][i % 3]);
+          }
+
           setup_common();
           auto start = std::chrono::steady_clock::now();
 
-          auto mj_path = std::string(MODEL_PATH) + std::string("mjmodel.xml");
+          auto mj_path = std::string(MODEL_PATH) + std::string("mymodel.xml");
           auto [m, d] = load_mj(mj_path);
 
           mj_model = m;
@@ -110,14 +114,9 @@ namespace sim
             mj_resetData(mj_model, mj_data);
             mj_forward(mj_model, mj_data);
           }
-          ImGui::Checkbox("Segment", (bool *)(&scn.flags[mjtRndFlag::mjRND_SEGMENT]));
-          ImGui::Checkbox("Id", (bool *)(&scn.flags[mjtRndFlag::mjRND_IDCOLOR]));
-          ImGui::Checkbox("Shadow", (bool *)(&scn.flags[mjtRndFlag::mjRND_SHADOW]));
-          ImGui::Checkbox("Reflection", (bool *)(&scn.flags[mjtRndFlag::mjRND_REFLECTION]));
-          ImGui::Checkbox("Haze", (bool *)(&scn.flags[mjtRndFlag::mjRND_HAZE]));
-          ImGui::Checkbox("Cull Face", (bool *)(&scn.flags[mjtRndFlag::mjRND_CULL_FACE]));
-          ImGui::Checkbox("Additive", (bool *)(&scn.flags[mjtRndFlag::mjRND_ADDITIVE]));
-          ImGui::Checkbox("Skybox", (bool *)(&scn.flags[mjtRndFlag::mjRND_SKYBOX]));
+          for (int i = 0; i < 10; i++) {
+            ImGui::Checkbox(mjRNDSTRING[i][0], (bool *)(&scn.flags[i]));
+          }
 
           ImGui::End();
         }
