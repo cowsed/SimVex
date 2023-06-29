@@ -14,6 +14,3 @@
 [submodule "sdk/sim_vexv5/vendor/mujoco"]
 	path = sdk/sim_vexv5/vendor/mujoco
 	url = http://github.com/deepmind/mujoco.git
-[submodule "sdk/sim_vexv5/vendor/v-hacd"]
-	path = sdk/sim_vexv5/vendor/v-hacd
-	url = git@github.com:kmammou/v-hacd.git
