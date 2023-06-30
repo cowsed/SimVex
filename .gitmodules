@@ -8,9 +8,6 @@
 [submodule "sdk/sim_vexv5/vendor/stb"]
 	path = sdk/sim_vexv5/vendor/stb
 	url = git@github.com:nothings/stb.git
-[submodule "bullet3"]
-	path = sdk/sim_vexv5/vendor/bullet3
-	url = https://github.com/bulletphysics/bullet3
 [submodule "sdk/sim_vexv5/vendor/mujoco"]
 	path = sdk/sim_vexv5/vendor/mujoco
 	url = http://github.com/deepmind/mujoco.git
