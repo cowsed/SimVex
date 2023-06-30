@@ -20,6 +20,7 @@ Dependencies
 - Dear ImGui (submoduled)
 - Assimp (submoduled)
 - Mujoco (see below)
+- obj2mjcf (see below)
 
 ## Installing Dependencies
 OpenGL, GLFW, and GLM Needs to be installed on your system
@@ -33,6 +34,14 @@ make -j2
 where 2 is the number of cores you wish to devote to compilation
 
 Download Mujoco binaries and place them in vendor/mujoco
+
+
+```bash
+pip install --upgrade obj2mjcf
+cd vendor/obj2mjcf/
+bash install_vhacd.sh
+```
+
 
 ## Building your robot code
 

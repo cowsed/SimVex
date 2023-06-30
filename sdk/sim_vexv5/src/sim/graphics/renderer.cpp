@@ -74,9 +74,6 @@ namespace sim
 
         void setup()
         {
-          for (int i = 0; i < 30; i++) {
-            printf("%s,", mjRNDSTRING[i / 3][i % 3]);
-          }
 
           setup_common();
           auto start = std::chrono::steady_clock::now();
@@ -96,6 +93,7 @@ namespace sim
 
           mjv_makeScene(mj_model, &scn, 1000);
           mjr_makeContext(mj_model, &con, mjFONTSCALE_100);
+          scn.flags[mjtRndFlag::mjRND_SHADOW] = false;
 
           field_viewport.init(800, 600);
           brain_screen = new brain_screen_shape();
