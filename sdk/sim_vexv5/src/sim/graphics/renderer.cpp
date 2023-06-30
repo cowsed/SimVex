@@ -14,16 +14,41 @@
 
 #include "imgui.h"
 
-#include "sim/physics.h"
-#include "sim/graphics/skybox.h"
-#include "sim/urdf_loader.h"
-
 #include "mujoco/mujoco.h"
 
 // MODEL_PATH is defined by the makefile. this guard is only here to make the IDE be quiet
 #ifndef MODEL_PATH
 #define MODEL_PATH "./"
 #endif
+
+char *option_names[] = {
+    (char *)"Convex Hull",
+    (char *)"Texture",
+    (char *)"Joint",
+    (char *)"Camera",
+    (char *)"Actuator",
+    (char *)"Activation",
+    (char *)"Light",
+    (char *)"Tendon",
+    (char *)"Range finder",
+    (char *)"Constraints",
+    (char *)"Inertia",
+    (char *)"SCLINERTIA",
+    (char *)"Perturbation Force",
+    (char *)"Perturbation Object",
+    (char *)"Contact Point",
+    (char *)"Contact Force",
+    (char *)"Contact Split",
+    (char *)"Transparent",
+    (char *)"Autoconnect",
+    (char *)"Center of Mass",
+    (char *)"Select",
+    (char *)"Static Objects",
+    (char *)"Skin",
+    (char *)"Midphase",
+    (char *)"Mesh BVH",
+};
+const int num_options = mjtVisFlag::mjNVISFLAG;
 
 std::pair<mjModel *, mjData *> load_mj(std::string path)
 {
@@ -112,8 +137,17 @@ namespace sim
             mj_resetData(mj_model, mj_data);
             mj_forward(mj_model, mj_data);
           }
-          for (int i = 0; i < 10; i++) {
-            ImGui::Checkbox(mjRNDSTRING[i][0], (bool *)(&scn.flags[i]));
+
+          if (ImGui::CollapsingHeader("Render Options")) {
+            for (int i = 0; i < num_options; i++) {
+              ImGui::Checkbox(option_names[i], (bool *)(&opt.flags[i]));
+            }
+          }
+
+          if (ImGui::CollapsingHeader("Render Flags")) {
+            for (int i = 0; i < 10; i++) {
+              ImGui::Checkbox(mjRNDSTRING[i][0], (bool *)(&scn.flags[i]));
+            }
           }
 
           ImGui::End();

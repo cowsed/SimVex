@@ -9,8 +9,11 @@
         <mesh file="/home/richie/VEX/Sim/sdk/sim_vexv5/media/Models/Fields/OverUnder/over_under_field_flat.msh" />
 
         <texture type="2d" name="bars_tex" file="/home/richie/VEX/Sim/sdk/sim_vexv5/media/Models/Fields/OverUnder/bars_tex.png" />
-        <material name="bars_Material" texture="bars_tex" specular="0.5" shininess="0.25" />
+        <material name="bars_Material" texture="bars_tex" specular="0.25" shininess="0.05" />
         <mesh file="Fields/OverUnder/bars.msh" />
+
+        <!-- <material name="nut_Material" rgba = "0 1 0 1" specular="0.25" shininess="0.05" /> -->
+        <!-- <mesh file="Fields/OverUnder/nut.msh" /> -->
 
     </asset>
 
@@ -45,6 +48,11 @@
             <geom material="bars_Material" mesh="bars" class="visual" />
             <geom mesh="bars" class="collision" />
         </body>
+
+        <!-- <body name="nut">
+            <geom material="nut_Material" mesh="nut" class="visual" />
+            <geom mesh="nut" class="collision" />
+        </body> -->
 
 
     </worldbody>
