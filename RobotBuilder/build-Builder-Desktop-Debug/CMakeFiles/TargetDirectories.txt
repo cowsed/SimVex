@@ -1,0 +1,7 @@
+/home/richie/VEX/Sim/RobotBuilder/build-Builder-Desktop-Debug/CMakeFiles/Builder.dir
+/home/richie/VEX/Sim/RobotBuilder/build-Builder-Desktop-Debug/CMakeFiles/edit_cache.dir
+/home/richie/VEX/Sim/RobotBuilder/build-Builder-Desktop-Debug/CMakeFiles/rebuild_cache.dir
+/home/richie/VEX/Sim/RobotBuilder/build-Builder-Desktop-Debug/CMakeFiles/list_install_components.dir
+/home/richie/VEX/Sim/RobotBuilder/build-Builder-Desktop-Debug/CMakeFiles/install.dir
+/home/richie/VEX/Sim/RobotBuilder/build-Builder-Desktop-Debug/CMakeFiles/install/local.dir
+/home/richie/VEX/Sim/RobotBuilder/build-Builder-Desktop-Debug/CMakeFiles/install/strip.dir

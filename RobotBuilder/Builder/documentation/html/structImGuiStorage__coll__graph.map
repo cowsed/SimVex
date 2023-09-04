@@ -1,0 +1,21 @@
+<map id="ImGuiStorage" name="ImGuiStorage">
+<area shape="rect" id="Node000001" title=" " alt="" coords="208,2203,332,2571"/>
+<area shape="rect" id="Node000002" href="$structImVector.html" title=" " alt="" coords="191,1179,349,2139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="273,2138,273,2186,267,2186,267,2138"/>
+<area shape="rect" id="Node000003" href="$classint.html" title=" " alt="" coords="257,5,283,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="273,74,273,1162,267,1162,267,74"/>
+<area shape="rect" id="Node000004" href="$structImGuiStorage_1_1ImGuiStoragePair.html" title=" " alt="" coords="359,571,563,683"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="286,58,314,100,342,154,381,260,412,369,436,470,452,554,446,555,430,472,407,371,376,262,337,156,309,103,281,61"/>
+<area shape="rect" id="Node000008" href="$structImVector.html" title=" " alt="" coords="5,155,153,1099"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="258,49,223,68,205,83,190,100,163,146,158,144,185,97,201,79,220,64,256,44"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="453,683,354,1217,349,1216,448,682"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="454,5,491,75"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="473,75,471,99,465,349,463,553,458,553,459,349,466,99,467,75"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="515,5,561,75"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="536,75,473,554,468,553,531,74"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="316,5,429,75"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="380,74,453,553,447,554,375,75"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="63,1112,70,1154,93,1247,123,1339,158,1427,194,1505,189,1507,153,1429,118,1341,88,1249,65,1155,58,1113"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="65,5,94,75"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="82,74,82,138,77,138,77,74"/>
+</map>

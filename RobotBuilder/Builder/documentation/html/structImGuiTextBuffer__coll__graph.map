@@ -1,0 +1,15 @@
+<map id="ImGuiTextBuffer" name="ImGuiTextBuffer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="190,2171,317,2475"/>
+<area shape="rect" id="Node000002" href="$structImVector.html" title=" " alt="" coords="113,1163,261,2107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,2106,240,2154,235,2154,230,2107"/>
+<area shape="rect" id="Node000003" href="$classint.html" title=" " alt="" coords="30,5,56,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="42,75,26,234,12,486,8,633,10,788,18,945,35,1098,49,1178,67,1259,111,1412,105,1413,62,1260,44,1179,30,1099,13,945,5,788,3,633,6,486,21,233,36,74"/>
+<area shape="rect" id="Node000005" href="$structImVector.html" title=" " alt="" coords="109,155,257,1099"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="59,68,92,154,107,207,102,209,87,156,54,70"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="295,592,332,661"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="316,661,304,1139,300,1422,298,1643,293,1864,276,2147,276,2154,271,2154,271,2146,287,1863,293,1643,294,1422,299,1139,310,661"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="315,661,303,848,290,973,271,1099,264,1123,260,1146,254,1145,259,1122,266,1098,285,972,298,847,310,661"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="180,1113,181,1139,181,1163,176,1163,175,1139,175,1113"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="168,5,198,75"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="186,74,186,138,180,138,180,74"/>
+</map>

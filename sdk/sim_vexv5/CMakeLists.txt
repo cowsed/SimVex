@@ -32,7 +32,7 @@ set(project_sources
     src/sim/graphics/brain_fonts/noto_sans_mono_50.cpp
     src/sim/graphics/brain_fonts/noto_sans_mono_60.cpp
 
-    src/sim/graphics/brain_screen.cpp
+    src/sim/graphics/sim_brain.cpp
     src/sim/graphics/render_common.cpp
     src/sim/graphics/renderer.cpp
     src/sim/graphics/skybox.cpp
@@ -95,7 +95,7 @@ set(project_headers
     include/sim/graphics/brain_fonts/noto_sans_mono_60.h
     include/sim/graphics/brain_fonts/font_common.h
 
-    include/sim/graphics/brain_screen.h
+    include/sim/graphics/sim_brain.h
     include/sim/graphics/render_common.h
     include/sim/graphics/renderer.h
     include/sim/graphics/skybox.h
@@ -136,7 +136,7 @@ set(project_headers
 
 )
 
-add_library(simv5rt STATIC ${project_sources} )
+add_library(simv5rt STATIC ${project_sources})
 
 #39s
 # include_directories(include vendor/imgui/ vendor/ vendor/assimp/include vendor/bullet3/src)

@@ -1,0 +1,7 @@
+<map id="ImGuiWindowClass" name="ImGuiWindowClass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="48,235,196,304"/>
+<area shape="rect" id="Node000002" href="$classint.html" title=" " alt="" coords="8,5,35,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="15,75,10,105,8,140,12,176,25,209,37,225,33,228,20,212,7,177,3,140,5,105,10,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="204,5,242,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,74,221,141,211,177,196,212,187,224,183,221,191,209,206,176,215,140,221,74"/>
+</map>

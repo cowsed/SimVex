@@ -1,0 +1,94 @@
+\doxysection{Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data Struct Reference}
+\hypertarget{structImGui__ImplWGPU__Data}{}\label{structImGui__ImplWGPU__Data}\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+
+
+Collaboration diagram for Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{structImGui__ImplWGPU__Data__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+WGPUDevice \mbox{\hyperlink{structImGui__ImplWGPU__Data_abffeb18f864003eb0661716b924159d0}{wgpu\+Device}} = nullptr
+\item 
+WGPUQueue \mbox{\hyperlink{structImGui__ImplWGPU__Data_a4281fd4cf419267792c8ba5195517360}{default\+Queue}} = nullptr
+\item 
+WGPUTexture\+Format \mbox{\hyperlink{structImGui__ImplWGPU__Data_a7d6a63bad9154eaa895f6e857f6dcebb}{render\+Target\+Format}} = WGPUTexture\+Format\+\_\+\+Undefined
+\item 
+WGPUTexture\+Format \mbox{\hyperlink{structImGui__ImplWGPU__Data_a346d81380745d85c9065283da935c1e2}{depth\+Stencil\+Format}} = WGPUTexture\+Format\+\_\+\+Undefined
+\item 
+WGPURender\+Pipeline \mbox{\hyperlink{structImGui__ImplWGPU__Data_acbfe6572ac667ca0e3c8f190025f265e}{pipeline\+State}} = nullptr
+\item 
+\mbox{\hyperlink{structRenderResources}{Render\+Resources}} \mbox{\hyperlink{structImGui__ImplWGPU__Data_aa917aa3bfe6121ca7775feb83a131fe7}{render\+Resources}}
+\item 
+\mbox{\hyperlink{structFrameResources}{Frame\+Resources}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structImGui__ImplWGPU__Data_af9800b68c39356eec8a8792ca2f387d0}{p\+Frame\+Resources}} = nullptr
+\item 
+unsigned \mbox{\hyperlink{classint}{int}} \mbox{\hyperlink{structImGui__ImplWGPU__Data_a6c5df0f3745f9c235ec7349227eeae2a}{num\+Frames\+In\+Flight}} = 0
+\item 
+unsigned \mbox{\hyperlink{classint}{int}} \mbox{\hyperlink{structImGui__ImplWGPU__Data_a3b6d51ef6b216f8237533ce095468c04}{frame\+Index}} = UINT\+\_\+\+MAX
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structImGui__ImplWGPU__Data_a4281fd4cf419267792c8ba5195517360}\label{structImGui__ImplWGPU__Data_a4281fd4cf419267792c8ba5195517360} 
+\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}!defaultQueue@{defaultQueue}}
+\index{defaultQueue@{defaultQueue}!ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+\doxysubsubsection{\texorpdfstring{defaultQueue}{defaultQueue}}
+{\footnotesize\ttfamily WGPUQueue Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+::default\+Queue = nullptr}
+
+\Hypertarget{structImGui__ImplWGPU__Data_a346d81380745d85c9065283da935c1e2}\label{structImGui__ImplWGPU__Data_a346d81380745d85c9065283da935c1e2} 
+\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}!depthStencilFormat@{depthStencilFormat}}
+\index{depthStencilFormat@{depthStencilFormat}!ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+\doxysubsubsection{\texorpdfstring{depthStencilFormat}{depthStencilFormat}}
+{\footnotesize\ttfamily WGPUTexture\+Format Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+::depth\+Stencil\+Format = WGPUTexture\+Format\+\_\+\+Undefined}
+
+\Hypertarget{structImGui__ImplWGPU__Data_a3b6d51ef6b216f8237533ce095468c04}\label{structImGui__ImplWGPU__Data_a3b6d51ef6b216f8237533ce095468c04} 
+\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}!frameIndex@{frameIndex}}
+\index{frameIndex@{frameIndex}!ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+\doxysubsubsection{\texorpdfstring{frameIndex}{frameIndex}}
+{\footnotesize\ttfamily unsigned \mbox{\hyperlink{classint}{int}} Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+::frame\+Index = UINT\+\_\+\+MAX}
+
+\Hypertarget{structImGui__ImplWGPU__Data_a6c5df0f3745f9c235ec7349227eeae2a}\label{structImGui__ImplWGPU__Data_a6c5df0f3745f9c235ec7349227eeae2a} 
+\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}!numFramesInFlight@{numFramesInFlight}}
+\index{numFramesInFlight@{numFramesInFlight}!ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+\doxysubsubsection{\texorpdfstring{numFramesInFlight}{numFramesInFlight}}
+{\footnotesize\ttfamily unsigned \mbox{\hyperlink{classint}{int}} Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+::num\+Frames\+In\+Flight = 0}
+
+\Hypertarget{structImGui__ImplWGPU__Data_af9800b68c39356eec8a8792ca2f387d0}\label{structImGui__ImplWGPU__Data_af9800b68c39356eec8a8792ca2f387d0} 
+\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}!pFrameResources@{pFrameResources}}
+\index{pFrameResources@{pFrameResources}!ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+\doxysubsubsection{\texorpdfstring{pFrameResources}{pFrameResources}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structFrameResources}{Frame\+Resources}}\texorpdfstring{$\ast$}{*} Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+::p\+Frame\+Resources = nullptr}
+
+\Hypertarget{structImGui__ImplWGPU__Data_acbfe6572ac667ca0e3c8f190025f265e}\label{structImGui__ImplWGPU__Data_acbfe6572ac667ca0e3c8f190025f265e} 
+\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}!pipelineState@{pipelineState}}
+\index{pipelineState@{pipelineState}!ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+\doxysubsubsection{\texorpdfstring{pipelineState}{pipelineState}}
+{\footnotesize\ttfamily WGPURender\+Pipeline Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+::pipeline\+State = nullptr}
+
+\Hypertarget{structImGui__ImplWGPU__Data_aa917aa3bfe6121ca7775feb83a131fe7}\label{structImGui__ImplWGPU__Data_aa917aa3bfe6121ca7775feb83a131fe7} 
+\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}!renderResources@{renderResources}}
+\index{renderResources@{renderResources}!ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+\doxysubsubsection{\texorpdfstring{renderResources}{renderResources}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structRenderResources}{Render\+Resources}} Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+::render\+Resources}
+
+\Hypertarget{structImGui__ImplWGPU__Data_a7d6a63bad9154eaa895f6e857f6dcebb}\label{structImGui__ImplWGPU__Data_a7d6a63bad9154eaa895f6e857f6dcebb} 
+\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}!renderTargetFormat@{renderTargetFormat}}
+\index{renderTargetFormat@{renderTargetFormat}!ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+\doxysubsubsection{\texorpdfstring{renderTargetFormat}{renderTargetFormat}}
+{\footnotesize\ttfamily WGPUTexture\+Format Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+::render\+Target\+Format = WGPUTexture\+Format\+\_\+\+Undefined}
+
+\Hypertarget{structImGui__ImplWGPU__Data_abffeb18f864003eb0661716b924159d0}\label{structImGui__ImplWGPU__Data_abffeb18f864003eb0661716b924159d0} 
+\index{ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}!wgpuDevice@{wgpuDevice}}
+\index{wgpuDevice@{wgpuDevice}!ImGui\_ImplWGPU\_Data@{ImGui\_ImplWGPU\_Data}}
+\doxysubsubsection{\texorpdfstring{wgpuDevice}{wgpuDevice}}
+{\footnotesize\ttfamily WGPUDevice Im\+Gui\+\_\+\+Impl\+WGPU\+\_\+\+Data\+::wgpu\+Device = nullptr}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/richie/\+VEX/\+Sim/\+Robot\+Builder/\+Builder/vendor/imgui/backends/\mbox{\hyperlink{imgui__impl__wgpu_8cpp}{imgui\+\_\+impl\+\_\+wgpu.\+cpp}}\end{DoxyCompactItemize}

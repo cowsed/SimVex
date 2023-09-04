@@ -1,0 +1,5 @@
+<map id="modeller::Link::PlaneLink" name="modeller::Link::PlaneLink">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,187,164,256"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="25,5,145,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,75,87,170,82,170,82,75"/>
+</map>

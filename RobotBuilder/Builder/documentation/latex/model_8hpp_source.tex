@@ -1,0 +1,51 @@
+\doxysection{model.\+hpp}
+\hypertarget{model_8hpp_source}{}\label{model_8hpp_source}\index{/home/richie/VEX/Sim/RobotBuilder/Builder/include/model.hpp@{/home/richie/VEX/Sim/RobotBuilder/Builder/include/model.hpp}}
+\mbox{\hyperlink{model_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <glm/gtc/quaternion.hpp>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <variant>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacemodeller}{modeller}}\ \{}
+\DoxyCodeLine{00008\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacemodeller_ae5b1489b0a94c1f0f09c4d842c3b58a2}{name\_exists}}(\textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a5c4947d4516dd7cfa3505ce3a648a4ef}{name}});}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structmodeller_1_1Link}{Link}}\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structmodeller_1_1Link_1_1CustomLinkPoint}{CustomLinkPoint}}\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ glm::vec3\ \mbox{\hyperlink{structmodeller_1_1Link_1_1CustomLinkPoint_ae2358bbe94409454b5710cd3f1b174bc}{pos}};}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ glm::quat\ \mbox{\hyperlink{structmodeller_1_1Link_1_1CustomLinkPoint_a2340e404e877408fcf9441de6d90ffd3}{orientation}};}
+\DoxyCodeLine{00014\ \ \ \ \ \};}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structmodeller_1_1Link_1_1FixedLink}{FixedLink}}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ std::optional<glm::vec3>\ \mbox{\hyperlink{structmodeller_1_1Link_1_1FixedLink_a4c37f86e10bafce5dd63435642229999}{offset}};}
+\DoxyCodeLine{00017\ \ \ \ \ \};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structmodeller_1_1Link_1_1RotationalLink}{RotationalLink}}\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ std::optional<double>\ \mbox{\hyperlink{structmodeller_1_1Link_1_1RotationalLink_ac97614bb7139d9d46a64063fcd4f1e5c}{lower\_limit}};}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ std::optional<double>\ \mbox{\hyperlink{structmodeller_1_1Link_1_1RotationalLink_ac3792e825be8b94c10abb33e7fc9e53f}{upper\_limit}};}
+\DoxyCodeLine{00022\ \ \ \ \ \};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structmodeller_1_1Link_1_1SliderLink}{SliderLink}}\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ std::optional<double>\ \mbox{\hyperlink{structmodeller_1_1Link_1_1SliderLink_aa5af75676bcea0cee4675fba1bf069b0}{lower\_limit}};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ std::optional<double>\ \mbox{\hyperlink{structmodeller_1_1Link_1_1SliderLink_af36fb06cb6fea71dafb36edb37a2759a}{upper\_limit}};}
+\DoxyCodeLine{00026\ \ \ \ \ \};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structmodeller_1_1Link_1_1PlaneLink}{PlaneLink}}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ std::optional<double>\ \mbox{\hyperlink{structmodeller_1_1Link_1_1PlaneLink_a0b93a4b139702f9cb62fd59e290db39f}{lower\_x\_limit}};}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ std::optional<double>\ \mbox{\hyperlink{structmodeller_1_1Link_1_1PlaneLink_a5ea70ca247e373d2b5f170481493945e}{lower\_y\_limit}};}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ std::optional<double>\ \mbox{\hyperlink{structmodeller_1_1Link_1_1PlaneLink_a21df8ad63e3548bf08ca56532b045006}{upper\_x\_limit}};}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ std::optional<double>\ \mbox{\hyperlink{structmodeller_1_1Link_1_1PlaneLink_a10ba0f43bf5f199035edd8c3120d799f}{upper\_y\_limit}};}
+\DoxyCodeLine{00033\ \ \ \ \ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classint}{LinkIndex}}\ =\ \mbox{\hyperlink{classint}{int}};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{structmodeller_1_1Link_a275b5e4861ae7d5e93014539b391b3bb}{parent}};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ std::variant<LinkIndex,\ CustomLinkPoint>\ \mbox{\hyperlink{structmodeller_1_1Link_a33b00152c7166ca8d5be1e29f7cb0924}{parent\_link\_point}};}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{structmodeller_1_1Link_a473fc7925f64a030e1c61bea7b97bd43}{child}};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ std::variant<LinkIndex,\ CustomLinkPoint>\ \mbox{\hyperlink{structmodeller_1_1Link_a4afdfc897cf61a60989d5b4a2ba4d3ea}{child\_link\_point}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ std::variant<FixedLink,\ RotationalLink>\ \mbox{\hyperlink{structmodeller_1_1Link_a6ce5412827732ec2069807882ed1a5f3}{link\_type}};}
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \}\ \textcolor{comment}{//\ namespace\ modeller}}
+
+\end{DoxyCode}

@@ -1,0 +1,11 @@
+<map id="ImGuiLastItemData" name="ImGuiLastItemData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="14,1109,160,1179"/>
+<area shape="rect" id="Node000002" href="$classint.html" title=" " alt="" coords="19,656,46,725"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="27,726,16,793,8,884,9,935,13,986,22,1036,37,1084,42,1095,37,1097,32,1086,17,1037,8,986,3,935,3,884,11,793,22,725"/>
+<area shape="rect" id="Node000003" href="$structImRect.html" title=" " alt="" coords="90,368,193,1013"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="130,1014,115,1086,113,1094,108,1093,110,1085,124,1013"/>
+<area shape="rect" id="Node000004" href="$structImVec2.html" title=" " alt="" coords="98,155,185,288"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="144,288,144,351,139,351,139,288"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="123,5,160,75"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="144,75,144,138,139,138,139,75"/>
+</map>

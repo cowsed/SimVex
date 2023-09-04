@@ -1,0 +1,13 @@
+<map id="stbtt_fontinfo" name="stbtt_fontinfo">
+<area shape="rect" id="Node000001" title=" " alt="" coords="99,491,189,581"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,216,51,285"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="22,286,14,325,11,371,16,420,22,443,32,465,55,492,85,511,83,516,52,496,28,468,17,445,10,421,6,371,9,324,16,285"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,5,152,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,75,124,155,121,251,124,346,138,473,132,474,119,347,115,251,119,154,126,74"/>
+<area shape="rect" id="Node000005" href="$structstbtt____buf.html" title=" " alt="" coords="171,216,242,285"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="147,73,192,199,187,201,142,75"/>
+<area shape="rect" id="Node000004" href="$classint.html" title=" " alt="" coords="243,5,269,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="269,73,288,149,302,251,302,306,297,363,283,417,260,468,235,495,205,515,202,511,232,491,255,465,278,415,291,362,297,306,296,251,283,150,264,75"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="245,62,227,100,215,150,210,199,205,199,210,149,221,98,240,59"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="202,286,160,475,155,474,197,284"/>
+</map>

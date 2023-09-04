@@ -1,0 +1,31 @@
+\doxysection{imgui\+\_\+impl\+\_\+wgpu.\+h}
+\hypertarget{imgui__impl__wgpu_8h_source}{}\label{imgui__impl__wgpu_8h_source}\index{/home/richie/VEX/Sim/RobotBuilder/Builder/vendor/imgui/backends/imgui\_impl\_wgpu.h@{/home/richie/VEX/Sim/RobotBuilder/Builder/vendor/imgui/backends/imgui\_impl\_wgpu.h}}
+\mbox{\hyperlink{imgui__impl__wgpu_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ dear\ imgui:\ Renderer\ for\ WebGPU}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ This\ needs\ to\ be\ used\ along\ with\ a\ Platform\ Binding\ (e.g.\ GLFW)}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ (Please\ note\ that\ WebGPU\ is\ currently\ experimental,\ will\ not\ run\ on\ non-\/beta\ browsers,\ and\ may\ break.)}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ Implemented\ features:}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ [X]\ Renderer:\ User\ texture\ binding.\ Use\ 'WGPUTextureView'\ as\ ImTextureID.\ Read\ the\ FAQ\ about\ ImTextureID!}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ [X]\ Renderer:\ Large\ meshes\ support\ (64k+\ vertices)\ with\ 16-\/bit\ indices.}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ You\ can\ use\ unmodified\ imgui\_impl\_*\ files\ in\ your\ project.\ See\ examples/\ folder\ for\ examples\ of\ using\ this.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ Prefer\ including\ the\ entire\ imgui/\ repository\ into\ your\ project\ (either\ as\ a\ copy\ or\ as\ a\ submodule),\ and\ only\ build\ the\ backends\ you\ need.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ If\ you\ are\ new\ to\ Dear\ ImGui,\ read\ documentation\ from\ the\ docs/\ folder\ +\ read\ the\ top\ of\ imgui.cpp.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ Read\ online:\ https://github.com/ocornut/imgui/tree/master/docs}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{imgui_8h}{imgui.h}}"{}}\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ IMGUI\_IMPL\_API}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <webgpu/webgpu.h>}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{imgui__impl__wgpu_8h_a0c512c7c2b33186c20c54f9e7eff613d}{ImGui\_ImplWGPU\_Init}}(WGPUDevice\ device,\ \textcolor{keywordtype}{int}\ num\_frames\_in\_flight,\ WGPUTextureFormat\ rt\_format,\ WGPUTextureFormat\ depth\_format\ =\ WGPUTextureFormat\_Undefined);}
+\DoxyCodeLine{00019\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__wgpu_8h_a8f518adc1b396651e1c4c785644b72fc}{ImGui\_ImplWGPU\_Shutdown}}();}
+\DoxyCodeLine{00020\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__wgpu_8h_a66452774219a993368c3ad017d67848c}{ImGui\_ImplWGPU\_NewFrame}}();}
+\DoxyCodeLine{00021\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__wgpu_8h_a81aabc242052c5e001388a54b0b46ca0}{ImGui\_ImplWGPU\_RenderDrawData}}(\mbox{\hyperlink{structImDrawData}{ImDrawData}}*\ draw\_data,\ WGPURenderPassEncoder\ pass\_encoder);}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ Use\ if\ you\ want\ to\ reset\ your\ rendering\ device\ without\ losing\ Dear\ ImGui\ state.}}
+\DoxyCodeLine{00024\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__wgpu_8h_aa1d0e7487ac3d04f9c601627c1f26392}{ImGui\_ImplWGPU\_InvalidateDeviceObjects}}();}
+\DoxyCodeLine{00025\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{imgui__impl__wgpu_8h_ad3d03747f8d4edeaa31a7647b6d197bb}{ImGui\_ImplWGPU\_CreateDeviceObjects}}();}
+
+\end{DoxyCode}

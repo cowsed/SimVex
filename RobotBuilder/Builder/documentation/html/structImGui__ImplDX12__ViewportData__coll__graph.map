@@ -1,0 +1,32 @@
+<map id="ImGui_ImplDX12_ViewportData" name="ImGui_ImplDX12_ViewportData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="722,320,939,427"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,171,171,240"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,238,205,268,271,293,384,322,499,342,609,356,705,364,705,369,608,361,498,348,382,327,269,299,202,273,143,242"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="195,171,395,240"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="345,238,395,267,452,294,515,314,581,331,705,355,704,360,580,336,514,319,450,298,393,272,342,242"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="419,171,576,240"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="526,238,555,268,589,294,646,322,707,343,705,348,644,327,586,298,551,272,522,242"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="600,171,733,240"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="679,239,692,267,710,294,723,308,719,311,706,298,687,270,674,241"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="758,171,861,240"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="800,240,794,268,796,296,798,303,793,305,791,296,789,267,794,239"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="885,171,944,240"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="891,241,875,265,856,306,851,303,870,263,886,238"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="998,171,1066,240"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1030,240,1022,270,1005,298,982,318,956,335,953,330,979,314,1001,294,1017,268,1025,239"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1123,171,1168,240"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1142,241,1130,271,1110,298,1075,323,1037,341,997,355,957,364,956,359,995,350,1035,336,1073,318,1106,294,1125,268,1137,239"/>
+<area shape="rect" id="Node000010" href="$structImGui__ImplDX12__FrameContext.html" title=" " alt="" coords="1195,171,1397,240"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1293,241,1281,271,1260,298,1238,311,1208,323,1132,342,1043,356,957,366,956,360,1043,351,1131,337,1207,318,1236,307,1257,294,1277,269,1288,239"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="949,13,1126,83"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="1057,81,1081,115,1112,144,1179,167,1178,172,1109,149,1077,118,1053,84"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1455,13,1577,83"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="1484,84,1453,116,1441,133,1427,149,1402,165,1399,161,1424,145,1437,130,1449,113,1480,81"/>
+<area shape="rect" id="Node000014" href="$structImGui__ImplDX12__RenderBuffers.html" title=" " alt="" coords="1474,171,1678,240"/>
+<area shape="poly" id="edge14_Node000014_Node000012" title=" " alt="" coords="1535,81,1549,114,1563,154,1558,155,1544,116,1530,84"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="1150,5,1335,91"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="1240,90,1240,118,1247,146,1252,156,1247,158,1242,148,1235,119,1234,90"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1508,242,1437,272,1358,299,1254,323,1147,342,956,365,956,360,1146,337,1252,318,1357,293,1435,267,1506,237"/>
+<area shape="rect" id="Node000015" href="$classint.html" title=" " alt="" coords="1675,13,1701,83"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="1680,83,1666,116,1646,148,1636,161,1632,157,1642,145,1661,113,1675,81"/>
+</map>

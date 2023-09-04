@@ -8,7 +8,7 @@
 #include "sim/3d_model.h"
 #include "sim/controller.h"
 #include "sim/events.h"
-#include "sim/graphics/brain_screen.h"
+#include "sim/graphics/sim_brain.h"
 #include "sim/graphics/renderer.h"
 #include "sim/physics.h"
 #include "sim/sim.h"

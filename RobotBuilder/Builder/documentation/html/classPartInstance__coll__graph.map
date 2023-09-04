@@ -1,0 +1,5 @@
+<map id="PartInstance" name="PartInstance">
+<area shape="rect" id="Node000001" title=" " alt="" coords="13,181,118,272"/>
+<area shape="rect" id="Node000002" href="$classPartDefinition.html" title=" " alt="" coords="5,5,125,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,117,68,164,63,164,63,117"/>
+</map>

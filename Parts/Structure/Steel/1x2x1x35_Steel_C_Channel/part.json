@@ -1,0 +1,12 @@
+{
+    "name": "1x2x1x35 C-Channel Steel",
+    "number": "276-2906",
+    "categories": ["c-channel", "structure", "steel"],
+    "model": "model.obj",
+    "model_mat": "model.mtl",
+    "options": [""],
+    "link_positions": [
+        {"pos": [1,2,3], "orientation": [1,0,0,0]},
+        {"pos": [3,2,1], "orientation": [0,1,0,0]}
+    ]
+}

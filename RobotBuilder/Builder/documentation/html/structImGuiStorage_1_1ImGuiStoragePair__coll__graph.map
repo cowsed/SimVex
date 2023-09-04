@@ -1,0 +1,11 @@
+<map id="ImGuiStorage::ImGuiStoragePair" name="ImGuiStorage::ImGuiStoragePair">
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,155,221,267"/>
+<area shape="rect" id="Node000002" href="$classint.html" title=" " alt="" coords="5,5,32,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="25,74,32,102,43,129,50,140,45,143,39,132,27,103,20,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="65,5,103,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="84,74,88,130,90,138,85,139,83,131,79,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="132,5,177,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="150,75,136,139,131,138,145,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="202,5,315,75"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="236,76,191,132,182,144,178,140,187,129,232,73"/>
+</map>

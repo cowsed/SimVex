@@ -1,0 +1,7 @@
+<map id="ImGuiInputEventMouseWheel" name="ImGuiInputEventMouseWheel">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,155,192,224"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="27,5,64,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="52,74,67,130,71,139,66,141,62,132,47,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="88,5,216,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="144,76,125,132,122,140,117,138,120,130,139,74"/>
+</map>

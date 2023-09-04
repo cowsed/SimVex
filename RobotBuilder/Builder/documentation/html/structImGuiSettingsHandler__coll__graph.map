@@ -1,0 +1,17 @@
+<map id="ImGuiSettingsHandler" name="ImGuiSettingsHandler">
+<area shape="rect" id="Node000001" title=" " alt="" coords="364,219,524,288"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,29,43,99"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="33,98,51,148,67,172,87,193,105,203,131,212,197,227,273,237,347,244,347,249,273,243,196,232,129,217,103,208,83,197,62,176,47,150,28,99"/>
+<area shape="rect" id="Node000003" href="$classint.html" title=" " alt="" coords="104,29,131,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="131,97,145,121,167,146,187,163,241,192,294,214,348,230,347,235,292,219,239,197,184,168,163,150,141,124,126,100"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="155,13,331,115"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="286,112,324,153,365,193,382,207,379,211,362,197,320,156,282,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="355,13,533,115"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="447,114,447,202,441,202,441,114"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="557,5,733,123"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="607,124,576,161,540,197,522,211,518,207,537,193,572,158,603,121"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="757,5,933,123"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="782,125,730,163,672,197,607,222,541,239,540,234,605,217,670,192,727,159,779,120"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="957,29,1003,99"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="966,100,947,124,918,152,891,170,825,197,752,219,677,234,541,250,541,245,677,229,751,213,823,192,889,165,914,147,943,121,962,97"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ImGuiSizeCallbackData" name="ImGuiSizeCallbackData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,384,159,453"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="10,187,55,256"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="30,256,27,306,30,333,37,359,41,369,36,371,31,361,25,334,22,306,24,256"/>
+<area shape="rect" id="Node000003" href="$structImVec2.html" title=" " alt="" coords="88,155,175,288"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,288,105,361,102,369,97,367,99,359,117,287"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="113,5,150,75"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="134,75,134,138,129,138,129,75"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="ImGuiTableColumnSettings" name="ImGuiTableColumnSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="102,171,293,240"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,43,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="25,74,31,111,37,129,47,145,66,162,88,175,85,180,63,166,43,148,32,131,25,112,20,75"/>
+<area shape="rect" id="Node000003" href="$classint.html" title=" " alt="" coords="141,5,168,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,74,153,110,159,146,163,155,158,157,154,147,147,110,148,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="215,5,265,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="234,75,213,155,208,154,229,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="340,5,377,75"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="354,75,341,113,318,148,301,163,298,159,314,145,336,110,349,73"/>
+</map>

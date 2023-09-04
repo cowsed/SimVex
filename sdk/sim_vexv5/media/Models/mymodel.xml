@@ -1,19 +1,27 @@
-<mujoco model="rover4We (v0.2)">
+<mujoco model="over_under_main">
 
     <compiler inertiafromgeom="true" angle="degree" />
-    <option timestep="0.02" gravity="0 0 -9.81" />
+    <option timestep="0.01" gravity="0 0 -9.81" />
 
     <asset>
         <texture type="2d" name="field_tex" file="/home/richie/VEX/Sim/sdk/sim_vexv5/media/Models/Fields/OverUnder/field_tex.png" />
-        <material name="over_under_field_flat_Material" texture="field_tex" specular="0.5" shininess="0.25" />
+        <material name="over_under_field_flat_Material" texture="field_tex" specular="0.05" shininess="0.05" />
         <mesh file="/home/richie/VEX/Sim/sdk/sim_vexv5/media/Models/Fields/OverUnder/over_under_field_flat.msh" />
 
         <texture type="2d" name="bars_tex" file="/home/richie/VEX/Sim/sdk/sim_vexv5/media/Models/Fields/OverUnder/bars_tex.png" />
         <material name="bars_Material" texture="bars_tex" specular="0.25" shininess="0.05" />
         <mesh file="Fields/OverUnder/bars.msh" />
 
-        <!-- <material name="nut_Material" rgba = "0 1 0 1" specular="0.25" shininess="0.05" /> -->
-        <!-- <mesh file="Fields/OverUnder/nut.msh" /> -->
+        <material name="nut_Material" rgba = "0 1 0 1" specular="0.25" shininess="0.05" />
+        <mesh file="Fields/OverUnder/nut.msh" />
+
+        <texture type="2d" name="wheels_tex" file="/home/richie/VEX/Sim/sdk/sim_vexv5/media/Models/Motion/Wheels/omni_wheel_tex.png" />
+        <material name="wheel_material" texture = "wheels_tex" specular="0.25" shininess="0.05" /> 
+        <mesh file="/home/richie/VEX/Sim/sdk/sim_vexv5/media/Models/Motion/Wheels/4_inch_omni.msh" />
+
+        <material name="aluminum_material" rgba = ".5 .5 .5 1" specular="0.5" shininess="0.45" />
+        <mesh file="/home/richie/VEX/Sim/sdk/sim_vexv5/media/Models/Aluminum/1_by_2_25.msh" />
+        <mesh file="/home/richie/VEX/Sim/sdk/sim_vexv5/media/Models/Aluminum/1_by_2_35.msh" />
 
     </asset>
 
@@ -30,32 +38,48 @@
     </default>
 
 
-    <visual>
-        <headlight active="1" />
-        <scale camera=".5" />
-        <map znear="0.001" zfar="1000" />
-    </visual>
 
     <worldbody>
-    <light pos="0 0 2" dir="0 0.1 -1" directional="true" diffuse="1 1 1"/>
+            <light pos="0 0 2" dir="0 0 -1" directional="true" diffuse="1 1 1"/>
 
-        <body name="over_under_field_flat">
+        <body name="field_base">
             <geom material="over_under_field_flat_Material" mesh="over_under_field_flat" class="visual" />
             <geom mesh="over_under_field_flat" class="collision" />
         </body>
 
         <body name="bars">
             <geom material="bars_Material" mesh="bars" class="visual" />
-            <geom mesh="bars" class="collision" />
+            <!-- <geom mesh="bars" class="collision" /> -->
         </body>
 
-        <!-- <body name="nut">
+        <body name="nut1" pos = "1 1 1">
+        	<joint type="free"/>
+
             <geom material="nut_Material" mesh="nut" class="visual" />
             <geom mesh="nut" class="collision" />
-        </body> -->
+        </body>
+
+
+        <body name="wheel" pos = "-1 1 1">
+        	<joint type="free"/>
+
+            <geom material="wheel_material" mesh="4_inch_omni" class="visual" />
+            <geom mesh="4_inch_omni" class="collision" />
+        </body>
+
+        <body name="alum1" pos = "0 -.051 1" euler = "0 90 0">
+        	<joint type="free"/>
+
+            <geom material="aluminum_material" mesh="1_by_2_25" class="visual" />
+            <geom mesh="1_by_2_25" class="collision" />
+        </body>
+
 
 
     </worldbody>
 
+  <contact>
+    <!-- <pair name="against_foam" geom1="field_base" geom2="nut" friction="1"/> -->
+  </contact>
 
 </mujoco>

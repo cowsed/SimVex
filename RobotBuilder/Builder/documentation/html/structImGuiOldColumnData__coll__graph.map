@@ -1,0 +1,12 @@
+<map id="ImGuiOldColumnData" name="ImGuiOldColumnData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="74,1077,234,1147"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="22,5,60,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="39,75,28,180,18,312,9,512,8,594,12,669,21,744,37,822,62,910,95,1012,121,1062,116,1064,90,1014,56,912,32,824,16,744,7,669,3,594,4,512,13,312,22,180,34,74"/>
+<area shape="rect" id="Node000005" href="$structImVec2.html" title=" " alt="" coords="110,155,196,288"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="62,69,105,139,101,142,57,72"/>
+<area shape="rect" id="Node000003" href="$classint.html" title=" " alt="" coords="234,656,261,725"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,725,261,789,262,873,258,919,250,966,238,1011,221,1055,214,1066,209,1063,216,1052,233,1010,245,964,253,918,256,873,256,789,250,725"/>
+<area shape="rect" id="Node000004" href="$structImRect.html" title=" " alt="" coords="106,368,208,1013"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="157,1013,157,1060,152,1060,152,1013"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="174,287,178,312,182,351,177,352,173,312,169,288"/>
+</map>

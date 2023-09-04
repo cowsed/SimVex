@@ -1,0 +1,18 @@
+<map id="ImGuiTextFilter" name="ImGuiTextFilter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="191,2203,311,2379"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="29,5,66,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="44,75,34,155,16,420,9,627,14,834,34,1098,51,1253,73,1411,126,1717,182,1986,228,2185,223,2187,177,1987,121,1718,68,1412,46,1254,29,1099,8,834,3,627,11,420,29,154,39,74"/>
+<area shape="rect" id="Node000005" href="$structImGuiTextFilter_1_1ImGuiTextRange.html" title=" " alt="" coords="44,552,213,701"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="55,74,119,535,113,535,49,75"/>
+<area shape="rect" id="Node000003" href="$structImVector.html" title=" " alt="" coords="289,1179,456,2139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="292,2092,274,2187,269,2186,287,2091"/>
+<area shape="rect" id="Node000004" href="$classint.html" title=" " alt="" coords="333,5,359,75"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="346,74,345,99,306,639,292,875,279,1179,264,1748,256,2186,250,2186,259,1747,274,1179,286,874,301,638,339,98,341,74"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="349,74,352,484,361,1099,362,1162,357,1162,355,1099,347,484,343,74"/>
+<area shape="rect" id="Node000006" href="$structImVector.html" title=" " alt="" coords="435,155,583,1099"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="361,57,390,99,418,154,432,193,427,194,413,156,385,102,357,60"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="133,701,137,793,146,906,161,1031,185,1154,205,1232,230,1310,285,1457,280,1458,225,1311,200,1233,179,1155,156,1032,140,907,132,793,127,701"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="447,1113,438,1179,433,1179,442,1113"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="494,5,523,75"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="511,74,511,138,506,138,506,74"/>
+</map>

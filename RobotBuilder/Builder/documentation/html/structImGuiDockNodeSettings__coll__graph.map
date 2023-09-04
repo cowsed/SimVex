@@ -1,0 +1,11 @@
+<map id="ImGuiDockNodeSettings" name="ImGuiDockNodeSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="65,395,241,464"/>
+<area shape="rect" id="Node000002" href="$classint.html" title=" " alt="" coords="5,176,32,245"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="18,245,22,307,31,339,46,369,58,382,54,386,42,372,26,341,17,307,13,245"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="135,176,172,245"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="156,245,156,378,151,378,151,245"/>
+<area shape="rect" id="Node000004" href="$structImVec2ih.html" title=" " alt="" coords="201,155,287,267"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="245,267,237,319,217,372,210,383,205,380,212,369,231,318,240,266"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="223,5,265,75"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="247,75,247,138,241,138,241,75"/>
+</map>

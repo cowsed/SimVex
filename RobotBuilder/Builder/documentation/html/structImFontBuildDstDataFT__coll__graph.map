@@ -1,0 +1,17 @@
+<map id="ImFontBuildDstDataFT" name="ImFontBuildDstDataFT">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,2389,153,2459"/>
+<area shape="rect" id="Node000002" href="$classint.html" title=" " alt="" coords="106,5,133,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,75,96,113,86,155,66,286,59,389,61,625,61,2249,64,2314,73,2372,67,2373,59,2314,55,2249,55,625,54,389,61,285,81,154,91,112,104,74"/>
+<area shape="rect" id="Node000004" href="$structImVector.html" title=" " alt="" coords="192,1163,340,2107"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="118,74,103,234,91,487,91,635,97,789,110,946,134,1098,145,1130,159,1162,190,1271,185,1273,154,1164,140,1132,129,1099,105,946,91,790,85,635,86,487,98,234,113,74"/>
+<area shape="rect" id="Node000006" href="$structImVector.html" title=" " alt="" coords="208,155,356,1099"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="135,57,163,99,191,154,205,193,200,194,186,156,159,102,130,60"/>
+<area shape="rect" id="Node000003" href="$structImBitVector.html" title=" " alt="" coords="160,2171,241,2325"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,2309,115,2377,110,2374,158,2306"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="218,2107,213,2154,208,2153,213,2106"/>
+<area shape="rect" id="Node000005" href="$classImU32_01_5.html" title=" " alt="" coords="381,592,442,661"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="412,661,398,848,370,1099,346,1252,340,1251,365,1098,392,847,407,661"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="277,1113,276,1163,271,1163,272,1113"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="267,5,297,75"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="285,74,285,138,279,138,279,74"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="modeller::Link" name="modeller::Link">
+<area shape="rect" id="Node000001" title=" " alt="" coords="123,187,217,256"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,21,63,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,89,123,161,132,172,128,175,119,164,59,92"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="87,13,253,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,98,173,170,167,170,167,98"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="277,5,434,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="330,108,309,137,284,165,259,183,233,197,230,193,256,178,280,161,305,134,326,105"/>
+</map>

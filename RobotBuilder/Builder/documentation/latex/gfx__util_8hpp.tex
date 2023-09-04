@@ -1,0 +1,96 @@
+\doxysection{/home/richie/\+VEX/\+Sim/\+Robot\+Builder/\+Builder/include/gfx\+\_\+util.hpp File Reference}
+\hypertarget{gfx__util_8hpp}{}\label{gfx__util_8hpp}\index{/home/richie/VEX/Sim/RobotBuilder/Builder/include/gfx\_util.hpp@{/home/richie/VEX/Sim/RobotBuilder/Builder/include/gfx\_util.hpp}}
+{\ttfamily \#include $<$GL/gl.\+h$>$}\newline
+{\ttfamily \#include $<$GLFW/glfw3.\+h$>$}\newline
+Include dependency graph for gfx\+\_\+util.\+hpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=263pt]{gfx__util_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{gfx__util_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{gfx__util_8hpp_a05eb6e00738969e65911aada7ca67b7a}{glfw\+Error}} (\mbox{\hyperlink{classint}{int}} id, const char \texorpdfstring{$\ast$}{*}description)
+\item 
+\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{gfx__util_8hpp_aac70b230f5f229758655ab7bdae0a975}{gl\+Error}} (\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a7efd7809e1632cdae75603fd1fee61c0}{GLenum}} source, \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a7efd7809e1632cdae75603fd1fee61c0}{GLenum}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a63267399cd2a2ee217572c11d2e54f07}{type}}, \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a68c4714e43d8e827d80759f9cb864f3c}{GLuint}} id, \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a7efd7809e1632cdae75603fd1fee61c0}{GLenum}} severity, \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a011fc24f10426c01349e94a4edd4b0d5}{length}}, const \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_af7575655ac056b187ea385966b95a22d}{GLchar}} \texorpdfstring{$\ast$}{*}msg, const \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_abd87654504355b4c1bb002dcb1d4d16a}{data}})
+\item 
+bool \mbox{\hyperlink{gfx__util_8hpp_ad6e4954b5163d9b8c194eabf217045a1}{imgui\+\_\+setup}} (\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} \texorpdfstring{$\ast$}{*}window)
+\item 
+\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{gfx__util_8hpp_abdd29c10bd4dc1c805e113541a5ce759}{imgui\+\_\+new\+\_\+frame}} ()
+\item 
+\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{gfx__util_8hpp_a0feb77c6baad55bcf81db1246d1d83ba}{imgui\+\_\+render}} ()
+\begin{DoxyCompactList}\small\item\em Render imgui to screen. Call this last after all simulation renderring happens. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{gfx__util_8hpp_a2b40f17a5b0f55ede3d165e8a5581fc8}{imgui\+\_\+cleanup}} ()
+\begin{DoxyCompactList}\small\item\em Destruct Imgui. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{gfx__util_8hpp_ae4f52886cff75add1cd01710d54ecc52}{set\+\_\+red\+\_\+style}} ()
+\item 
+\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{gfx__util_8hpp_ad65881eda83fa21d71c78e85531744e9}{setup\+\_\+dockspace}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{gfx__util_8hpp_aac70b230f5f229758655ab7bdae0a975}\label{gfx__util_8hpp_aac70b230f5f229758655ab7bdae0a975} 
+\index{gfx\_util.hpp@{gfx\_util.hpp}!glError@{glError}}
+\index{glError@{glError}!gfx\_util.hpp@{gfx\_util.hpp}}
+\doxysubsubsection{\texorpdfstring{glError()}{glError()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} gl\+Error (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a7efd7809e1632cdae75603fd1fee61c0}{GLenum}}}]{source,  }\item[{\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a7efd7809e1632cdae75603fd1fee61c0}{GLenum}}}]{type,  }\item[{\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a68c4714e43d8e827d80759f9cb864f3c}{GLuint}}}]{id,  }\item[{\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a7efd7809e1632cdae75603fd1fee61c0}{GLenum}}}]{severity,  }\item[{\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a9289d5b99dc1f27f01480360f2e18ae0}{GLsizei}}}]{length,  }\item[{const \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_af7575655ac056b187ea385966b95a22d}{GLchar}} \texorpdfstring{$\ast$}{*}}]{msg,  }\item[{const \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \texorpdfstring{$\ast$}{*}}]{data }\end{DoxyParamCaption})}
+
+\Hypertarget{gfx__util_8hpp_a05eb6e00738969e65911aada7ca67b7a}\label{gfx__util_8hpp_a05eb6e00738969e65911aada7ca67b7a} 
+\index{gfx\_util.hpp@{gfx\_util.hpp}!glfwError@{glfwError}}
+\index{glfwError@{glfwError}!gfx\_util.hpp@{gfx\_util.hpp}}
+\doxysubsubsection{\texorpdfstring{glfwError()}{glfwError()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} glfw\+Error (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classint}{int}}}]{id,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{description }\end{DoxyParamCaption})}
+
+\Hypertarget{gfx__util_8hpp_a2b40f17a5b0f55ede3d165e8a5581fc8}\label{gfx__util_8hpp_a2b40f17a5b0f55ede3d165e8a5581fc8} 
+\index{gfx\_util.hpp@{gfx\_util.hpp}!imgui\_cleanup@{imgui\_cleanup}}
+\index{imgui\_cleanup@{imgui\_cleanup}!gfx\_util.hpp@{gfx\_util.hpp}}
+\doxysubsubsection{\texorpdfstring{imgui\_cleanup()}{imgui\_cleanup()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} imgui\+\_\+cleanup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destruct Imgui. 
+
+\Hypertarget{gfx__util_8hpp_abdd29c10bd4dc1c805e113541a5ce759}\label{gfx__util_8hpp_abdd29c10bd4dc1c805e113541a5ce759} 
+\index{gfx\_util.hpp@{gfx\_util.hpp}!imgui\_new\_frame@{imgui\_new\_frame}}
+\index{imgui\_new\_frame@{imgui\_new\_frame}!gfx\_util.hpp@{gfx\_util.hpp}}
+\doxysubsubsection{\texorpdfstring{imgui\_new\_frame()}{imgui\_new\_frame()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} imgui\+\_\+new\+\_\+frame (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\Hypertarget{gfx__util_8hpp_a0feb77c6baad55bcf81db1246d1d83ba}\label{gfx__util_8hpp_a0feb77c6baad55bcf81db1246d1d83ba} 
+\index{gfx\_util.hpp@{gfx\_util.hpp}!imgui\_render@{imgui\_render}}
+\index{imgui\_render@{imgui\_render}!gfx\_util.hpp@{gfx\_util.hpp}}
+\doxysubsubsection{\texorpdfstring{imgui\_render()}{imgui\_render()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} imgui\+\_\+render (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Render imgui to screen. Call this last after all simulation renderring happens. 
+
+\Hypertarget{gfx__util_8hpp_ad6e4954b5163d9b8c194eabf217045a1}\label{gfx__util_8hpp_ad6e4954b5163d9b8c194eabf217045a1} 
+\index{gfx\_util.hpp@{gfx\_util.hpp}!imgui\_setup@{imgui\_setup}}
+\index{imgui\_setup@{imgui\_setup}!gfx\_util.hpp@{gfx\_util.hpp}}
+\doxysubsubsection{\texorpdfstring{imgui\_setup()}{imgui\_setup()}}
+{\footnotesize\ttfamily bool imgui\+\_\+setup (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} \texorpdfstring{$\ast$}{*}}]{window }\end{DoxyParamCaption})}
+
+\Hypertarget{gfx__util_8hpp_ae4f52886cff75add1cd01710d54ecc52}\label{gfx__util_8hpp_ae4f52886cff75add1cd01710d54ecc52} 
+\index{gfx\_util.hpp@{gfx\_util.hpp}!set\_red\_style@{set\_red\_style}}
+\index{set\_red\_style@{set\_red\_style}!gfx\_util.hpp@{gfx\_util.hpp}}
+\doxysubsubsection{\texorpdfstring{set\_red\_style()}{set\_red\_style()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} set\+\_\+red\+\_\+style (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\Hypertarget{gfx__util_8hpp_ad65881eda83fa21d71c78e85531744e9}\label{gfx__util_8hpp_ad65881eda83fa21d71c78e85531744e9} 
+\index{gfx\_util.hpp@{gfx\_util.hpp}!setup\_dockspace@{setup\_dockspace}}
+\index{setup\_dockspace@{setup\_dockspace}!gfx\_util.hpp@{gfx\_util.hpp}}
+\doxysubsubsection{\texorpdfstring{setup\_dockspace()}{setup\_dockspace()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} setup\+\_\+dockspace (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+

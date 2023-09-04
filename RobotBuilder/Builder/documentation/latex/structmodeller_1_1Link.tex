@@ -1,0 +1,93 @@
+\doxysection{modeller\+::Link Struct Reference}
+\hypertarget{structmodeller_1_1Link}{}\label{structmodeller_1_1Link}\index{modeller::Link@{modeller::Link}}
+
+
+{\ttfamily \#include $<$model.\+hpp$>$}
+
+
+
+Collaboration diagram for modeller\+::Link\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structmodeller_1_1Link__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmodeller_1_1Link_1_1CustomLinkPoint}{Custom\+Link\+Point}}
+\item 
+struct \mbox{\hyperlink{structmodeller_1_1Link_1_1FixedLink}{Fixed\+Link}}
+\item 
+struct \mbox{\hyperlink{structmodeller_1_1Link_1_1PlaneLink}{Plane\+Link}}
+\item 
+struct \mbox{\hyperlink{structmodeller_1_1Link_1_1RotationalLink}{Rotational\+Link}}
+\item 
+struct \mbox{\hyperlink{structmodeller_1_1Link_1_1SliderLink}{Slider\+Link}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{structmodeller_1_1Link_a19d47e5128e7acfba3c140ff54aca630}{Link\+Index}} = \mbox{\hyperlink{classint}{int}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \mbox{\hyperlink{structmodeller_1_1Link_a275b5e4861ae7d5e93014539b391b3bb}{parent}}
+\item 
+const std\+::variant$<$ \mbox{\hyperlink{structmodeller_1_1Link_a19d47e5128e7acfba3c140ff54aca630}{Link\+Index}}, \mbox{\hyperlink{structmodeller_1_1Link_1_1CustomLinkPoint}{Custom\+Link\+Point}} $>$ \mbox{\hyperlink{structmodeller_1_1Link_a33b00152c7166ca8d5be1e29f7cb0924}{parent\+\_\+link\+\_\+point}}
+\item 
+const std\+::string \& \mbox{\hyperlink{structmodeller_1_1Link_a473fc7925f64a030e1c61bea7b97bd43}{child}}
+\item 
+const std\+::variant$<$ \mbox{\hyperlink{structmodeller_1_1Link_a19d47e5128e7acfba3c140ff54aca630}{Link\+Index}}, \mbox{\hyperlink{structmodeller_1_1Link_1_1CustomLinkPoint}{Custom\+Link\+Point}} $>$ \mbox{\hyperlink{structmodeller_1_1Link_a4afdfc897cf61a60989d5b4a2ba4d3ea}{child\+\_\+link\+\_\+point}}
+\item 
+std\+::variant$<$ \mbox{\hyperlink{structmodeller_1_1Link_1_1FixedLink}{Fixed\+Link}}, \mbox{\hyperlink{structmodeller_1_1Link_1_1RotationalLink}{Rotational\+Link}} $>$ \mbox{\hyperlink{structmodeller_1_1Link_a6ce5412827732ec2069807882ed1a5f3}{link\+\_\+type}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{structmodeller_1_1Link_a19d47e5128e7acfba3c140ff54aca630}\label{structmodeller_1_1Link_a19d47e5128e7acfba3c140ff54aca630} 
+\index{modeller::Link@{modeller::Link}!LinkIndex@{LinkIndex}}
+\index{LinkIndex@{LinkIndex}!modeller::Link@{modeller::Link}}
+\doxysubsubsection{\texorpdfstring{LinkIndex}{LinkIndex}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{structmodeller_1_1Link_a19d47e5128e7acfba3c140ff54aca630}{modeller\+::\+Link\+::\+Link\+Index}} =  \mbox{\hyperlink{classint}{int}}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structmodeller_1_1Link_a473fc7925f64a030e1c61bea7b97bd43}\label{structmodeller_1_1Link_a473fc7925f64a030e1c61bea7b97bd43} 
+\index{modeller::Link@{modeller::Link}!child@{child}}
+\index{child@{child}!modeller::Link@{modeller::Link}}
+\doxysubsubsection{\texorpdfstring{child}{child}}
+{\footnotesize\ttfamily const std\+::string\& modeller\+::\+Link\+::child}
+
+\Hypertarget{structmodeller_1_1Link_a4afdfc897cf61a60989d5b4a2ba4d3ea}\label{structmodeller_1_1Link_a4afdfc897cf61a60989d5b4a2ba4d3ea} 
+\index{modeller::Link@{modeller::Link}!child\_link\_point@{child\_link\_point}}
+\index{child\_link\_point@{child\_link\_point}!modeller::Link@{modeller::Link}}
+\doxysubsubsection{\texorpdfstring{child\_link\_point}{child\_link\_point}}
+{\footnotesize\ttfamily const std\+::variant$<$\mbox{\hyperlink{structmodeller_1_1Link_a19d47e5128e7acfba3c140ff54aca630}{Link\+Index}}, \mbox{\hyperlink{structmodeller_1_1Link_1_1CustomLinkPoint}{Custom\+Link\+Point}}$>$ modeller\+::\+Link\+::child\+\_\+link\+\_\+point}
+
+\Hypertarget{structmodeller_1_1Link_a6ce5412827732ec2069807882ed1a5f3}\label{structmodeller_1_1Link_a6ce5412827732ec2069807882ed1a5f3} 
+\index{modeller::Link@{modeller::Link}!link\_type@{link\_type}}
+\index{link\_type@{link\_type}!modeller::Link@{modeller::Link}}
+\doxysubsubsection{\texorpdfstring{link\_type}{link\_type}}
+{\footnotesize\ttfamily std\+::variant$<$\mbox{\hyperlink{structmodeller_1_1Link_1_1FixedLink}{Fixed\+Link}}, \mbox{\hyperlink{structmodeller_1_1Link_1_1RotationalLink}{Rotational\+Link}}$>$ modeller\+::\+Link\+::link\+\_\+type}
+
+\Hypertarget{structmodeller_1_1Link_a275b5e4861ae7d5e93014539b391b3bb}\label{structmodeller_1_1Link_a275b5e4861ae7d5e93014539b391b3bb} 
+\index{modeller::Link@{modeller::Link}!parent@{parent}}
+\index{parent@{parent}!modeller::Link@{modeller::Link}}
+\doxysubsubsection{\texorpdfstring{parent}{parent}}
+{\footnotesize\ttfamily const std\+::string\& modeller\+::\+Link\+::parent}
+
+\Hypertarget{structmodeller_1_1Link_a33b00152c7166ca8d5be1e29f7cb0924}\label{structmodeller_1_1Link_a33b00152c7166ca8d5be1e29f7cb0924} 
+\index{modeller::Link@{modeller::Link}!parent\_link\_point@{parent\_link\_point}}
+\index{parent\_link\_point@{parent\_link\_point}!modeller::Link@{modeller::Link}}
+\doxysubsubsection{\texorpdfstring{parent\_link\_point}{parent\_link\_point}}
+{\footnotesize\ttfamily const std\+::variant$<$\mbox{\hyperlink{structmodeller_1_1Link_a19d47e5128e7acfba3c140ff54aca630}{Link\+Index}}, \mbox{\hyperlink{structmodeller_1_1Link_1_1CustomLinkPoint}{Custom\+Link\+Point}}$>$ modeller\+::\+Link\+::parent\+\_\+link\+\_\+point}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/richie/\+VEX/\+Sim/\+Robot\+Builder/\+Builder/include/\mbox{\hyperlink{model_8hpp}{model.\+hpp}}\end{DoxyCompactItemize}

@@ -1,5 +1,8 @@
 #include "vex_brain.h"
 
+#include "sim/graphics/sim_brain.h"
+#include <filesystem>
+
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_brain.h
  * @brief   V5 brain class header
@@ -26,7 +29,7 @@ namespace vex
     /**
      * @brief Use this class to write or draw to the brain's LCD screen.
      */
-    brain::lcd::lcd() { print_unimplimented(); }
+    brain::lcd::lcd() {}
 
     /**
      * @brief Sets the cursor to the row and column number set in the parameters.
@@ -666,8 +669,8 @@ namespace vex
         return 0.0;
     }
 
-    brain::sdcard::sdcard() { print_unimplimented(); }
-    brain::sdcard::~sdcard() { print_unimplimented(); }
+    brain::sdcard::sdcard() {}
+    brain::sdcard::~sdcard() {}
 
     /**
      * @brief Gets the state of the SD card
@@ -675,8 +678,7 @@ namespace vex
      */
     bool brain::sdcard::isInserted()
     {
-        print_unimplimented();
-        return false;
+        return sim::brain_screen::sd_is_inserted();
     }
 
     /**
@@ -688,8 +690,17 @@ namespace vex
      */
     int32_t brain::sdcard::loadfile(const char *name, uint8_t *buffer, int32_t len)
     {
-        print_unimplimented();
-        return 0;
+        auto newname = sim::brain_screen::prefix_sd(name);
+        FILE *f = fopen(newname, "rb");
+        if (f == NULL) {
+            return 0;
+        }
+
+        int read = fread(buffer, 1, len, f);
+
+        fclose(f);
+        free(newname);
+        return read;
     }
 
     /**
@@ -701,8 +712,18 @@ namespace vex
      */
     int32_t brain::sdcard::savefile(const char *name, uint8_t *buffer, int32_t len)
     {
-        print_unimplimented();
-        return 0;
+        auto newname = sim::brain_screen::prefix_sd(name);
+
+        FILE *f = fopen(newname, "wb");
+        if (f == NULL) {
+            return 0;
+        }
+
+        int written = fwrite(buffer, 1, len, f);
+
+        fclose(f);
+        free(newname);
+        return written;
     }
 
     /**
@@ -714,8 +735,18 @@ namespace vex
      */
     int32_t brain::sdcard::appendfile(const char *name, uint8_t *buffer, int32_t len)
     {
-        print_unimplimented();
-        return 0;
+        auto newname = sim::brain_screen::prefix_sd(name);
+        FILE *f = fopen(newname, "ab");
+        if (f == NULL) {
+            return 0;
+        }
+
+        int written = fwrite(buffer, 1, len, f);
+
+        fclose(f);
+        free(newname);
+
+        return written;
     }
 
     /**
@@ -725,8 +756,11 @@ namespace vex
      */
     int32_t brain::sdcard::size(const char *name)
     {
-        print_unimplimented();
-        return 0;
+        auto newname = sim::brain_screen::prefix_sd(name);
+        std::cout << std::string("file name: ") << std::string(newname) << '\n';
+        int32_t size = std::filesystem::file_size(newname);
+        free(newname);
+        return size;
     }
 
     /**
@@ -734,9 +768,10 @@ namespace vex
      * @return true if the file exists
      * @param name The name of the file.
      */
-    bool brain::sdcard::exists(const char *name)
-    {
-        print_unimplimented();
-        return false;
+    bool brain::sdcard::exists(const char *name) {
+        auto newname = sim::brain_screen::prefix_sd(name);
+        bool exists = std::filesystem::exists(newname);
+        free(newname);
+        return exists;
     }
 }

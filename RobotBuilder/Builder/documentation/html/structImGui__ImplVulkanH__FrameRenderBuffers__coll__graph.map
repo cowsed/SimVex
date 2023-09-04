@@ -1,0 +1,9 @@
+<map id="ImGui_ImplVulkanH_FrameRenderBuffers" name="ImGui_ImplVulkanH_FrameRenderBuffers">
+<area shape="rect" id="Node000001" title=" " alt="" coords="115,155,331,240"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,123,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="69,74,77,103,91,129,105,143,101,146,87,132,72,105,64,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="175,5,271,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,75,225,138,220,138,220,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="328,5,392,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,75,348,104,333,132,320,146,316,142,329,129,344,102,352,74"/>
+</map>

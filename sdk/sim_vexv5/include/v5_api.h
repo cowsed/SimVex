@@ -25,7 +25,7 @@
 *//*---------------------------------------------------------------------------*/
 #include "sim/util.h"
 #include "sim/terminal.h"
-#include "sim/graphics/brain_screen.h"
+#include "sim/graphics/sim_brain.h"
 #include "sim/events.h"
 
 #include "v5_apitypes.h"

@@ -40,7 +40,7 @@ namespace vex
     double timer::time(timeUnits units) const
     {  
         uint32_t time_ms = time();
-        if (units==vex::msec){
+        if (units == vex::timeUnits::msec) {
             return (double)time_ms;
         }
 

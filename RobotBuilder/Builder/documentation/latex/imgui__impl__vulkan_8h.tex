@@ -1,0 +1,155 @@
+\doxysection{/home/richie/\+VEX/\+Sim/\+Robot\+Builder/\+Builder/vendor/imgui/backends/imgui\+\_\+impl\+\_\+vulkan.h File Reference}
+\hypertarget{imgui__impl__vulkan_8h}{}\label{imgui__impl__vulkan_8h}\index{/home/richie/VEX/Sim/RobotBuilder/Builder/vendor/imgui/backends/imgui\_impl\_vulkan.h@{/home/richie/VEX/Sim/RobotBuilder/Builder/vendor/imgui/backends/imgui\_impl\_vulkan.h}}
+{\ttfamily \#include \"{}imgui.\+h\"{}}\newline
+{\ttfamily \#include $<$vulkan/vulkan.\+h$>$}\newline
+Include dependency graph for imgui\+\_\+impl\+\_\+vulkan.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{imgui__impl__vulkan_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{imgui__impl__vulkan_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structImGui__ImplVulkan__InitInfo}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Init\+Info}}
+\item 
+struct \mbox{\hyperlink{structImGui__ImplVulkanH__Frame}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Frame}}
+\item 
+struct \mbox{\hyperlink{structImGui__ImplVulkanH__FrameSemaphores}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Frame\+Semaphores}}
+\item 
+struct \mbox{\hyperlink{structImGui__ImplVulkanH__Window}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Window}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} bool \mbox{\hyperlink{imgui__impl__vulkan_8h_ad4daa307d203af914786f8631a307ec6}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Init}} (\mbox{\hyperlink{structImGui__ImplVulkan__InitInfo}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Init\+Info}} \texorpdfstring{$\ast$}{*}info, Vk\+Render\+Pass render\+\_\+pass)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{imgui__impl__vulkan_8h_ac5f93959197622a7afc8ac9d9e7c378c}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Shutdown}} ()
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{imgui__impl__vulkan_8h_a1140b281b5df05d3a20b07d979ee0250}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+New\+Frame}} ()
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{imgui__impl__vulkan_8h_ab20cc208b1400091be27ed1e57c8ce41}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Render\+Draw\+Data}} (\mbox{\hyperlink{structImDrawData}{Im\+Draw\+Data}} \texorpdfstring{$\ast$}{*}draw\+\_\+data, Vk\+Command\+Buffer command\+\_\+buffer, Vk\+Pipeline pipeline=VK\+\_\+\+NULL\+\_\+\+HANDLE)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} bool \mbox{\hyperlink{imgui__impl__vulkan_8h_a88bee060d9d78f1f581edcf319cd9868}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Create\+Fonts\+Texture}} (Vk\+Command\+Buffer command\+\_\+buffer)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{imgui__impl__vulkan_8h_a9d953844162b3e7632455f2eb3dfff43}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Destroy\+Font\+Upload\+Objects}} ()
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{imgui__impl__vulkan_8h_ab6c61e9c9d8e8c314866e5d9b48b58b5}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Set\+Min\+Image\+Count}} (uint32\+\_\+t min\+\_\+image\+\_\+count)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} Vk\+Descriptor\+Set \mbox{\hyperlink{imgui__impl__vulkan_8h_a4122551e48de0c2cb4b3e074374fc4bd}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Add\+Texture}} (Vk\+Sampler \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_a4f7acaf0f814147f227f72b9065e8ed0}{sampler}}, Vk\+Image\+View image\+\_\+view, Vk\+Image\+Layout image\+\_\+layout)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{imgui__impl__vulkan_8h_a312a4fc95451afe097cf45fba6e773fd}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Remove\+Texture}} (Vk\+Descriptor\+Set descriptor\+\_\+set)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} bool \mbox{\hyperlink{imgui__impl__vulkan_8h_aa74445b92ed2b7e06979f4b230d062bc}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Load\+Functions}} (PFN\+\_\+vk\+Void\+Function(\texorpdfstring{$\ast$}{*}loader\+\_\+func)(const char \texorpdfstring{$\ast$}{*}function\+\_\+name, \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \texorpdfstring{$\ast$}{*}user\+\_\+data), \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \texorpdfstring{$\ast$}{*}user\+\_\+data=nullptr)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{imgui__impl__vulkan_8h_af8a69ee55486054683a7a0729445ad76}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Create\+Or\+Resize\+Window}} (Vk\+Instance instance, Vk\+Physical\+Device physical\+\_\+device, Vk\+Device device, \mbox{\hyperlink{structImGui__ImplVulkanH__Window}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Window}} \texorpdfstring{$\ast$}{*}wnd, uint32\+\_\+t queue\+\_\+family, const Vk\+Allocation\+Callbacks \texorpdfstring{$\ast$}{*}allocator, \mbox{\hyperlink{classint}{int}} w, \mbox{\hyperlink{classint}{int}} h, uint32\+\_\+t min\+\_\+image\+\_\+count)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \mbox{\hyperlink{imgui__impl__vulkan_8h_a85f0bc7caedd9313be70e55179885081}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Destroy\+Window}} (Vk\+Instance instance, Vk\+Device device, \mbox{\hyperlink{structImGui__ImplVulkanH__Window}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Window}} \texorpdfstring{$\ast$}{*}wnd, const Vk\+Allocation\+Callbacks \texorpdfstring{$\ast$}{*}allocator)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} Vk\+Surface\+Format\+KHR \mbox{\hyperlink{imgui__impl__vulkan_8h_a372dec07c30709ba8557673a0f28864f}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Select\+Surface\+Format}} (Vk\+Physical\+Device physical\+\_\+device, Vk\+Surface\+KHR surface, const Vk\+Format \texorpdfstring{$\ast$}{*}request\+\_\+formats, \mbox{\hyperlink{classint}{int}} request\+\_\+formats\+\_\+count, Vk\+Color\+Space\+KHR request\+\_\+color\+\_\+space)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} Vk\+Present\+Mode\+KHR \mbox{\hyperlink{imgui__impl__vulkan_8h_a2db0beb55053b0878cd8ae72f14f56ef}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Select\+Present\+Mode}} (Vk\+Physical\+Device physical\+\_\+device, Vk\+Surface\+KHR surface, const Vk\+Present\+Mode\+KHR \texorpdfstring{$\ast$}{*}request\+\_\+modes, \mbox{\hyperlink{classint}{int}} request\+\_\+modes\+\_\+count)
+\item 
+\mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{classint}{int}} \mbox{\hyperlink{imgui__impl__vulkan_8h_a8236d44a7a09080d3fd617ba0a1ea153}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Get\+Min\+Image\+Count\+From\+Present\+Mode}} (Vk\+Present\+Mode\+KHR present\+\_\+mode)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{imgui__impl__vulkan_8h_a4122551e48de0c2cb4b3e074374fc4bd}\label{imgui__impl__vulkan_8h_a4122551e48de0c2cb4b3e074374fc4bd} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_AddTexture@{ImGui\_ImplVulkan\_AddTexture}}
+\index{ImGui\_ImplVulkan\_AddTexture@{ImGui\_ImplVulkan\_AddTexture}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_AddTexture()}{ImGui\_ImplVulkan\_AddTexture()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} Vk\+Descriptor\+Set Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Add\+Texture (\begin{DoxyParamCaption}\item[{Vk\+Sampler}]{sampler,  }\item[{Vk\+Image\+View}]{image\+\_\+view,  }\item[{Vk\+Image\+Layout}]{image\+\_\+layout }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_a88bee060d9d78f1f581edcf319cd9868}\label{imgui__impl__vulkan_8h_a88bee060d9d78f1f581edcf319cd9868} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_CreateFontsTexture@{ImGui\_ImplVulkan\_CreateFontsTexture}}
+\index{ImGui\_ImplVulkan\_CreateFontsTexture@{ImGui\_ImplVulkan\_CreateFontsTexture}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_CreateFontsTexture()}{ImGui\_ImplVulkan\_CreateFontsTexture()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} bool Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Create\+Fonts\+Texture (\begin{DoxyParamCaption}\item[{Vk\+Command\+Buffer}]{command\+\_\+buffer }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_a9d953844162b3e7632455f2eb3dfff43}\label{imgui__impl__vulkan_8h_a9d953844162b3e7632455f2eb3dfff43} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_DestroyFontUploadObjects@{ImGui\_ImplVulkan\_DestroyFontUploadObjects}}
+\index{ImGui\_ImplVulkan\_DestroyFontUploadObjects@{ImGui\_ImplVulkan\_DestroyFontUploadObjects}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_DestroyFontUploadObjects()}{ImGui\_ImplVulkan\_DestroyFontUploadObjects()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Destroy\+Font\+Upload\+Objects (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_ad4daa307d203af914786f8631a307ec6}\label{imgui__impl__vulkan_8h_ad4daa307d203af914786f8631a307ec6} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_Init@{ImGui\_ImplVulkan\_Init}}
+\index{ImGui\_ImplVulkan\_Init@{ImGui\_ImplVulkan\_Init}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_Init()}{ImGui\_ImplVulkan\_Init()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} bool Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structImGui__ImplVulkan__InitInfo}{Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Init\+Info}} \texorpdfstring{$\ast$}{*}}]{info,  }\item[{Vk\+Render\+Pass}]{render\+\_\+pass }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_aa74445b92ed2b7e06979f4b230d062bc}\label{imgui__impl__vulkan_8h_aa74445b92ed2b7e06979f4b230d062bc} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_LoadFunctions@{ImGui\_ImplVulkan\_LoadFunctions}}
+\index{ImGui\_ImplVulkan\_LoadFunctions@{ImGui\_ImplVulkan\_LoadFunctions}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_LoadFunctions()}{ImGui\_ImplVulkan\_LoadFunctions()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} bool Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Load\+Functions (\begin{DoxyParamCaption}\item[{PFN\+\_\+vk\+Void\+Function(\texorpdfstring{$\ast$}{*})(const char \texorpdfstring{$\ast$}{*}function\+\_\+name, \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \texorpdfstring{$\ast$}{*}user\+\_\+data)}]{loader\+\_\+func,  }\item[{\mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} \texorpdfstring{$\ast$}{*}}]{user\+\_\+data = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_a1140b281b5df05d3a20b07d979ee0250}\label{imgui__impl__vulkan_8h_a1140b281b5df05d3a20b07d979ee0250} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_NewFrame@{ImGui\_ImplVulkan\_NewFrame}}
+\index{ImGui\_ImplVulkan\_NewFrame@{ImGui\_ImplVulkan\_NewFrame}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_NewFrame()}{ImGui\_ImplVulkan\_NewFrame()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+New\+Frame (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_a312a4fc95451afe097cf45fba6e773fd}\label{imgui__impl__vulkan_8h_a312a4fc95451afe097cf45fba6e773fd} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_RemoveTexture@{ImGui\_ImplVulkan\_RemoveTexture}}
+\index{ImGui\_ImplVulkan\_RemoveTexture@{ImGui\_ImplVulkan\_RemoveTexture}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_RemoveTexture()}{ImGui\_ImplVulkan\_RemoveTexture()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Remove\+Texture (\begin{DoxyParamCaption}\item[{Vk\+Descriptor\+Set}]{descriptor\+\_\+set }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_ab20cc208b1400091be27ed1e57c8ce41}\label{imgui__impl__vulkan_8h_ab20cc208b1400091be27ed1e57c8ce41} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_RenderDrawData@{ImGui\_ImplVulkan\_RenderDrawData}}
+\index{ImGui\_ImplVulkan\_RenderDrawData@{ImGui\_ImplVulkan\_RenderDrawData}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_RenderDrawData()}{ImGui\_ImplVulkan\_RenderDrawData()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Render\+Draw\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structImDrawData}{Im\+Draw\+Data}} \texorpdfstring{$\ast$}{*}}]{draw\+\_\+data,  }\item[{Vk\+Command\+Buffer}]{command\+\_\+buffer,  }\item[{Vk\+Pipeline}]{pipeline = {\ttfamily VK\+\_\+NULL\+\_\+HANDLE} }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_ab6c61e9c9d8e8c314866e5d9b48b58b5}\label{imgui__impl__vulkan_8h_ab6c61e9c9d8e8c314866e5d9b48b58b5} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_SetMinImageCount@{ImGui\_ImplVulkan\_SetMinImageCount}}
+\index{ImGui\_ImplVulkan\_SetMinImageCount@{ImGui\_ImplVulkan\_SetMinImageCount}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_SetMinImageCount()}{ImGui\_ImplVulkan\_SetMinImageCount()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Set\+Min\+Image\+Count (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{min\+\_\+image\+\_\+count }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_ac5f93959197622a7afc8ac9d9e7c378c}\label{imgui__impl__vulkan_8h_ac5f93959197622a7afc8ac9d9e7c378c} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkan\_Shutdown@{ImGui\_ImplVulkan\_Shutdown}}
+\index{ImGui\_ImplVulkan\_Shutdown@{ImGui\_ImplVulkan\_Shutdown}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkan\_Shutdown()}{ImGui\_ImplVulkan\_Shutdown()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} Im\+Gui\+\_\+\+Impl\+Vulkan\+\_\+\+Shutdown (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_af8a69ee55486054683a7a0729445ad76}\label{imgui__impl__vulkan_8h_af8a69ee55486054683a7a0729445ad76} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkanH\_CreateOrResizeWindow@{ImGui\_ImplVulkanH\_CreateOrResizeWindow}}
+\index{ImGui\_ImplVulkanH\_CreateOrResizeWindow@{ImGui\_ImplVulkanH\_CreateOrResizeWindow}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkanH\_CreateOrResizeWindow()}{ImGui\_ImplVulkanH\_CreateOrResizeWindow()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Create\+Or\+Resize\+Window (\begin{DoxyParamCaption}\item[{Vk\+Instance}]{instance,  }\item[{Vk\+Physical\+Device}]{physical\+\_\+device,  }\item[{Vk\+Device}]{device,  }\item[{\mbox{\hyperlink{structImGui__ImplVulkanH__Window}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Window}} \texorpdfstring{$\ast$}{*}}]{wnd,  }\item[{uint32\+\_\+t}]{queue\+\_\+family,  }\item[{const Vk\+Allocation\+Callbacks \texorpdfstring{$\ast$}{*}}]{allocator,  }\item[{\mbox{\hyperlink{classint}{int}}}]{w,  }\item[{\mbox{\hyperlink{classint}{int}}}]{h,  }\item[{uint32\+\_\+t}]{min\+\_\+image\+\_\+count }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_a85f0bc7caedd9313be70e55179885081}\label{imgui__impl__vulkan_8h_a85f0bc7caedd9313be70e55179885081} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkanH\_DestroyWindow@{ImGui\_ImplVulkanH\_DestroyWindow}}
+\index{ImGui\_ImplVulkanH\_DestroyWindow@{ImGui\_ImplVulkanH\_DestroyWindow}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkanH\_DestroyWindow()}{ImGui\_ImplVulkanH\_DestroyWindow()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{imgui__impl__opengl3__loader_8h_ac668e7cffd9e2e9cfee428b9b2f34fa7}{void}} Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Destroy\+Window (\begin{DoxyParamCaption}\item[{Vk\+Instance}]{instance,  }\item[{Vk\+Device}]{device,  }\item[{\mbox{\hyperlink{structImGui__ImplVulkanH__Window}{Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Window}} \texorpdfstring{$\ast$}{*}}]{wnd,  }\item[{const Vk\+Allocation\+Callbacks \texorpdfstring{$\ast$}{*}}]{allocator }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_a8236d44a7a09080d3fd617ba0a1ea153}\label{imgui__impl__vulkan_8h_a8236d44a7a09080d3fd617ba0a1ea153} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkanH\_GetMinImageCountFromPresentMode@{ImGui\_ImplVulkanH\_GetMinImageCountFromPresentMode}}
+\index{ImGui\_ImplVulkanH\_GetMinImageCountFromPresentMode@{ImGui\_ImplVulkanH\_GetMinImageCountFromPresentMode}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkanH\_GetMinImageCountFromPresentMode()}{ImGui\_ImplVulkanH\_GetMinImageCountFromPresentMode()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} \mbox{\hyperlink{classint}{int}} Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Get\+Min\+Image\+Count\+From\+Present\+Mode (\begin{DoxyParamCaption}\item[{Vk\+Present\+Mode\+KHR}]{present\+\_\+mode }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_a2db0beb55053b0878cd8ae72f14f56ef}\label{imgui__impl__vulkan_8h_a2db0beb55053b0878cd8ae72f14f56ef} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkanH\_SelectPresentMode@{ImGui\_ImplVulkanH\_SelectPresentMode}}
+\index{ImGui\_ImplVulkanH\_SelectPresentMode@{ImGui\_ImplVulkanH\_SelectPresentMode}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkanH\_SelectPresentMode()}{ImGui\_ImplVulkanH\_SelectPresentMode()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} Vk\+Present\+Mode\+KHR Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Select\+Present\+Mode (\begin{DoxyParamCaption}\item[{Vk\+Physical\+Device}]{physical\+\_\+device,  }\item[{Vk\+Surface\+KHR}]{surface,  }\item[{const Vk\+Present\+Mode\+KHR \texorpdfstring{$\ast$}{*}}]{request\+\_\+modes,  }\item[{\mbox{\hyperlink{classint}{int}}}]{request\+\_\+modes\+\_\+count }\end{DoxyParamCaption})}
+
+\Hypertarget{imgui__impl__vulkan_8h_a372dec07c30709ba8557673a0f28864f}\label{imgui__impl__vulkan_8h_a372dec07c30709ba8557673a0f28864f} 
+\index{imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}!ImGui\_ImplVulkanH\_SelectSurfaceFormat@{ImGui\_ImplVulkanH\_SelectSurfaceFormat}}
+\index{ImGui\_ImplVulkanH\_SelectSurfaceFormat@{ImGui\_ImplVulkanH\_SelectSurfaceFormat}!imgui\_impl\_vulkan.h@{imgui\_impl\_vulkan.h}}
+\doxysubsubsection{\texorpdfstring{ImGui\_ImplVulkanH\_SelectSurfaceFormat()}{ImGui\_ImplVulkanH\_SelectSurfaceFormat()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\+\_\+\+IMPL\+\_\+\+API}} Vk\+Surface\+Format\+KHR Im\+Gui\+\_\+\+Impl\+Vulkan\+H\+\_\+\+Select\+Surface\+Format (\begin{DoxyParamCaption}\item[{Vk\+Physical\+Device}]{physical\+\_\+device,  }\item[{Vk\+Surface\+KHR}]{surface,  }\item[{const Vk\+Format \texorpdfstring{$\ast$}{*}}]{request\+\_\+formats,  }\item[{\mbox{\hyperlink{classint}{int}}}]{request\+\_\+formats\+\_\+count,  }\item[{Vk\+Color\+Space\+KHR}]{request\+\_\+color\+\_\+space }\end{DoxyParamCaption})}
+

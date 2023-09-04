@@ -1,0 +1,21 @@
+<map id="STB_TexteditState" name="STB_TexteditState">
+<area shape="rect" id="Node000001" title=" " alt="" coords="287,597,409,667"/>
+<area shape="rect" id="Node000002" href="$classint.html" title=" " alt="" coords="109,5,136,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,58,75,104,35,171,19,209,10,249,9,288,20,327,42,370,70,410,102,447,136,482,208,541,275,586,272,591,205,545,133,486,98,451,66,413,38,372,15,329,4,289,5,248,14,208,30,168,71,101,107,54"/>
+<area shape="rect" id="Node000005" href="$structStbUndoState.html" title=" " alt="" coords="257,352,351,421"/>
+<area shape="poly" id="edge10_Node000005_Node000002" title=" " alt="" coords="120,75,117,110,117,153,123,197,137,239,158,272,185,302,244,349,241,353,181,305,154,275,132,241,117,198,111,153,111,110,114,74"/>
+<area shape="rect" id="Node000006" href="$structStbUndoRecord.html" title=" " alt="" coords="251,171,357,240"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="138,59,170,100,213,145,239,164,236,168,210,149,166,104,134,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="380,352,417,421"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="398,422,389,492,372,574,370,582,364,581,367,573,383,491,393,421"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="549,352,587,421"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="574,421,575,456,572,497,560,539,538,575,514,596,486,611,456,622,427,628,425,623,455,616,484,606,511,592,534,572,555,536,566,496,570,456,569,421"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="299,422,291,493,294,533,303,572,307,582,302,584,298,574,288,534,286,493,294,421"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="307,240,307,335,301,335,301,240"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="195,5,413,75"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="307,75,307,153,301,153,301,75"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="381,171,573,240"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="454,241,419,284,376,330,362,343,359,339,373,326,415,281,450,238"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="598,171,639,240"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="600,240,562,288,536,311,508,330,471,344,439,346,407,347,369,355,368,355,366,350,367,349,407,341,439,341,470,339,505,326,533,307,558,284,596,237"/>
+</map>

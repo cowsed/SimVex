@@ -16,7 +16,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
-#include "sim/graphics/brain_screen.h"
+#include "sim/graphics/sim_brain.h"
 
 namespace sim
 {

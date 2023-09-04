@@ -11,3 +11,6 @@
 [submodule "sdk/sim_vexv5/vendor/mujoco"]
 	path = sdk/sim_vexv5/vendor/mujoco
 	url = http://github.com/deepmind/mujoco.git
+[submodule "RobotBuilder/Builder/vendor/OBJ-Loader"]
+	path = RobotBuilder/Builder/vendor/OBJ-Loader
+	url = git@github.com:Bly7/OBJ-Loader.git

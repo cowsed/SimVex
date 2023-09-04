@@ -17,7 +17,7 @@
 #include "sim/graphics/ui.h"
 #include "sim/graphics/embedded_font.h"
 #include "sim/graphics/renderer.h"
-#include "sim/graphics/brain_screen.h"
+#include "sim/graphics/sim_brain.h"
 
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"

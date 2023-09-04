@@ -1,0 +1,14 @@
+<map id="stbtt_pack_range" name="stbtt_pack_range">
+<area shape="rect" id="Node000001" title=" " alt="" coords="146,384,259,453"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="14,5,52,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="25,75,16,116,9,166,10,220,15,246,24,271,44,305,71,334,101,360,133,380,130,385,98,364,67,338,40,308,19,273,10,247,5,220,4,166,10,115,20,74"/>
+<area shape="rect" id="Node000004" href="$structstbtt__packedchar.html" title=" " alt="" coords="99,203,212,272"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="42,74,57,125,69,152,85,177,95,189,91,193,80,180,65,154,52,127,37,75"/>
+<area shape="rect" id="Node000003" href="$classint.html" title=" " alt="" coords="266,203,293,272"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="279,272,270,315,253,361,246,372,242,369,248,359,264,314,273,271"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="139,273,125,315,124,338,130,359,137,370,132,373,125,361,119,338,120,314,134,271"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="135,5,176,75"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,74,158,186,153,186,153,74"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="473,203,510,272"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="494,272,485,318,474,342,459,362,428,379,382,393,276,412,275,407,381,388,426,374,455,358,470,339,480,317,489,271"/>
+</map>

@@ -23,7 +23,6 @@
 #include "vex_mevent.h"
 #include <type_traits> // for weird rectangle stuff
 
-#include "sim/graphics/brain_screen.h"
 
 /*-----------------------------------------------------------------------------*/
 /** @file    vex_brain.h
@@ -31,13 +30,11 @@
  */
 /*---------------------------------------------------------------------------*/
 
-namespace vex
-{
-  /**
+namespace vex {
+/**
    * @brief Use the brain class to see battery information, SD card information, or write to the Screen.
    */
-  class brain
-  {
+class brain {
     friend class competition;
 
   private:
@@ -724,6 +721,6 @@ namespace vex
      */
     sdcard SDcard;
   };
-};
+  }; // namespace vex
 
 #endif // VEX_BRAIN_CLASS_H

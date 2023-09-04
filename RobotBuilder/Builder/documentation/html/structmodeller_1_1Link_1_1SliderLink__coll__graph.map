@@ -1,0 +1,5 @@
+<map id="modeller::Link::SliderLink" name="modeller::Link::SliderLink">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,155,164,224"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="25,5,145,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,75,87,137,82,137,82,75"/>
+</map>

@@ -1,0 +1,71 @@
+\doxysection{imgui\+\_\+impl\+\_\+metal.\+h}
+\hypertarget{imgui__impl__metal_8h_source}{}\label{imgui__impl__metal_8h_source}\index{/home/richie/VEX/Sim/RobotBuilder/Builder/vendor/imgui/backends/imgui\_impl\_metal.h@{/home/richie/VEX/Sim/RobotBuilder/Builder/vendor/imgui/backends/imgui\_impl\_metal.h}}
+\mbox{\hyperlink{imgui__impl__metal_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ dear\ imgui:\ Renderer\ Backend\ for\ Metal}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ This\ needs\ to\ be\ used\ along\ with\ a\ Platform\ Backend\ (e.g.\ OSX)}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ Implemented\ features:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ [X]\ Renderer:\ User\ texture\ binding.\ Use\ 'MTLTexture'\ as\ ImTextureID.\ Read\ the\ FAQ\ about\ ImTextureID!}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ [X]\ Renderer:\ Large\ meshes\ support\ (64k+\ vertices)\ with\ 16-\/bit\ indices.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ [X]\ Renderer:\ Multi-\/viewport\ support\ (multiple\ windows).\ Enable\ with\ 'io.ConfigFlags\ |=\ ImGuiConfigFlags\_ViewportsEnable'.}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ You\ can\ use\ unmodified\ imgui\_impl\_*\ files\ in\ your\ project.\ See\ examples/\ folder\ for\ examples\ of\ using\ this.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ Prefer\ including\ the\ entire\ imgui/\ repository\ into\ your\ project\ (either\ as\ a\ copy\ or\ as\ a\ submodule),\ and\ only\ build\ the\ backends\ you\ need.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ If\ you\ are\ new\ to\ Dear\ ImGui,\ read\ documentation\ from\ the\ docs/\ folder\ +\ read\ the\ top\ of\ imgui.cpp.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ Read\ online:\ https://github.com/ocornut/imgui/tree/master/docs}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{imgui_8h}{imgui.h}}"{}}\ \ \ \ \ \ \textcolor{comment}{//\ IMGUI\_IMPL\_API}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ ObjC\ API}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#ifdef\ \_\_OBJC\_\_}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{@class}\ MTLRenderPassDescriptor;}
+\DoxyCodeLine{00023\ \textcolor{keyword}{@protocol\ }MTLDevice,\ MTLCommandBuffer,\ MTLRenderCommandEncoder;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a5a4f95ae7ba6c5f4e051ac5fd66cc12a}{ImGui\_ImplMetal\_Init}}(id<MTLDevice>\ device);}
+\DoxyCodeLine{00026\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a3b7e2ce3843a8e53c6ea3cc0b956d29f}{ImGui\_ImplMetal\_Shutdown}}();}
+\DoxyCodeLine{00027\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a6671732c2560be3773ff20ff58297aff}{ImGui\_ImplMetal\_NewFrame}}(MTLRenderPassDescriptor*\ renderPassDescriptor);}
+\DoxyCodeLine{00028\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a69ba53a62f0f07b4a52e66bf4f8a9528}{ImGui\_ImplMetal\_RenderDrawData}}(\mbox{\hyperlink{structImDrawData}{ImDrawData}}*\ drawData,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ id<MTLCommandBuffer>\ commandBuffer,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ id<MTLRenderCommandEncoder>\ commandEncoder);}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ Called\ by\ Init/NewFrame/Shutdown}}
+\DoxyCodeLine{00033\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a9026e9e0b9443e7b811df9191805d362}{ImGui\_ImplMetal\_CreateFontsTexture}}(id<MTLDevice>\ device);}
+\DoxyCodeLine{00034\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a0650a79d01cb676f97c55fdb0611c398}{ImGui\_ImplMetal\_DestroyFontsTexture}}();}
+\DoxyCodeLine{00035\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a6c259b636759ed64114e4c414463557b}{ImGui\_ImplMetal\_CreateDeviceObjects}}(id<MTLDevice>\ device);}
+\DoxyCodeLine{00036\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_ada447693098dd0c55a2c00f0676f4749}{ImGui\_ImplMetal\_DestroyDeviceObjects}}();}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00041\ \textcolor{comment}{//\ C++\ API}}
+\DoxyCodeLine{00042\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{comment}{//\ Enable\ Metal\ C++\ binding\ support\ with\ '\#define\ IMGUI\_IMPL\_METAL\_CPP'\ in\ your\ imconfig.h\ file}}
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ More\ info\ about\ using\ Metal\ from\ C++:\ https://developer.apple.com/metal/cpp/}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#ifdef\ IMGUI\_IMPL\_METAL\_CPP}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#include\ <Metal/Metal.hpp>}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#ifndef\ \_\_OBJC\_\_}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a5a4f95ae7ba6c5f4e051ac5fd66cc12a}{ImGui\_ImplMetal\_Init}}(MTL::Device*\ device);}
+\DoxyCodeLine{00052\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a3b7e2ce3843a8e53c6ea3cc0b956d29f}{ImGui\_ImplMetal\_Shutdown}}();}
+\DoxyCodeLine{00053\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a6671732c2560be3773ff20ff58297aff}{ImGui\_ImplMetal\_NewFrame}}(MTL::RenderPassDescriptor*\ renderPassDescriptor);}
+\DoxyCodeLine{00054\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a69ba53a62f0f07b4a52e66bf4f8a9528}{ImGui\_ImplMetal\_RenderDrawData}}(\mbox{\hyperlink{structImDrawData}{ImDrawData}}*\ draw\_data,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MTL::CommandBuffer*\ commandBuffer,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MTL::RenderCommandEncoder*\ commandEncoder);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{comment}{//\ Called\ by\ Init/NewFrame/Shutdown}}
+\DoxyCodeLine{00059\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a9026e9e0b9443e7b811df9191805d362}{ImGui\_ImplMetal\_CreateFontsTexture}}(MTL::Device*\ device);}
+\DoxyCodeLine{00060\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a0650a79d01cb676f97c55fdb0611c398}{ImGui\_ImplMetal\_DestroyFontsTexture}}();}
+\DoxyCodeLine{00061\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{imgui__impl__metal_8mm_a6c259b636759ed64114e4c414463557b}{ImGui\_ImplMetal\_CreateDeviceObjects}}(MTL::Device*\ device);}
+\DoxyCodeLine{00062\ \mbox{\hyperlink{imgui_8h_a665f6b404eea9a640b1222a87236fe19}{IMGUI\_IMPL\_API}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{imgui__impl__metal_8mm_ada447693098dd0c55a2c00f0676f4749}{ImGui\_ImplMetal\_DestroyDeviceObjects}}();}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,4 +1,5 @@
 #include "sim/graphics/renderer.h"
+#include "sim/sim.h"
 
 #include <chrono>
 #include <functional>
@@ -156,14 +157,16 @@ namespace sim
         void render()
         {
           field_viewport.activate();
-          glEnable(GL_FRAMEBUFFER_SRGB_EXT);
-          mjtNum simstart = mj_data->time;
-          while (mj_data->time - simstart < 1.0 / 60.0)
-            mj_step(mj_model, mj_data);
-
-          // get framebuffer viewport
           mjrRect viewport = {0, 0, static_cast<int>(field_viewport.width),
                               static_cast<int>(field_viewport.height)};
+
+          glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+          mjtNum simstart = mj_data->time;
+          if (sim::is_running()) {
+            while (mj_data->time - simstart < 1.0 / 60.0)
+              mj_step(mj_model, mj_data);
+          }
+          // get framebuffer viewport
 
           // update scene and render
 

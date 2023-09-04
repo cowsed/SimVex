@@ -12,7 +12,8 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
-#ifndef   VEX_OPTICAL_CLASS_H
+#include "vex_color.h"
+#ifndef VEX_OPTICAL_CLASS_H
 #define   VEX_OPTICAL_CLASS_H
 #include "vex_device.h"
 /*-----------------------------------------------------------------------------*/

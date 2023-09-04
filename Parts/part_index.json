@@ -1,0 +1,9 @@
+{
+	"number": 2,
+	"parts": [
+		"Structure/Aluminum/1x2x1x35_Aluminum_C_Channel",
+		"Structure/Aluminum/1x2x1x25_Aluminum_C_Channel",
+		"Structure/Steel/1x2x1x25_Steel_C_Channel",
+		"Structure/Steel/1x2x1x35_Steel_C_Channel"
+	]
+}

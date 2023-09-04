@@ -1,0 +1,13 @@
+<map id="ImGuiComboPreviewData" name="ImGuiComboPreviewData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="236,1077,420,1147"/>
+<area shape="rect" id="Node000002" href="$structImRect.html" title=" " alt="" coords="411,368,514,1013"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="414,966,396,1014,367,1065,362,1062,391,1012,409,964"/>
+<area shape="rect" id="Node000003" href="$structImVec2.html" title=" " alt="" coords="179,155,266,288"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="220,288,210,452,204,663,205,770,211,868,221,951,237,1012,253,1040,274,1064,270,1068,249,1043,232,1014,216,952,205,868,200,770,199,663,205,452,215,287"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="267,246,334,296,368,329,395,367,406,386,402,389,391,369,364,332,331,300,264,250"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="7,5,44,75"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="22,75,10,194,8,269,14,344,37,541,47,621,60,695,79,767,107,841,146,921,199,1012,224,1041,253,1066,249,1070,220,1045,195,1015,141,924,102,843,74,769,55,696,42,622,32,541,9,344,3,269,5,194,17,74"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="46,56,169,168,165,172,42,60"/>
+<area shape="rect" id="Node000005" href="$classint.html" title=" " alt="" coords="539,656,565,725"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="560,725,567,783,568,857,557,938,546,978,529,1015,511,1039,489,1059,464,1075,437,1087,434,1082,461,1070,486,1054,507,1035,524,1012,541,976,552,937,563,857,562,783,555,725"/>
+</map>
