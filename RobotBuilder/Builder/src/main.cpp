@@ -15,7 +15,7 @@ int main() {
         glClearColor(0.4, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //        glFrontFace(GL_CW);
-        //        glDisable(GL_CULL_FACE);
+        glDisable(GL_CULL_FACE);
         parts::build_ui();
 
         ui::post_render();

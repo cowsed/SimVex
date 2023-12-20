@@ -84,7 +84,6 @@ set(project_sources
     )
 
 
-#include vendor/imgui/ vendor/ vendor/assimp/include vendor/bullet3/src
 set(project_headers 
     include/sim/graphics/brain_fonts/noto_sans_mono_15.h
     include/sim/graphics/brain_fonts/noto_sans_mono_12.h

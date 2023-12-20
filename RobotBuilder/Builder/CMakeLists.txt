@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(BuilderProject LANGUAGES CXX)
+project(BuilderProject LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -19,6 +19,7 @@ set(project_headers
     include/part_instance.hpp
     include/model.hpp
     include/image_load.hpp
+    include/part_catalog.h
 
 
 )
@@ -32,6 +33,10 @@ set(project_sources
     src/part_definition.cpp
     src/part_instance.cpp
     src/image_load.cpp
+    src/part_instance.cpp
+    src/part_catalog.cpp
+    src/shaders/obj.frag
+    src/shaders/obj.vert
 
 
 
@@ -44,15 +49,12 @@ set(project_sources
     vendor/imgui/backends/imgui_impl_glfw.cpp
     vendor/imgui/backends/imgui_impl_opengl3.cpp
 
+    vendor/objgl/source/objgl2/objgl2.c
+
 )
 
 add_executable(Builder ${project_sources}
     ${project_headers}
-    src/part_instance.cpp
-    include/part_catalog.h
-    src/part_catalog.cpp
-    src/shaders/obj.frag
-    src/shaders/obj.vert
 )
 
 include(GNUInstallDirs)
@@ -62,7 +64,7 @@ install(TARGETS Builder
 )
 
 
-target_include_directories(Builder PUBLIC include vendor/imgui vendor/stb vendor/OBJ-Loader/Source)
+target_include_directories(Builder PUBLIC include vendor/imgui vendor/stb vendor/objgl/source/objgl2)
 
 find_package(nlohmann_json 3.11.2 REQUIRED)
 target_link_libraries(Builder PRIVATE nlohmann_json::nlohmann_json glfw GL GLEW)

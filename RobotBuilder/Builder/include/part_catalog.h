@@ -4,4 +4,5 @@
 namespace parts {
 void init(const std::string &parts_directory);
 void build_ui();
+void deconstruct();
 } // namespace parts

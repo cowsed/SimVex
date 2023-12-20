@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -17,7 +18,12 @@ public:
     };
 
     VexPartDefinition(const std::string &folder_path);
-    ~VexPartDefinition() = default;
+    VexPartDefinition(VexPartDefinition &&other);
+
+    VexPartDefinition(const VexPartDefinition &) = delete;
+    VexPartDefinition operator=(const VexPartDefinition &) = delete;
+
+    ~VexPartDefinition();
     void load_obj();
     std::string name() const;
     const std::vector<std::string> &categories() { return my_categories; }
@@ -27,6 +33,7 @@ public:
     bool build_preview_ui();
 
     void gl_render(modeller::RenderInfo ri);
+    void release_preview();
 
 private:
     std::string my_name;
@@ -38,4 +45,5 @@ private:
     std::optional<GLInfo> my_info = {};
 };
 
-std::vector<VexPartDefinition> load_parts_from_index(const std::string &part_index_path);
+std::vector<std::unique_ptr<VexPartDefinition>> load_parts_from_index(
+    const std::string &part_index_path);

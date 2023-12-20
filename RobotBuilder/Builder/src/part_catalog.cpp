@@ -6,11 +6,11 @@
 namespace parts {
 const int search_bar_buf_size = 100;
 char search_bar_buf[search_bar_buf_size] = "";
-std::vector<VexPartDefinition> pds;
+std::vector<std::unique_ptr<VexPartDefinition>> pds;
 
 void init(const std::string &parts_directory) {
-    pds = load_parts_from_index(modeller::parts_directory);
-    pds[0].load_obj();
+    pds = std::move(load_parts_from_index(modeller::parts_directory));
+    pds[0]->load_obj();
 }
 glm::vec3 eye = {.15, 0, 0};
 glm::vec3 center = {0, 0, 0};
@@ -20,7 +20,7 @@ void build_ui() {
                                .view = glm::lookAt(eye, center, glm::vec3{0, 0, 1}),
                                .proj = glm::perspective(M_PI / 2.0, 1.0, 0.1, 100.0)};
 
-    pds[0].gl_render(ri);
+    pds[0]->gl_render(ri);
 
     ImGui::Begin("Part Catalog");
     ImGui::DragFloat3("eye", (float *) &eye, 0.001);
@@ -41,13 +41,13 @@ void build_ui() {
 
     int part_num = 0;
     if (ImGui::BeginTable("parts_table", num_cols)) {
-        for (auto p : pds) {
+        for (auto &p : pds) {
             if (part_num % num_cols == 0) {
                 ImGui::TableNextRow();
             }
 
             ImGui::TableNextColumn();
-            bool clicked = p.build_preview_ui();
+            bool clicked = p->build_preview_ui();
             if (clicked) {
                 std::cout << "pressed" << std::endl;
             }
@@ -56,5 +56,10 @@ void build_ui() {
         ImGui::EndTable();
     }
     ImGui::End();
+}
+void deconstruct() {
+    for (auto &pd : pds) {
+        pd.get()->release_preview();
+    }
 }
 } // namespace parts

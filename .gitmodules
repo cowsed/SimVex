@@ -14,3 +14,9 @@
 [submodule "RobotBuilder/Builder/vendor/OBJ-Loader"]
 	path = RobotBuilder/Builder/vendor/OBJ-Loader
 	url = git@github.com:Bly7/OBJ-Loader.git
+[submodule "RobotBuilder/Builder/vendor/tinyobjloader"]
+	path = RobotBuilder/Builder/vendor/tinyobjloader
+	url = git@github.com:tinyobjloader/tinyobjloader.git
+[submodule "RobotBuilder/Builder/vendor/objgl"]
+	path = RobotBuilder/Builder/vendor/objgl
+	url = git@github.com:karolek471/objgl.git

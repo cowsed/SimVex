@@ -4,11 +4,12 @@
 #include <fstream>
 #include <iostream>
 
-#include "OBJ_Loader.h"
 #include "gfx_util.hpp"
 #include "image_load.hpp"
 #include "imgui.h"
 #include "nlohmann/json.hpp"
+
+#include "objgl2.h"
 
 struct NoSuchModelPath {};
 struct NoSuchModelPartSpec {};
@@ -19,6 +20,33 @@ struct OBJLoadFailed {};
 
 std::optional<GLuint> fallback_preview_texture = {};
 std::optional<GLuint> obj_shader = {};
+
+VexPartDefinition::~VexPartDefinition() {
+    glDeleteBuffers(1, &my_info->vbo);
+    glDeleteBuffers(1, &my_info->ibo);
+    glDeleteVertexArrays(1, &my_info->vao);
+    std::cout << "DELETING" << std::endl;
+}
+struct MovingIntoFullPartDefinition {};
+
+VexPartDefinition::VexPartDefinition(VexPartDefinition &&other) {
+    if (my_info.has_value()) {
+        throw MovingIntoFullPartDefinition{};
+    }
+
+    my_name = std::move(other.my_name);
+    serial_num = std::move(other.serial_num);
+    my_categories = std::move(other.my_categories);
+    links = std::move(other.links);
+    preview_tex = other.preview_tex;
+
+    my_info = GLInfo{};
+    my_info->vao = other.my_info->vao;
+    my_info->ibo = other.my_info->ibo;
+    my_info->vbo = other.my_info->vbo;
+
+    other.my_info = std::nullopt;
+}
 
 VexPartDefinition::VexPartDefinition(const std::string &folder_path) {
     if (!fallback_preview_texture.has_value()) {
@@ -64,124 +92,59 @@ VexPartDefinition::VexPartDefinition(const std::string &folder_path) {
 }
 
 void VexPartDefinition::load_obj() {
+    // if already read
     if (my_info.has_value()) {
         return;
     }
-    objl::Loader l;
-    bool loaded = l.LoadFile(obj_file);
-    if (!loaded) {
-        throw OBJLoadFailed{};
-    }
-    objl::Mesh m = l.LoadedMeshes[0];
 
-    GLuint vao;
+    // read buffer
+    std::ifstream file(obj_file);
+    std::ostringstream ss;
+    ss << file.rdbuf();
+    const std::string &s = ss.str();
+    std::vector<char> vec(s.begin(), s.end());
 
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    unsigned int bufferSize = 65536;
+    char *fname = (char *) malloc(obj_file.size() + 1);
+    strcpy(fname, obj_file.c_str());
 
-    // This will identify our vertex buffer
-    GLuint vbo;
-    // Generate 1 buffer, put the resulting identifier in vertexbuffer
-    glGenBuffers(1, &vbo);
-    // The following commands will talk about our 'vertexbuffer' buffer
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    // Give our vertices to OpenGL.
-    glBufferData(GL_ARRAY_BUFFER,
-                 m.Vertices.size() * sizeof(objl::Vertex),
-                 &m.Vertices[0],
-                 GL_STATIC_DRAW);
+    objgl2StreamInfo strinfo = objgl2_init_filestream(fname, bufferSize);
+    objgl2Data data = objgl2_readobj(&strinfo);
 
+    printf("numIndices: %d\n", data.numIndices);
+    printf("numVertices: %d\n", data.numVertices);
+    printf("normals: %d", (int) data.hasNormals);
+    printf("uvs: %d", (int) data.hasTexCoords);
+
+    GLuint VAO;
+    glGenVertexArrays(1, &VAO);
+
+    glBindVertexArray(VAO);
+
+    GLuint VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, data.numVertices * 8 * sizeof(float), data.data, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glEnableVertexAttribArray(2);
-    // position
-    glVertexAttribPointer(0,                    // attribute
-                          3,                    // size
-                          GL_FLOAT,             // type
-                          GL_FALSE,             // normalized?
-                          sizeof(objl::Vertex), // stride
-                          (void *) 0            // array buffer offset
-    );
-    // normal
-    glVertexAttribPointer(1,                               // attribute
-                          3,                               // size
-                          GL_FLOAT,                        // type
-                          GL_FALSE,                        // normalized?
-                          sizeof(objl::Vertex),            // stride
-                          (void *) (sizeof(objl::Vector3)) // array buffer offset
-    );
-    // uv
-    glVertexAttribPointer(2,                                   // attribute
-                          2,                                   // size
-                          GL_FLOAT,                            // type
-                          GL_FALSE,                            // normalized?
-                          sizeof(objl::Vertex),                // stride
-                          (void *) (2 * sizeof(objl::Vector3)) // array buffer offset
-    );
 
-    GLuint ibo;
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (5 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    GLuint EBO;
+    glGenBuffers(1, &EBO);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                 m.Indices.size() * sizeof(unsigned int),
-                 &m.Indices[0],
+                 data.numIndices * sizeof(unsigned int),
+                 data.indices,
                  GL_STATIC_DRAW);
 
-    glBindVertexArray(0);
-    //    GLuint vao, vbo, ibo;
-
-    //    glGenBuffers(1, &vbo);
-    //    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    //    glBufferData(GL_ARRAY_BUFFER,
-    //                 m.Vertices.size() * sizeof(objl::Vertex),
-    //                 &(m.Vertices[0]),
-    //                 GL_STATIC_DRAW);
-
-    //    unsigned int vert_ind = 0;
-    //    unsigned int norm_ind = 1;
-    //    unsigned int uv_ind = 2;
-
-    //    glGenVertexArrays(1, &vao);
-    //    glBindVertexArray(vao);
-    //    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    //    glEnableVertexAttribArray(vert_ind); // vert pos
-    //    glVertexAttribPointer(vert_ind,
-    //                          3,
-    //                          GL_FLOAT,
-    //                          GL_FALSE,
-    //                          sizeof(objl::Vertex),
-    //                          (void *) (0 * sizeof(float)));
-
-    //    glEnableVertexAttribArray(norm_ind); // vert normal
-    //    glVertexAttribPointer(norm_ind,
-    //                          3,
-    //                          GL_FLOAT,
-    //                          GL_FALSE,
-    //                          sizeof(objl::Vertex),
-    //                          (void *) (3 * sizeof(float)));
-    //    glEnableVertexAttribArray(uv_ind); // vert UV
-    //    glVertexAttribPointer(uv_ind,
-    //                          2,
-    //                          GL_FLOAT,
-    //                          GL_FALSE,
-    //                          sizeof(objl::Vertex),
-    //                          (void *) (6 * sizeof(float)));
-
-    //    glGenBuffers(1, &ibo);
-    //    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    //    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-    //                 m.Indices.size() * sizeof(unsigned int),
-    //                 (void *) &(m.Indices[0]),
-    //                 GL_STATIC_DRAW);
-
-    GLInfo info;
-    info.vao = vao;
-    info.ibo = ibo;
-    info.vbo = vbo;
-    info.num_indices = m.Indices.size();
-
-    my_info = info;
+    my_info = {.vao = VAO, .vbo = VBO, .ibo = EBO, .num_indices = data.numIndices};
 }
 
 std::string VexPartDefinition::name() const {
@@ -197,7 +160,8 @@ bool VexPartDefinition::build_preview_ui() {
     return clicked;
 }
 
-std::vector<VexPartDefinition> load_parts_from_index(const std::string &part_directory) {
+std::vector<std::unique_ptr<VexPartDefinition>> load_parts_from_index(
+    const std::string &part_directory) {
     if (!std::filesystem::exists(part_directory + "part_index.json")) {
         throw NoPartIndexFound{};
     }
@@ -210,10 +174,10 @@ std::vector<VexPartDefinition> load_parts_from_index(const std::string &part_dir
     std::vector<std::string> names(num);
     data.at("parts").get_to(names);
 
-    std::vector<VexPartDefinition> pds;
-    pds.reserve(names.size());
+    std::vector<std::unique_ptr<VexPartDefinition>> pds;
     for (const auto &name : names) {
-        pds.emplace_back(part_directory + name);
+        std::string fname = part_directory + name;
+        pds.push_back(std::make_unique<VexPartDefinition>(fname));
     }
 
     return pds;
@@ -224,6 +188,7 @@ void VexPartDefinition::gl_render(modeller::RenderInfo ri) {
         return;
     }
     GLInfo info = my_info.value();
+    printf("VAO: %d - IBO %d\n", info.vao, info.ibo);
     glBindVertexArray(info.vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, info.ibo);
 
@@ -240,10 +205,16 @@ void VexPartDefinition::gl_render(modeller::RenderInfo ri) {
 
     // Index buffer
 
+    glDrawElements(GL_TRIANGLES, info.num_indices, GL_UNSIGNED_INT, 0);
+
     // Draw the triangles !
-    glDrawElements(GL_TRIANGLES,     // mode
-                   info.num_indices, // count
-                   GL_UNSIGNED_INT,  // type
-                   (void *) 0        // element array buffer offset
-    );
+    //    glDrawElements(GL_TRIANGLES,     // mode
+    //                   info.num_indices, // count
+    //                   GL_UNSIGNED_INT,  // type
+    //                   (void *) 0        // element array buffer offset
+    //    );
+}
+
+void VexPartDefinition::release_preview() {
+    glDeleteTextures(1, &preview_tex);
 }
