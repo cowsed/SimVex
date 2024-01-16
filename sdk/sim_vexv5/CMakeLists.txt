@@ -144,6 +144,6 @@ add_library(simv5rt STATIC ${project_sources})
 
 #target_link_libraries(simv5rt vendor/mujoco-2.3.5/lib/libmujoco.so.2.3.5)
 
-target_include_directories(simv5rt PUBLIC include vendor/imgui/ vendor/assimp/include vendor/ vendor/mujoco-2.3.5/include/)
+target_include_directories(simv5rt PUBLIC include vendor/imgui/ vendor/assimp/include vendor/ vendor/mujoco-3.1.1/include/)
 #target_precompile_headers(simv5rt PUBLIC ${project_headers})
 
